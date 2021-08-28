@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace QueueViewer
+namespace QueueInator
 {
-    public partial class Dialog : Form
+    public partial class NewQueueDialog : Form
     {
         public MainScreen Main { get; set; }
         public string Value { get; set; }
 
-        public Dialog(MainScreen main)
+        public NewQueueDialog(MainScreen main)
         {
             InitializeComponent();
             Main = main;

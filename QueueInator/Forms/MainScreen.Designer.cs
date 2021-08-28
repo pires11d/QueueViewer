@@ -1,5 +1,5 @@
 ﻿
-namespace QueueViewer
+namespace QueueInator
 {
     partial class MainScreen
     {
@@ -68,6 +68,8 @@ namespace QueueViewer
             this.TSMI_Purge = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.messageQueue1 = new System.Messaging.MessageQueue();
+            this.CB_Refresh = new System.Windows.Forms.CheckBox();
+            this.CBB_Refresh = new System.Windows.Forms.ComboBox();
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
             this.SuspendLayout();
@@ -77,10 +79,10 @@ namespace QueueViewer
             this.TV_Queues.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TV_Queues.Location = new System.Drawing.Point(12, 33);
-            this.TV_Queues.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TV_Queues.Margin = new System.Windows.Forms.Padding(4);
             this.TV_Queues.Name = "TV_Queues";
             this.TV_Queues.ShowNodeToolTips = true;
-            this.TV_Queues.Size = new System.Drawing.Size(335, 594);
+            this.TV_Queues.Size = new System.Drawing.Size(335, 567);
             this.TV_Queues.TabIndex = 0;
             this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
             // 
@@ -366,20 +368,50 @@ namespace QueueViewer
             this.messageQueue1.MessageReadPropertyFilter.LookupId = true;
             this.messageQueue1.SynchronizingObject = this;
             // 
+            // CB_Refresh
+            // 
+            this.CB_Refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CB_Refresh.AutoSize = true;
+            this.CB_Refresh.Checked = true;
+            this.CB_Refresh.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CB_Refresh.Location = new System.Drawing.Point(12, 608);
+            this.CB_Refresh.Name = "CB_Refresh";
+            this.CB_Refresh.Size = new System.Drawing.Size(112, 20);
+            this.CB_Refresh.TabIndex = 2;
+            this.CB_Refresh.Text = "Refresh Every";
+            this.CB_Refresh.UseVisualStyleBackColor = true;
+            // 
+            // CBB_Refresh
+            // 
+            this.CBB_Refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CBB_Refresh.FormattingEnabled = true;
+            this.CBB_Refresh.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "5",
+            "10"});
+            this.CBB_Refresh.Location = new System.Drawing.Point(130, 606);
+            this.CBB_Refresh.Name = "CBB_Refresh";
+            this.CBB_Refresh.Size = new System.Drawing.Size(56, 24);
+            this.CBB_Refresh.TabIndex = 3;
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1259, 640);
             this.ContextMenuStrip = this.CMS_Queues;
+            this.Controls.Add(this.CBB_Refresh);
+            this.Controls.Add(this.CB_Refresh);
             this.Controls.Add(this.TV_Queues);
             this.Controls.Add(this.MS_Header);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MS_Header;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "QueueInator";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.MS_Header.ResumeLayout(false);
             this.MS_Header.PerformLayout();
@@ -428,6 +460,8 @@ namespace QueueViewer
         private System.Messaging.MessageQueue messageQueue1;
         private System.Windows.Forms.ToolStripMenuItem TSMI_Purge;
         private System.Windows.Forms.ToolStripMenuItem TSMI_Create;
+        private System.Windows.Forms.ComboBox CBB_Refresh;
+        private System.Windows.Forms.CheckBox CB_Refresh;
     }
 }
 

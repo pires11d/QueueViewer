@@ -1,7 +1,7 @@
 ﻿
-namespace QueueViewer
+namespace QueueInator
 {
-    partial class Dialog
+    partial class NewQueueDialog
     {
         /// <summary>
         /// Required designer variable.

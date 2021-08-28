@@ -4,10 +4,13 @@
     {
         public static TreeNode GetNode(this TreeNode rootNode, string name)
         {
-            foreach (TreeNode node in rootNode.Nodes)
+            if (rootNode != null)
             {
-                if (node.Text == name)
-                    return node;
+                foreach (TreeNode node in rootNode.Nodes)
+                {
+                    if (node.Name == name)
+                        return node;
+                }
             }
             return null;
         }

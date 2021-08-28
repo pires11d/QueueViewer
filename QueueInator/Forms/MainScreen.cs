@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Messaging;
-using Jarbas = System.Messaging.Message;
+using System.Windows.Forms;
+using Message = System.Messaging.Message;
 
-namespace QueueViewer
+namespace QueueInator
 {
     public partial class MainScreen : Form
     {
@@ -23,6 +19,7 @@ namespace QueueViewer
         {
             InitializeComponent();
             LoadTreeView();
+            CBB_Refresh.SelectedIndex = 1;
         }
 
         private void LoadTreeView()
@@ -32,9 +29,9 @@ namespace QueueViewer
             TV_Queues.Nodes.Clear();
 
             TreeNode rootNode = TV_Queues.Nodes.Add("localhost");
-            rootNode.Nodes.Add("Public Queues");
-            rootNode.Nodes.Add("Private Queues");
-            rootNode.Nodes.Add("System Queues");
+            rootNode.Nodes.Add("Public Queues","Public Queues");
+            rootNode.Nodes.Add("Private Queues","Private Queues");
+            rootNode.Nodes.Add("System Queues","System Queues");
 
             var publicNode = rootNode.GetNode("Public Queues");
             LoadNode(publicNode, PublicQueues);
@@ -67,11 +64,49 @@ namespace QueueViewer
             SystemQueues.Add(dead2);
         }
 
-        private void LoadNode(TreeNode node, List<MessageQueue> queues)
+        private void LoadNode(TreeNode parentNode, List<MessageQueue> queues)
         {
             foreach (var queue in queues)
             {
-                node.Nodes.Add(queue.QueueName, queue.QueueName.ToQueueName());
+                var messages = new List<Message>();
+                int n = 0;
+                try
+                {
+                    messages = queue.GetAllMessages()?.ToList();
+                    n = messages?.Count() ?? 0;
+                }
+                catch (Exception)
+                {
+                }
+
+                var fullName = queue.QueueName.ToQueueName();
+
+                AddNode(parentNode, fullName, n);
+            }
+        }
+
+        private void AddNode(TreeNode node, string fullName, int n = 0)
+        {
+            var lastName = "";
+            var names = fullName.Split('.');
+            foreach (var name in names)
+            {
+                var existentNode = node.GetNode(lastName);
+                if (existentNode != null)
+                {
+                    AddNode(existentNode, name, n);
+                }
+
+                if (node.Nodes.ContainsKey(name))
+                {
+                    lastName = name;
+                }
+                else 
+                { 
+                    node.Nodes.Add(name, name + $" ({n})");
+                    lastName = name;
+                }
+
             }
         }
 
@@ -108,7 +143,7 @@ namespace QueueViewer
 
         private void TSMI_Create_Click(object sender, EventArgs e)
         {
-            var dialog = new Dialog(this);
+            var dialog = new NewQueueDialog(this);
             dialog.Show();
         }
 
