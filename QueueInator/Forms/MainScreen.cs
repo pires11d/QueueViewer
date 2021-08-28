@@ -90,11 +90,10 @@ namespace QueueInator
             {
                 var lastNodeItems = queueGroup.Where(x => x.QueueName.Count(y => y == '.') == depth);
 
-                var queue = lastNodeItems.FirstOrDefault();
                 int messageCount = 0;
                 try
                 {
-                    messageCount = queue?.GetAllMessages()?.Count() ?? 0;
+                    messageCount = queueGroup.Select(x => x.GetAllMessages()?.Count() ?? 0).Sum();
                 }
                 catch (Exception)
                 {
