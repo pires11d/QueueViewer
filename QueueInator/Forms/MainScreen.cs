@@ -56,7 +56,7 @@ namespace QueueInator
             {
             }
 
-            PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").OrderBy(x => x.QueueName).ToList();
+            //PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").OrderBy(x => x.QueueName).ToList();
 
             string prefix = $"DIRECT=OS:{MachineId.ToLower()}";
             //var deadLetter = new MessageQueue(prefix+@"\DeadLetter$");
@@ -69,47 +69,27 @@ namespace QueueInator
             SystemQueues.Add(dead2);
         }
 
-        private void LoadNode(TreeNode parentNode, List<MessageQueue> queues)
+        private void LoadNode(TreeNode parentNode, List<MessageQueue> queues, int depth = 0)
         {
-            foreach (var queue in queues)
+            if (!queues.Any()) return;
+
+            var groupedQueues = queues.GroupBy(x => x.QueueName.ToQueueName().Split('.')[depth]);
+
+            foreach (var item in groupedQueues)
             {
-                try
-                {
-                    var messages = queue.GetAllMessages()?.ToList();
-                    var n = messages?.Count() ?? 0;
-                    var fullName = queue.QueueName.ToQueueName();
-                    AddNode(parentNode, fullName, "", n);
-                }
-                catch (Exception)
-                {
-                }
+                var newParent = AddNode(parentNode, item.Key, item.Count());
+
+                var lastNodeItems = item.Where(x => x.QueueName.Count(y => y == '.') == depth);
+
+                var newItems = item.Except(lastNodeItems).ToList();
+
+                LoadNode(newParent, newItems, depth + 1);
             }
         }
 
-        private void AddNode(TreeNode node, string fullName, string lastName = "", int n = 0)
+        private TreeNode AddNode(TreeNode node, string name, int n = 0)
         {
-            var names = fullName.Split('.');
-            foreach (var name in names)
-            {
-                var existentNode = node.GetNode(lastName);
-                if (existentNode != null)
-                {
-                    AddNode(existentNode, name, lastName, n);
-                    lastName = name;
-                    continue;
-                }
-
-                if (node.Nodes.ContainsKey(name))
-                {
-                    lastName = name;
-                }
-                else
-                {
-                    node.Nodes.Add(name, name + $" ({n})");
-                    lastName = name;
-                }
-
-            }
+            return node.Nodes.Add(name, name + $" ({n})");
         }
 
         public void CreateQueue(string queueName)
