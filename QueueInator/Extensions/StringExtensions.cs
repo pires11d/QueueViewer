@@ -14,8 +14,10 @@
         public static string ToQueuePath(this string arg)
         {
             arg = arg.ToLower();
+            arg = arg.Replace(@"private", "");
+            arg = arg.StartsWith(".") ? arg.Remove(0,1) : arg;
             arg = arg.StartsWith("@") ? arg : $"@{arg}";
-            arg = arg.Replace(@".",@"\").Replace(@"@", @".\private$\");
+            arg = arg.Replace(@"@", @".\private$\");
             return arg;
         }
     }

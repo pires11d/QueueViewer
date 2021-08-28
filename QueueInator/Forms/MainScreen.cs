@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QueueInator.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Messaging;
@@ -34,20 +35,28 @@ namespace QueueInator
             TV_Queues.Nodes.Clear();
 
             TreeNode rootNode = TV_Queues.Nodes.Add("localhost");
-            rootNode.Nodes.Add("Public Queues", "Public Queues");
-            rootNode.Nodes.Add("Private Queues", "Private Queues");
-            rootNode.Nodes.Add("System Queues", "System Queues");
+            rootNode.Nodes.Add(nameof(Constants.Private), Constants.Private);
+            rootNode.Nodes.Add(nameof(Constants.Public), Constants.Public);
+            rootNode.Nodes.Add(nameof(Constants.System), Constants.System);
 
-            var publicNode = rootNode.GetNode("Public Queues");
-            LoadNode(publicNode, PublicQueues);
-            var privateNode = rootNode.GetNode("Private Queues");
+            var privateNode = rootNode.GetNode(nameof(Constants.Private));
             LoadNode(privateNode, PrivateQueues);
-            var systemNode = rootNode.GetNode("System Queues");
+            var publicNode = rootNode.GetNode(nameof(Constants.Public));
+            LoadNode(publicNode, PublicQueues);
+            var systemNode = rootNode.GetNode(nameof(Constants.System));
             LoadNode(systemNode, SystemQueues);
         }
 
         private void LoadQueues()
         {
+            try
+            {
+                PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").OrderBy(x => x.QueueName).ToList();
+            }
+            catch (Exception)
+            {
+            }
+
             try
             {
                 PublicQueues = MessageQueue.GetPublicQueues().OrderBy(x => x.QueueName).ToList();
@@ -56,17 +65,19 @@ namespace QueueInator
             {
             }
 
-            //PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").OrderBy(x => x.QueueName).ToList();
+            try
+            {
+                string prefix = $"DIRECT=OS:{MachineId.ToLower()}";
+                var dead1 = new MessageQueue(prefix + @"\SYSTEM$\DEADXACT", accessMode: QueueAccessMode.PeekAndAdmin);
+                var dead2 = new MessageQueue(prefix + @"\SYSTEM$\DEADLETTER", accessMode: QueueAccessMode.PeekAndAdmin);
 
-            string prefix = $"DIRECT=OS:{MachineId.ToLower()}";
-            //var deadLetter = new MessageQueue(prefix+@"\DeadLetter$");
-            //var xactDeadLetter = new MessageQueue(prefix+ @"\XactDeadLetter$");
-            var dead1 = new MessageQueue(prefix + @"\SYSTEM$\DEADXACT", accessMode: QueueAccessMode.PeekAndAdmin);
-            var dead2 = new MessageQueue(prefix + @"\SYSTEM$\DEADLETTER", accessMode: QueueAccessMode.PeekAndAdmin);
-
-            SystemQueues = new List<MessageQueue>();
-            SystemQueues.Add(dead1);
-            SystemQueues.Add(dead2);
+                SystemQueues = new List<MessageQueue>();
+                SystemQueues.Add(dead1);
+                SystemQueues.Add(dead2);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private void LoadNode(TreeNode parentNode, List<MessageQueue> queues, int depth = 0)
@@ -89,7 +100,8 @@ namespace QueueInator
 
         private TreeNode AddNode(TreeNode node, string name, int n = 0)
         {
-            return node.Nodes.Add(name, name + $" ({n})");
+            var fullName = $"{node.Name}.{name}";
+            return node.Nodes.Add(fullName, name + $" ({n})");
         }
 
         public void CreateQueue(string queueName)
@@ -97,18 +109,20 @@ namespace QueueInator
             if (string.IsNullOrEmpty(queueName))
                 return;
 
-            var queuePath = queueName.ToQueuePath();
+            var queueFullName = $"{CurrentNode.Name}.{queueName}";
+
+            var queuePath = queueFullName.ToQueuePath();
 
             if (!MessageQueue.Exists(queuePath))
             {
                 MessageQueue.Create(queuePath);
-                CurrentNode.Nodes.Add(queueName);
+                CurrentNode.Nodes.Add(queueFullName, queueName);
             }
         }
 
         public void DeleteQueue()
         {
-            var queueName = CurrentNode?.Text;
+            var queueName = CurrentNode?.Name;
             if (string.IsNullOrEmpty(queueName))
                 return;
 

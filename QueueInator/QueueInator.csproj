@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Constants.cs" />
     <Compile Include="Forms\NewQueueDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,9 +63,6 @@
     </Compile>
     <Compile Include="Forms\MainScreen.Designer.cs">
       <DependentUpon>MainScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\Queue.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
