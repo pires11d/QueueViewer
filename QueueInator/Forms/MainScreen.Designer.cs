@@ -70,19 +70,34 @@ namespace QueueInator
             this.messageQueue1 = new System.Messaging.MessageQueue();
             this.CB_Refresh = new System.Windows.Forms.CheckBox();
             this.CBB_Refresh = new System.Windows.Forms.ComboBox();
+            this.L_Unit = new System.Windows.Forms.Label();
+            this.P_Top = new System.Windows.Forms.Panel();
+            this.P_Bottom = new System.Windows.Forms.Panel();
+            this.P_Left = new System.Windows.Forms.Panel();
+            this.P_Right = new System.Windows.Forms.Panel();
+            this.P_BotttomRight = new System.Windows.Forms.Panel();
+            this.P_TopRight = new System.Windows.Forms.Panel();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
+            this.P_Top.SuspendLayout();
+            this.P_Bottom.SuspendLayout();
+            this.P_Left.SuspendLayout();
+            this.P_Right.SuspendLayout();
+            this.P_BotttomRight.SuspendLayout();
+            this.P_TopRight.SuspendLayout();
             this.SuspendLayout();
             // 
             // TV_Queues
             // 
-            this.TV_Queues.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.TV_Queues.Location = new System.Drawing.Point(12, 33);
+            this.TV_Queues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TV_Queues.Location = new System.Drawing.Point(0, 0);
             this.TV_Queues.Margin = new System.Windows.Forms.Padding(4);
             this.TV_Queues.Name = "TV_Queues";
             this.TV_Queues.ShowNodeToolTips = true;
-            this.TV_Queues.Size = new System.Drawing.Size(335, 567);
+            this.TV_Queues.Size = new System.Drawing.Size(287, 503);
             this.TV_Queues.TabIndex = 0;
             this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
             // 
@@ -95,8 +110,8 @@ namespace QueueInator
             this.helpToolStripMenuItem});
             this.MS_Header.Location = new System.Drawing.Point(0, 0);
             this.MS_Header.Name = "MS_Header";
-            this.MS_Header.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.MS_Header.Size = new System.Drawing.Size(1259, 24);
+            this.MS_Header.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            this.MS_Header.Size = new System.Drawing.Size(1102, 24);
             this.MS_Header.TabIndex = 1;
             this.MS_Header.Text = "menuStrip1";
             // 
@@ -370,42 +385,137 @@ namespace QueueInator
             // 
             // CB_Refresh
             // 
-            this.CB_Refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CB_Refresh.AutoSize = true;
             this.CB_Refresh.Checked = true;
             this.CB_Refresh.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CB_Refresh.Location = new System.Drawing.Point(12, 608);
+            this.CB_Refresh.Location = new System.Drawing.Point(19, 7);
             this.CB_Refresh.Name = "CB_Refresh";
-            this.CB_Refresh.Size = new System.Drawing.Size(112, 20);
+            this.CB_Refresh.Size = new System.Drawing.Size(101, 18);
             this.CB_Refresh.TabIndex = 2;
             this.CB_Refresh.Text = "Refresh Every";
             this.CB_Refresh.UseVisualStyleBackColor = true;
             // 
             // CBB_Refresh
             // 
-            this.CBB_Refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CBB_Refresh.FormattingEnabled = true;
             this.CBB_Refresh.Items.AddRange(new object[] {
             "1",
             "2",
             "5",
             "10"});
-            this.CBB_Refresh.Location = new System.Drawing.Point(130, 606);
+            this.CBB_Refresh.Location = new System.Drawing.Point(123, 5);
             this.CBB_Refresh.Name = "CBB_Refresh";
-            this.CBB_Refresh.Size = new System.Drawing.Size(56, 24);
+            this.CBB_Refresh.Size = new System.Drawing.Size(50, 22);
             this.CBB_Refresh.TabIndex = 3;
+            // 
+            // L_Unit
+            // 
+            this.L_Unit.AutoSize = true;
+            this.L_Unit.Location = new System.Drawing.Point(177, 8);
+            this.L_Unit.Name = "L_Unit";
+            this.L_Unit.Size = new System.Drawing.Size(51, 14);
+            this.L_Unit.TabIndex = 4;
+            this.L_Unit.Text = "seconds";
+            // 
+            // P_Top
+            // 
+            this.P_Top.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.P_Top.Controls.Add(this.P_Right);
+            this.P_Top.Controls.Add(this.P_Left);
+            this.P_Top.Location = new System.Drawing.Point(0, 23);
+            this.P_Top.Name = "P_Top";
+            this.P_Top.Size = new System.Drawing.Size(1090, 503);
+            this.P_Top.TabIndex = 5;
+            // 
+            // P_Bottom
+            // 
+            this.P_Bottom.Controls.Add(this.CB_Refresh);
+            this.P_Bottom.Controls.Add(this.CBB_Refresh);
+            this.P_Bottom.Controls.Add(this.L_Unit);
+            this.P_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.P_Bottom.Location = new System.Drawing.Point(0, 529);
+            this.P_Bottom.Name = "P_Bottom";
+            this.P_Bottom.Size = new System.Drawing.Size(1102, 31);
+            this.P_Bottom.TabIndex = 8;
+            // 
+            // P_Left
+            // 
+            this.P_Left.Controls.Add(this.TV_Queues);
+            this.P_Left.Dock = System.Windows.Forms.DockStyle.Left;
+            this.P_Left.Location = new System.Drawing.Point(0, 0);
+            this.P_Left.Name = "P_Left";
+            this.P_Left.Size = new System.Drawing.Size(287, 503);
+            this.P_Left.TabIndex = 10;
+            // 
+            // P_Right
+            // 
+            this.P_Right.Controls.Add(this.splitter1);
+            this.P_Right.Controls.Add(this.P_BotttomRight);
+            this.P_Right.Controls.Add(this.P_TopRight);
+            this.P_Right.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.P_Right.Location = new System.Drawing.Point(287, 0);
+            this.P_Right.Name = "P_Right";
+            this.P_Right.Size = new System.Drawing.Size(803, 503);
+            this.P_Right.TabIndex = 11;
+            // 
+            // P_BotttomRight
+            // 
+            this.P_BotttomRight.Controls.Add(this.textBox1);
+            this.P_BotttomRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.P_BotttomRight.Location = new System.Drawing.Point(0, 220);
+            this.P_BotttomRight.Name = "P_BotttomRight";
+            this.P_BotttomRight.Size = new System.Drawing.Size(803, 283);
+            this.P_BotttomRight.TabIndex = 11;
+            // 
+            // P_TopRight
+            // 
+            this.P_TopRight.Controls.Add(this.listView1);
+            this.P_TopRight.Dock = System.Windows.Forms.DockStyle.Top;
+            this.P_TopRight.Location = new System.Drawing.Point(0, 0);
+            this.P_TopRight.Name = "P_TopRight";
+            this.P_TopRight.Size = new System.Drawing.Size(803, 220);
+            this.P_TopRight.TabIndex = 10;
+            // 
+            // listView1
+            // 
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(0, 0);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(803, 220);
+            this.listView1.TabIndex = 0;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(803, 283);
+            this.textBox1.TabIndex = 0;
+            // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.splitter1.Location = new System.Drawing.Point(0, 220);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(803, 3);
+            this.splitter1.TabIndex = 12;
+            this.splitter1.TabStop = false;
             // 
             // MainScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1259, 640);
+            this.ClientSize = new System.Drawing.Size(1102, 560);
             this.ContextMenuStrip = this.CMS_Queues;
-            this.Controls.Add(this.CBB_Refresh);
-            this.Controls.Add(this.CB_Refresh);
-            this.Controls.Add(this.TV_Queues);
+            this.Controls.Add(this.P_Bottom);
+            this.Controls.Add(this.P_Top);
             this.Controls.Add(this.MS_Header);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MS_Header;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -413,9 +523,18 @@ namespace QueueInator
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "QueueInator";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.MainScreen_Load);
             this.MS_Header.ResumeLayout(false);
             this.MS_Header.PerformLayout();
             this.CMS_Queues.ResumeLayout(false);
+            this.P_Top.ResumeLayout(false);
+            this.P_Bottom.ResumeLayout(false);
+            this.P_Bottom.PerformLayout();
+            this.P_Left.ResumeLayout(false);
+            this.P_Right.ResumeLayout(false);
+            this.P_BotttomRight.ResumeLayout(false);
+            this.P_BotttomRight.PerformLayout();
+            this.P_TopRight.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -462,6 +581,16 @@ namespace QueueInator
         private System.Windows.Forms.ToolStripMenuItem TSMI_Create;
         private System.Windows.Forms.ComboBox CBB_Refresh;
         private System.Windows.Forms.CheckBox CB_Refresh;
+        private System.Windows.Forms.Label L_Unit;
+        private System.Windows.Forms.Panel P_Top;
+        private System.Windows.Forms.Panel P_Bottom;
+        private System.Windows.Forms.Panel P_Right;
+        private System.Windows.Forms.Panel P_BotttomRight;
+        private System.Windows.Forms.Panel P_TopRight;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.Panel P_Left;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Splitter splitter1;
     }
 }
 

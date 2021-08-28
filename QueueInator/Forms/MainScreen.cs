@@ -22,6 +22,11 @@ namespace QueueInator
             CBB_Refresh.SelectedIndex = 1;
         }
 
+        private void MainScreen_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void LoadTreeView()
         {
             LoadQueues();
@@ -29,9 +34,9 @@ namespace QueueInator
             TV_Queues.Nodes.Clear();
 
             TreeNode rootNode = TV_Queues.Nodes.Add("localhost");
-            rootNode.Nodes.Add("Public Queues","Public Queues");
-            rootNode.Nodes.Add("Private Queues","Private Queues");
-            rootNode.Nodes.Add("System Queues","System Queues");
+            rootNode.Nodes.Add("Public Queues", "Public Queues");
+            rootNode.Nodes.Add("Private Queues", "Private Queues");
+            rootNode.Nodes.Add("System Queues", "System Queues");
 
             var publicNode = rootNode.GetNode("Public Queues");
             LoadNode(publicNode, PublicQueues);
@@ -45,13 +50,13 @@ namespace QueueInator
         {
             try
             {
-                PublicQueues = MessageQueue.GetPublicQueues().ToList();
+                PublicQueues = MessageQueue.GetPublicQueues().OrderBy(x => x.QueueName).ToList();
             }
             catch (Exception)
             {
             }
 
-            PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").ToList();
+            PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").OrderBy(x => x.QueueName).ToList();
 
             string prefix = $"DIRECT=OS:{MachineId.ToLower()}";
             //var deadLetter = new MessageQueue(prefix+@"\DeadLetter$");
@@ -68,41 +73,38 @@ namespace QueueInator
         {
             foreach (var queue in queues)
             {
-                var messages = new List<Message>();
-                int n = 0;
                 try
                 {
-                    messages = queue.GetAllMessages()?.ToList();
-                    n = messages?.Count() ?? 0;
+                    var messages = queue.GetAllMessages()?.ToList();
+                    var n = messages?.Count() ?? 0;
+                    var fullName = queue.QueueName.ToQueueName();
+                    AddNode(parentNode, fullName, "", n);
                 }
                 catch (Exception)
                 {
                 }
-
-                var fullName = queue.QueueName.ToQueueName();
-
-                AddNode(parentNode, fullName, n);
             }
         }
 
-        private void AddNode(TreeNode node, string fullName, int n = 0)
+        private void AddNode(TreeNode node, string fullName, string lastName = "", int n = 0)
         {
-            var lastName = "";
             var names = fullName.Split('.');
             foreach (var name in names)
             {
                 var existentNode = node.GetNode(lastName);
                 if (existentNode != null)
                 {
-                    AddNode(existentNode, name, n);
+                    AddNode(existentNode, name, lastName, n);
+                    lastName = name;
+                    continue;
                 }
 
                 if (node.Nodes.ContainsKey(name))
                 {
                     lastName = name;
                 }
-                else 
-                { 
+                else
+                {
                     node.Nodes.Add(name, name + $" ({n})");
                     lastName = name;
                 }
@@ -127,7 +129,7 @@ namespace QueueInator
         public void DeleteQueue()
         {
             var queueName = CurrentNode?.Text;
-            if (string.IsNullOrEmpty(queueName)) 
+            if (string.IsNullOrEmpty(queueName))
                 return;
 
             var queuePath = queueName.ToQueuePath();
