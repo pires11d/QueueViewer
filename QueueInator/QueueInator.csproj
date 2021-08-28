@@ -99,5 +99,10 @@
   <ItemGroup>
     <None Include="Resources\q.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\folder.ico" />
+    <None Include="Resources\mail.ico" />
+    <None Include="Resources\folderX.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

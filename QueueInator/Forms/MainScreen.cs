@@ -1,6 +1,7 @@
 ﻿using QueueInator.Entities;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Messaging;
 using System.Windows.Forms;
@@ -20,31 +21,26 @@ namespace QueueInator
         {
             InitializeComponent();
             LoadTreeView();
-            CBB_Refresh.SelectedIndex = 1;
+            CBB_Refresh.SelectedIndex = 2;
         }
 
-        private void MainScreen_Load(object sender, EventArgs e)
-        {
-
-        }
+#region LOAD
 
         private void LoadTreeView()
         {
+            LoadImages();
+
             LoadQueues();
 
-            TV_Queues.Nodes.Clear();
+            LoadNodes();
+        }
 
-            TreeNode rootNode = TV_Queues.Nodes.Add("localhost");
-            rootNode.Nodes.Add(nameof(Constants.Private), Constants.Private);
-            rootNode.Nodes.Add(nameof(Constants.Public), Constants.Public);
-            rootNode.Nodes.Add(nameof(Constants.System), Constants.System);
-
-            var privateNode = rootNode.GetNode(nameof(Constants.Private));
-            LoadNode(privateNode, PrivateQueues);
-            var publicNode = rootNode.GetNode(nameof(Constants.Public));
-            LoadNode(publicNode, PublicQueues);
-            var systemNode = rootNode.GetNode(nameof(Constants.System));
-            LoadNode(systemNode, SystemQueues);
+        private void LoadImages()
+        {
+            TV_Queues.ImageList = new ImageList();
+            TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.mail.ToBitmap());
+            TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.folder.ToBitmap());
+            TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.folderX.ToBitmap());
         }
 
         private void LoadQueues()
@@ -80,6 +76,24 @@ namespace QueueInator
             }
         }
 
+        private void LoadNodes()
+        {
+            TV_Queues.Nodes.Clear();
+
+            var machine = MachineId == Environment.MachineName ? "localhost" : MachineId;
+            TreeNode rootNode = TV_Queues.Nodes.Add(machine, machine, 1, 1);
+            rootNode.Nodes.Add(nameof(Constants.Private), Constants.Private, 1, 1);
+            rootNode.Nodes.Add(nameof(Constants.Public), Constants.Public, 1, 1);
+            rootNode.Nodes.Add(nameof(Constants.System), Constants.System, 2, 2);
+
+            var privateNode = rootNode.GetNode(nameof(Constants.Private));
+            LoadNode(privateNode, PrivateQueues);
+            var publicNode = rootNode.GetNode(nameof(Constants.Public));
+            LoadNode(publicNode, PublicQueues);
+            var systemNode = rootNode.GetNode(nameof(Constants.System));
+            LoadNode(systemNode, SystemQueues);
+        }
+
         private void LoadNode(TreeNode parentNode, List<MessageQueue> queues, int depth = 0)
         {
             if (!queues.Any()) return;
@@ -99,19 +113,25 @@ namespace QueueInator
                 {
                 }
 
-                var newParent = AddNode(parentNode, queueGroup.Key, messageCount);
-
                 var newItems = queueGroup.Except(lastNodeItems).ToList();
+
+                int imageIndex = newItems.Any() ? 1 : 0;
+
+                var newParent = AddNode(parentNode, queueGroup.Key, messageCount, imageIndex);
 
                 LoadNode(newParent, newItems, depth + 1);
             }
         }
 
-        private TreeNode AddNode(TreeNode node, string name, int n = 0)
+        private TreeNode AddNode(TreeNode node, string name, int n = 0, int imageIndex = 0)
         {
             var fullName = $"{node.Name}.{name}";
-            return node.Nodes.Add(fullName, name + $" ({n})");
+            return node.Nodes.Add(fullName, name + $" ({n})", imageIndex, imageIndex);
         }
+
+#endregion LOAD
+
+        #region ACTIONS
 
         public void CreateQueue(string queueName)
         {
@@ -143,6 +163,8 @@ namespace QueueInator
                 CurrentNode.Remove();
             }
         }
+
+        #endregion ACTIONS
 
         #region BUTTONS
 
