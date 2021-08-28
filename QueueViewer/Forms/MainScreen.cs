@@ -13,8 +13,10 @@ namespace QueueViewer
 {
     public partial class MainScreen : Form
     {
+        public string MachineId { get; set; } = Environment.MachineName;
         public TreeNode CurrentNode { get; set; }
         public List<MessageQueue> PrivateQueues { get; set; } = new List<MessageQueue>();
+        public List<MessageQueue> PublicQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> SystemQueues { get; set; } = new List<MessageQueue>();
 
         public MainScreen()
@@ -27,10 +29,15 @@ namespace QueueViewer
         {
             LoadQueues();
 
+            TV_Queues.Nodes.Clear();
+
             TreeNode rootNode = TV_Queues.Nodes.Add("localhost");
+            rootNode.Nodes.Add("Public Queues");
             rootNode.Nodes.Add("Private Queues");
             rootNode.Nodes.Add("System Queues");
 
+            var publicNode = rootNode.GetNode("Public Queues");
+            LoadNode(publicNode, PublicQueues);
             var privateNode = rootNode.GetNode("Private Queues");
             LoadNode(privateNode, PrivateQueues);
             var systemNode = rootNode.GetNode("System Queues");
@@ -39,12 +46,25 @@ namespace QueueViewer
 
         private void LoadQueues()
         {
+            try
+            {
+                PublicQueues = MessageQueue.GetPublicQueues().ToList();
+            }
+            catch (Exception)
+            {
+            }
+
             PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").ToList();
 
-            if (!PrivateQueues.Any())
-                    MessageQueue.Create(@".\private$\jarbas");
+            string prefix = $"DIRECT=OS:{MachineId.ToLower()}";
+            //var deadLetter = new MessageQueue(prefix+@"\DeadLetter$");
+            //var xactDeadLetter = new MessageQueue(prefix+ @"\XactDeadLetter$");
+            var dead1 = new MessageQueue(prefix + @"\SYSTEM$\DEADXACT", accessMode: QueueAccessMode.PeekAndAdmin);
+            var dead2 = new MessageQueue(prefix + @"\SYSTEM$\DEADLETTER", accessMode: QueueAccessMode.PeekAndAdmin);
 
-            PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").ToList();
+            SystemQueues = new List<MessageQueue>();
+            SystemQueues.Add(dead1);
+            SystemQueues.Add(dead2);
         }
 
         private void LoadNode(TreeNode node, List<MessageQueue> queues)
