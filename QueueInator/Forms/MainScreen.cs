@@ -86,13 +86,23 @@ namespace QueueInator
 
             var groupedQueues = queues.GroupBy(x => x.QueueName.ToQueueName().Split('.')[depth]);
 
-            foreach (var item in groupedQueues)
+            foreach (var queueGroup in groupedQueues)
             {
-                var newParent = AddNode(parentNode, item.Key, item.Count());
+                var lastNodeItems = queueGroup.Where(x => x.QueueName.Count(y => y == '.') == depth);
 
-                var lastNodeItems = item.Where(x => x.QueueName.Count(y => y == '.') == depth);
+                var queue = lastNodeItems.FirstOrDefault();
+                int messageCount = 0;
+                try
+                {
+                    messageCount = queue?.GetAllMessages()?.Count() ?? 0;
+                }
+                catch (Exception)
+                {
+                }
 
-                var newItems = item.Except(lastNodeItems).ToList();
+                var newParent = AddNode(parentNode, queueGroup.Key, messageCount);
+
+                var newItems = queueGroup.Except(lastNodeItems).ToList();
 
                 LoadNode(newParent, newItems, depth + 1);
             }
