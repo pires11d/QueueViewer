@@ -75,10 +75,14 @@ namespace QueueInator
             this.P_Right = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.P_BotttomRight = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TB_Message = new System.Windows.Forms.TextBox();
             this.P_TopRight = new System.Windows.Forms.Panel();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.LV_Messages = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.P_Left = new System.Windows.Forms.Panel();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             this.P_Bottom = new System.Windows.Forms.Panel();
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
@@ -345,7 +349,8 @@ namespace QueueInator
             this.TSMI_Purge,
             this.TSMI_Delete});
             this.CMS_Queues.Name = "CMS_Queues";
-            this.CMS_Queues.Size = new System.Drawing.Size(217, 92);
+            this.CMS_Queues.Size = new System.Drawing.Size(217, 114);
+            this.CMS_Queues.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Queues_Opening);
             // 
             // TSMI_Create
             // 
@@ -452,49 +457,81 @@ namespace QueueInator
             // 
             // P_BotttomRight
             // 
-            this.P_BotttomRight.Controls.Add(this.textBox1);
+            this.P_BotttomRight.Controls.Add(this.TB_Message);
             this.P_BotttomRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.P_BotttomRight.Location = new System.Drawing.Point(0, 220);
             this.P_BotttomRight.Name = "P_BotttomRight";
             this.P_BotttomRight.Size = new System.Drawing.Size(803, 283);
             this.P_BotttomRight.TabIndex = 11;
             // 
-            // textBox1
+            // TB_Message
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(803, 283);
-            this.textBox1.TabIndex = 0;
+            this.TB_Message.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TB_Message.Location = new System.Drawing.Point(0, 0);
+            this.TB_Message.Multiline = true;
+            this.TB_Message.Name = "TB_Message";
+            this.TB_Message.Size = new System.Drawing.Size(803, 283);
+            this.TB_Message.TabIndex = 0;
             // 
             // P_TopRight
             // 
-            this.P_TopRight.Controls.Add(this.listView1);
+            this.P_TopRight.Controls.Add(this.LV_Messages);
             this.P_TopRight.Dock = System.Windows.Forms.DockStyle.Top;
             this.P_TopRight.Location = new System.Drawing.Point(0, 0);
             this.P_TopRight.Name = "P_TopRight";
             this.P_TopRight.Size = new System.Drawing.Size(803, 220);
             this.P_TopRight.TabIndex = 10;
             // 
-            // listView1
+            // LV_Messages
             // 
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(803, 220);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.LV_Messages.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+            this.LV_Messages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LV_Messages.GridLines = true;
+            this.LV_Messages.HideSelection = false;
+            this.LV_Messages.Location = new System.Drawing.Point(0, 0);
+            this.LV_Messages.MultiSelect = false;
+            this.LV_Messages.Name = "LV_Messages";
+            this.LV_Messages.Size = new System.Drawing.Size(803, 220);
+            this.LV_Messages.TabIndex = 0;
+            this.LV_Messages.UseCompatibleStateImageBehavior = false;
+            this.LV_Messages.View = System.Windows.Forms.View.Details;
+            this.LV_Messages.SelectedIndexChanged += new System.EventHandler(this.LV_Messages_SelectedIndexChanged);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "MessageId";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Creation Time";
+            this.columnHeader2.Width = 95;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Body";
+            this.columnHeader3.Width = 72;
             // 
             // P_Left
             // 
+            this.P_Left.Controls.Add(this.splitter2);
             this.P_Left.Controls.Add(this.TV_Queues);
             this.P_Left.Dock = System.Windows.Forms.DockStyle.Left;
             this.P_Left.Location = new System.Drawing.Point(0, 0);
             this.P_Left.Name = "P_Left";
             this.P_Left.Size = new System.Drawing.Size(287, 503);
             this.P_Left.TabIndex = 10;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter2.Location = new System.Drawing.Point(284, 0);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 503);
+            this.splitter2.TabIndex = 1;
+            this.splitter2.TabStop = false;
             // 
             // P_Bottom
             // 
@@ -587,10 +624,14 @@ namespace QueueInator
         private System.Windows.Forms.Panel P_Right;
         private System.Windows.Forms.Panel P_BotttomRight;
         private System.Windows.Forms.Panel P_TopRight;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView LV_Messages;
         private System.Windows.Forms.Panel P_Left;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox TB_Message;
         private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.Splitter splitter2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
     }
 }
 

@@ -12,6 +12,7 @@ namespace QueueInator
         {
             InitializeComponent();
             Main = main;
+            AcceptButton = BTN_OK;
         }
 
         private void BTN_OK_Click(object sender, EventArgs e)
