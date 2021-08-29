@@ -1,6 +1,7 @@
 ﻿using QueueInator.Entities;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Messaging;
@@ -13,15 +14,17 @@ namespace QueueInator
     {
         public string MachineId { get; set; } = Environment.MachineName;
         public TreeNode CurrentNode { get; set; }
+        public MessageQueue CurrentQueue { get; set; }
         public List<MessageQueue> PrivateQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> PublicQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> SystemQueues { get; set; } = new List<MessageQueue>();
+        public ListViewColumnSorter ColumnSorter { get; set; }
 
         public MainScreen()
         {
             InitializeComponent();
             LoadTreeView();
-            ResizeListViewColumns(LV_Messages);
+            LoadListView();
             CBB_Refresh.SelectedIndex = 2;
         }
 
@@ -30,10 +33,15 @@ namespace QueueInator
         private void LoadTreeView()
         {
             LoadImages();
-
             LoadQueues();
-
             LoadNodes();
+        }
+
+        private void LoadListView()
+        {
+            ResizeListViewColumns(LV_Messages);
+            ColumnSorter = new ListViewColumnSorter();
+            LV_Messages.ListViewItemSorter = ColumnSorter;
         }
 
         private void LoadImages()
@@ -42,6 +50,10 @@ namespace QueueInator
             TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.mail.ToBitmap());
             TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.folder.ToBitmap());
             TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.folderX.ToBitmap());
+
+            LV_Messages.LargeImageList = new ImageList();
+            LV_Messages.LargeImageList.ImageSize = new Size(16, 16);
+            LV_Messages.LargeImageList.Images.Add(QueueInator.Properties.Resources.mail.ToBitmap());
         }
 
         private void LoadQueues()
@@ -171,13 +183,11 @@ namespace QueueInator
             }
         }
 
-        private void ShowMessages(TreeNode node)
+        private void ShowMessages(MessageQueue selectedQueue)
         {
             LV_Messages.Items.Clear();
             try
             {
-                var selectedQueue = GetQueue(node);
-
                 var messages = selectedQueue?.GetAllMessages()?.ToList();
                 if (messages != null)
                 {
@@ -191,7 +201,7 @@ namespace QueueInator
                             message.ResponseQueue?.CreateTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
                             body
                         };
-                        var item = new ListViewItem(values);
+                        var item = new ListViewItem(values,0);
                         LV_Messages.Items.Add(item);
                     }
                 }
@@ -216,13 +226,13 @@ namespace QueueInator
             return result;
         }
 
-        private MessageQueue GetQueue(TreeNode node)
+        private MessageQueue GetQueueByName(string name)
         {
-            var queues = GetQueuesByName(node.Name);
+            var queues = GetQueuesByName(name);
             if (queues == null)
                 return null;
 
-            var queueName = node.Name.ToQueueName();
+            var queueName = name.ToQueueName();
             var selectedQueue = queues.FirstOrDefault(x => x.QueueName == queueName);
 
             return selectedQueue;
@@ -255,7 +265,7 @@ namespace QueueInator
 
         #endregion ACTIONS
 
-        #region BUTTONS
+        #region CONTROLS
 
         private void TSMI_Create_Click(object sender, EventArgs e)
         {
@@ -280,7 +290,9 @@ namespace QueueInator
             try
             {
                 CurrentNode = e.Node;
-                ShowMessages(e.Node);
+                CurrentQueue = GetQueueByName(CurrentNode.Name);
+
+                ShowMessages(CurrentQueue);
                 ResizeListViewColumns(LV_Messages);
             }
             catch (Exception ex)
@@ -288,8 +300,6 @@ namespace QueueInator
                 MessageBox.Show(ex.Message);
             }
         }
-
-        #endregion BUTTONS
 
         private void LV_Messages_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -307,5 +317,43 @@ namespace QueueInator
             if (!(activeControl is TreeView))
                 e.Cancel = true;
         }
+
+        private void LV_Messages_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            // Determine if clicked column is already the column that is being sorted.
+            if (e.Column == ColumnSorter.SortColumn)
+            {
+                // Reverse the current sort direction for this column.
+                if (ColumnSorter.Order == SortOrder.Ascending)
+                {
+                    ColumnSorter.Order = SortOrder.Descending;
+                }
+                else
+                {
+                    ColumnSorter.Order = SortOrder.Ascending;
+                }
+            }
+            else
+            {
+                // Set the column number that is to be sorted; default to ascending.
+                ColumnSorter.SortColumn = e.Column;
+                ColumnSorter.Order = SortOrder.Ascending;
+            }
+
+            // Perform the sort with these new sort options.
+            LV_Messages.Sort();
+        }
+
+        private void LV_Messages_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+
+        }
+
+        private void TV_Queues_DragDrop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        #endregion CONTROLS
     }
 }

@@ -104,6 +104,7 @@ namespace QueueInator
             this.TV_Queues.Size = new System.Drawing.Size(287, 503);
             this.TV_Queues.TabIndex = 0;
             this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
+            this.TV_Queues.DragDrop += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragDrop);
             // 
             // MS_Header
             // 
@@ -349,7 +350,7 @@ namespace QueueInator
             this.TSMI_Purge,
             this.TSMI_Delete});
             this.CMS_Queues.Name = "CMS_Queues";
-            this.CMS_Queues.Size = new System.Drawing.Size(217, 114);
+            this.CMS_Queues.Size = new System.Drawing.Size(217, 92);
             this.CMS_Queues.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Queues_Opening);
             // 
             // TSMI_Create
@@ -498,6 +499,8 @@ namespace QueueInator
             this.LV_Messages.TabIndex = 0;
             this.LV_Messages.UseCompatibleStateImageBehavior = false;
             this.LV_Messages.View = System.Windows.Forms.View.Details;
+            this.LV_Messages.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LV_Messages_ColumnClick);
+            this.LV_Messages.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.LV_Messages_ItemDrag);
             this.LV_Messages.SelectedIndexChanged += new System.EventHandler(this.LV_Messages_SelectedIndexChanged);
             // 
             // columnHeader1
@@ -511,8 +514,8 @@ namespace QueueInator
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Body";
-            this.columnHeader3.Width = 72;
+            this.columnHeader3.Text = "Body Content";
+            this.columnHeader3.Width = 97;
             // 
             // P_Left
             // 
