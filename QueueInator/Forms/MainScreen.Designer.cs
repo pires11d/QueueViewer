@@ -31,7 +31,6 @@ namespace QueueInator
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
-            this.TV_Queues = new System.Windows.Forms.TreeView();
             this.MS_Header = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,6 +71,7 @@ namespace QueueInator
             this.CBB_Refresh = new System.Windows.Forms.ComboBox();
             this.L_Unit = new System.Windows.Forms.Label();
             this.P_Top = new System.Windows.Forms.Panel();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             this.P_Right = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.P_BotttomRight = new System.Windows.Forms.Panel();
@@ -81,8 +81,9 @@ namespace QueueInator
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.P_Left = new System.Windows.Forms.Panel();
-            this.splitter2 = new System.Windows.Forms.Splitter();
+            this.TV_Queues = new System.Windows.Forms.TreeView();
             this.P_Bottom = new System.Windows.Forms.Panel();
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
@@ -94,18 +95,6 @@ namespace QueueInator
             this.P_Bottom.SuspendLayout();
             this.SuspendLayout();
             // 
-            // TV_Queues
-            // 
-            this.TV_Queues.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TV_Queues.Location = new System.Drawing.Point(0, 0);
-            this.TV_Queues.Margin = new System.Windows.Forms.Padding(4);
-            this.TV_Queues.Name = "TV_Queues";
-            this.TV_Queues.ShowNodeToolTips = true;
-            this.TV_Queues.Size = new System.Drawing.Size(287, 503);
-            this.TV_Queues.TabIndex = 0;
-            this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
-            this.TV_Queues.DragDrop += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragDrop);
-            // 
             // MS_Header
             // 
             this.MS_Header.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -115,8 +104,7 @@ namespace QueueInator
             this.helpToolStripMenuItem});
             this.MS_Header.Location = new System.Drawing.Point(0, 0);
             this.MS_Header.Name = "MS_Header";
-            this.MS_Header.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.MS_Header.Size = new System.Drawing.Size(1102, 24);
+            this.MS_Header.Size = new System.Drawing.Size(945, 24);
             this.MS_Header.TabIndex = 1;
             this.MS_Header.Text = "menuStrip1";
             // 
@@ -364,9 +352,10 @@ namespace QueueInator
             // TSMI_Insert
             // 
             this.TSMI_Insert.Name = "TSMI_Insert";
-            this.TSMI_Insert.ShortcutKeys = System.Windows.Forms.Keys.Insert;
+            this.TSMI_Insert.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
             this.TSMI_Insert.Size = new System.Drawing.Size(216, 22);
             this.TSMI_Insert.Text = "Insert Message";
+            this.TSMI_Insert.Click += new System.EventHandler(this.TSMI_Insert_Click);
             // 
             // TSMI_Purge
             // 
@@ -374,11 +363,12 @@ namespace QueueInator
             this.TSMI_Purge.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
             this.TSMI_Purge.Size = new System.Drawing.Size(216, 22);
             this.TSMI_Purge.Text = "Purge Queue";
+            this.TSMI_Purge.Click += new System.EventHandler(this.TSMI_Purge_Click);
             // 
             // TSMI_Delete
             // 
             this.TSMI_Delete.Name = "TSMI_Delete";
-            this.TSMI_Delete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.TSMI_Delete.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
             this.TSMI_Delete.Size = new System.Drawing.Size(216, 22);
             this.TSMI_Delete.Text = "Delete Queue";
             this.TSMI_Delete.Click += new System.EventHandler(this.TSMI_Delete_Click);
@@ -394,9 +384,9 @@ namespace QueueInator
             this.CB_Refresh.AutoSize = true;
             this.CB_Refresh.Checked = true;
             this.CB_Refresh.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CB_Refresh.Location = new System.Drawing.Point(19, 7);
+            this.CB_Refresh.Location = new System.Drawing.Point(16, 6);
             this.CB_Refresh.Name = "CB_Refresh";
-            this.CB_Refresh.Size = new System.Drawing.Size(101, 18);
+            this.CB_Refresh.Size = new System.Drawing.Size(95, 17);
             this.CB_Refresh.TabIndex = 2;
             this.CB_Refresh.Text = "Refresh Every";
             this.CB_Refresh.UseVisualStyleBackColor = true;
@@ -410,17 +400,17 @@ namespace QueueInator
             "5",
             "10",
             "15"});
-            this.CBB_Refresh.Location = new System.Drawing.Point(123, 5);
+            this.CBB_Refresh.Location = new System.Drawing.Point(117, 4);
             this.CBB_Refresh.Name = "CBB_Refresh";
-            this.CBB_Refresh.Size = new System.Drawing.Size(50, 22);
+            this.CBB_Refresh.Size = new System.Drawing.Size(43, 21);
             this.CBB_Refresh.TabIndex = 3;
             // 
             // L_Unit
             // 
             this.L_Unit.AutoSize = true;
-            this.L_Unit.Location = new System.Drawing.Point(177, 8);
+            this.L_Unit.Location = new System.Drawing.Point(164, 6);
             this.L_Unit.Name = "L_Unit";
-            this.L_Unit.Size = new System.Drawing.Size(51, 14);
+            this.L_Unit.Size = new System.Drawing.Size(46, 13);
             this.L_Unit.TabIndex = 4;
             this.L_Unit.Text = "seconds";
             // 
@@ -429,12 +419,21 @@ namespace QueueInator
             this.P_Top.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.P_Top.Controls.Add(this.splitter2);
             this.P_Top.Controls.Add(this.P_Right);
             this.P_Top.Controls.Add(this.P_Left);
-            this.P_Top.Location = new System.Drawing.Point(0, 23);
+            this.P_Top.Location = new System.Drawing.Point(0, 21);
             this.P_Top.Name = "P_Top";
-            this.P_Top.Size = new System.Drawing.Size(1090, 503);
+            this.P_Top.Size = new System.Drawing.Size(934, 467);
             this.P_Top.TabIndex = 5;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Location = new System.Drawing.Point(269, 0);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 467);
+            this.splitter2.TabIndex = 12;
+            this.splitter2.TabStop = false;
             // 
             // P_Right
             // 
@@ -442,17 +441,17 @@ namespace QueueInator
             this.P_Right.Controls.Add(this.P_BotttomRight);
             this.P_Right.Controls.Add(this.P_TopRight);
             this.P_Right.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.P_Right.Location = new System.Drawing.Point(287, 0);
+            this.P_Right.Location = new System.Drawing.Point(269, 0);
             this.P_Right.Name = "P_Right";
-            this.P_Right.Size = new System.Drawing.Size(803, 503);
+            this.P_Right.Size = new System.Drawing.Size(665, 467);
             this.P_Right.TabIndex = 11;
             // 
             // splitter1
             // 
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter1.Location = new System.Drawing.Point(0, 220);
+            this.splitter1.Location = new System.Drawing.Point(0, 204);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(803, 3);
+            this.splitter1.Size = new System.Drawing.Size(665, 3);
             this.splitter1.TabIndex = 12;
             this.splitter1.TabStop = false;
             // 
@@ -460,9 +459,9 @@ namespace QueueInator
             // 
             this.P_BotttomRight.Controls.Add(this.TB_Message);
             this.P_BotttomRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.P_BotttomRight.Location = new System.Drawing.Point(0, 220);
+            this.P_BotttomRight.Location = new System.Drawing.Point(0, 204);
             this.P_BotttomRight.Name = "P_BotttomRight";
-            this.P_BotttomRight.Size = new System.Drawing.Size(803, 283);
+            this.P_BotttomRight.Size = new System.Drawing.Size(665, 263);
             this.P_BotttomRight.TabIndex = 11;
             // 
             // TB_Message
@@ -471,7 +470,7 @@ namespace QueueInator
             this.TB_Message.Location = new System.Drawing.Point(0, 0);
             this.TB_Message.Multiline = true;
             this.TB_Message.Name = "TB_Message";
-            this.TB_Message.Size = new System.Drawing.Size(803, 283);
+            this.TB_Message.Size = new System.Drawing.Size(665, 263);
             this.TB_Message.TabIndex = 0;
             // 
             // P_TopRight
@@ -480,7 +479,7 @@ namespace QueueInator
             this.P_TopRight.Dock = System.Windows.Forms.DockStyle.Top;
             this.P_TopRight.Location = new System.Drawing.Point(0, 0);
             this.P_TopRight.Name = "P_TopRight";
-            this.P_TopRight.Size = new System.Drawing.Size(803, 220);
+            this.P_TopRight.Size = new System.Drawing.Size(665, 204);
             this.P_TopRight.TabIndex = 10;
             // 
             // LV_Messages
@@ -488,14 +487,15 @@ namespace QueueInator
             this.LV_Messages.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
-            this.columnHeader3});
+            this.columnHeader3,
+            this.columnHeader4});
             this.LV_Messages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LV_Messages.GridLines = true;
             this.LV_Messages.HideSelection = false;
             this.LV_Messages.Location = new System.Drawing.Point(0, 0);
             this.LV_Messages.MultiSelect = false;
             this.LV_Messages.Name = "LV_Messages";
-            this.LV_Messages.Size = new System.Drawing.Size(803, 220);
+            this.LV_Messages.Size = new System.Drawing.Size(665, 204);
             this.LV_Messages.TabIndex = 0;
             this.LV_Messages.UseCompatibleStateImageBehavior = false;
             this.LV_Messages.View = System.Windows.Forms.View.Details;
@@ -514,27 +514,35 @@ namespace QueueInator
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Body Content";
-            this.columnHeader3.Width = 97;
+            this.columnHeader3.Text = "Response Queue";
+            this.columnHeader3.Width = 115;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Body Content";
+            this.columnHeader4.Width = 123;
             // 
             // P_Left
             // 
-            this.P_Left.Controls.Add(this.splitter2);
             this.P_Left.Controls.Add(this.TV_Queues);
             this.P_Left.Dock = System.Windows.Forms.DockStyle.Left;
             this.P_Left.Location = new System.Drawing.Point(0, 0);
             this.P_Left.Name = "P_Left";
-            this.P_Left.Size = new System.Drawing.Size(287, 503);
+            this.P_Left.Size = new System.Drawing.Size(269, 467);
             this.P_Left.TabIndex = 10;
             // 
-            // splitter2
+            // TV_Queues
             // 
-            this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter2.Location = new System.Drawing.Point(284, 0);
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(3, 503);
-            this.splitter2.TabIndex = 1;
-            this.splitter2.TabStop = false;
+            this.TV_Queues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TV_Queues.Location = new System.Drawing.Point(0, 0);
+            this.TV_Queues.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.TV_Queues.Name = "TV_Queues";
+            this.TV_Queues.ShowNodeToolTips = true;
+            this.TV_Queues.Size = new System.Drawing.Size(269, 467);
+            this.TV_Queues.TabIndex = 0;
+            this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
+            this.TV_Queues.DragDrop += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragDrop);
+            this.TV_Queues.DragEnter += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragEnter);
             // 
             // P_Bottom
             // 
@@ -542,27 +550,27 @@ namespace QueueInator
             this.P_Bottom.Controls.Add(this.CBB_Refresh);
             this.P_Bottom.Controls.Add(this.L_Unit);
             this.P_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.P_Bottom.Location = new System.Drawing.Point(0, 529);
+            this.P_Bottom.Location = new System.Drawing.Point(0, 491);
             this.P_Bottom.Name = "P_Bottom";
-            this.P_Bottom.Size = new System.Drawing.Size(1102, 31);
+            this.P_Bottom.Size = new System.Drawing.Size(945, 29);
             this.P_Bottom.TabIndex = 8;
             // 
             // MainScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1102, 560);
+            this.ClientSize = new System.Drawing.Size(945, 520);
             this.ContextMenuStrip = this.CMS_Queues;
             this.Controls.Add(this.P_Bottom);
             this.Controls.Add(this.P_Top);
             this.Controls.Add(this.MS_Header);
-            this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MS_Header;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "QueueInator";
+            this.Text = "My Queue Viewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.MS_Header.ResumeLayout(false);
             this.MS_Header.PerformLayout();
@@ -581,8 +589,6 @@ namespace QueueInator
         }
 
         #endregion
-
-        private System.Windows.Forms.TreeView TV_Queues;
         private System.Windows.Forms.MenuStrip MS_Header;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -633,8 +639,10 @@ namespace QueueInator
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.TreeView TV_Queues;
+        private System.Windows.Forms.Splitter splitter2;
     }
 }
 

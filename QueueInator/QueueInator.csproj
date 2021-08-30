@@ -54,6 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Constants.cs" />
+    <Compile Include="Entities\SoundsEnum.cs" />
+    <Compile Include="Forms\NewMessageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewMessageDialog.Designer.cs">
+      <DependentUpon>NewMessageDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewQueueDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +77,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <EmbeddedResource Include="Forms\NewMessageDialog.resx">
+      <DependentUpon>NewMessageDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewQueueDialog.resx">
       <DependentUpon>NewQueueDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -104,6 +114,12 @@
     <None Include="Resources\q.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Media\aiai.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Media\swoosh.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\folder.ico" />
     <None Include="Resources\mail.ico" />
     <None Include="Resources\folderX.ico" />

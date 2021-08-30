@@ -1,9 +1,11 @@
 ﻿using QueueInator.Entities;
+using QueueInator.Forms;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Messaging;
 using System.Windows.Forms;
 using Message = System.Messaging.Message;
@@ -13,6 +15,8 @@ namespace QueueInator
     public partial class MainScreen : Form
     {
         public string MachineId { get; set; } = Environment.MachineName;
+        public string SoundsFilePath { get; set; } = Path.Combine(Application.StartupPath, "Media");
+        public string CurrentMessage { get; set; }
         public TreeNode CurrentNode { get; set; }
         public MessageQueue CurrentQueue { get; set; }
         public List<MessageQueue> PrivateQueues { get; set; } = new List<MessageQueue>();
@@ -60,7 +64,8 @@ namespace QueueInator
         {
             try
             {
-                PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(".").OrderBy(x => x.QueueName).ToList();
+                var machine = MachineId == Environment.MachineName ? "." : MachineId;
+                PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(machine).OrderBy(x => x.QueueName).ToList();
             }
             catch (Exception)
             {
@@ -183,6 +188,23 @@ namespace QueueInator
             }
         }
 
+        public void InsertMessage(string content)
+        {
+            if (CurrentQueue != null)
+            {
+                CurrentQueue.Send(content);
+                PlaySound(SoundsEnum.Success);
+            }
+        }
+
+        public void PurgeQueue()
+        {
+            if (CurrentQueue != null)
+            {
+                CurrentQueue.Purge();
+            }
+        }
+
         private void ShowMessages(MessageQueue selectedQueue)
         {
             LV_Messages.Items.Clear();
@@ -199,9 +221,10 @@ namespace QueueInator
                         {
                             message.Id,
                             message.ResponseQueue?.CreateTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
+                            message.ResponseQueue?.QueueName.ToQueueLabel() ?? "",
                             body
                         };
-                        var item = new ListViewItem(values,0);
+                        var item = new ListViewItem(values, 0);
                         LV_Messages.Items.Add(item);
                     }
                 }
@@ -263,6 +286,34 @@ namespace QueueInator
             return null;
         }
 
+        private void PlaySound(SoundsEnum value)
+        {
+            try
+            {
+                SoundPlayer simpleSound;
+                switch (value)
+                {
+                    case SoundsEnum.Start:
+                        simpleSound = new SoundPlayer(@"C:\Windows\Media\chimes.wav");
+                        simpleSound.Play();
+                        break;
+                    case SoundsEnum.Success:
+                        simpleSound = new SoundPlayer(Path.Combine(SoundsFilePath, "swoosh.wav"));
+                        simpleSound.Play();
+                        break;
+                    case SoundsEnum.Fail:
+                        simpleSound = new SoundPlayer(Path.Combine(SoundsFilePath, "aiai.wav"));
+                        simpleSound.Play();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         #endregion ACTIONS
 
         #region CONTROLS
@@ -275,9 +326,47 @@ namespace QueueInator
 
         private void TSMI_Delete_Click(object sender, EventArgs e)
         {
+            var result = YesNoDialog("delete this queue");
+            if (!result)
+                return;
+
             try
             {
                 DeleteQueue();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private bool YesNoDialog(string action)
+        {
+            string message = $"Are you sure you want to {action}?";
+            string caption = "Confirmation Dialog";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            result = MessageBox.Show(this, message, caption, buttons);
+
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void TSMI_Insert_Click(object sender, EventArgs e)
+        {
+            var dialog = new NewMessageDialog(this, CurrentQueue);
+            dialog.Show();
+        }
+
+        private void TSMI_Purge_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                PurgeQueue();
             }
             catch (Exception ex)
             {
@@ -306,7 +395,7 @@ namespace QueueInator
             if (LV_Messages.SelectedItems.Count > 0)
             {
                 var item = LV_Messages.SelectedItems[0];
-                var body = item.SubItems[2].Text;
+                var body = item.SubItems[3].Text;
                 TB_Message.Text = body.Prettify();
             }
         }
@@ -346,10 +435,19 @@ namespace QueueInator
 
         private void LV_Messages_ItemDrag(object sender, ItemDragEventArgs e)
         {
-
+            if (e.Item is ListViewItem)
+            {
+                var selectedItem = (ListViewItem)e.Item;
+                CurrentMessage = selectedItem.SubItems[3]?.Text ?? "";
+            }
         }
 
         private void TV_Queues_DragDrop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void TV_Queues_DragEnter(object sender, DragEventArgs e)
         {
 
         }

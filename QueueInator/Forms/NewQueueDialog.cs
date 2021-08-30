@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace QueueInator
+namespace QueueInator.Forms
 {
     public partial class NewQueueDialog : Form
     {
         public MainScreen Main { get; set; }
-        public string Value { get; set; }
 
         public NewQueueDialog(MainScreen main)
         {
