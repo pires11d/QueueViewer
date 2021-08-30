@@ -85,6 +85,7 @@ namespace QueueInator
             this.P_Left = new System.Windows.Forms.Panel();
             this.TV_Queues = new System.Windows.Forms.TreeView();
             this.P_Bottom = new System.Windows.Forms.Panel();
+            this.columnHeader0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
@@ -395,11 +396,10 @@ namespace QueueInator
             // 
             this.CBB_Refresh.FormattingEnabled = true;
             this.CBB_Refresh.Items.AddRange(new object[] {
-            "1",
-            "2",
             "5",
             "10",
-            "15"});
+            "15",
+            "30"});
             this.CBB_Refresh.Location = new System.Drawing.Point(117, 4);
             this.CBB_Refresh.Name = "CBB_Refresh";
             this.CBB_Refresh.Size = new System.Drawing.Size(43, 21);
@@ -484,7 +484,9 @@ namespace QueueInator
             // 
             // LV_Messages
             // 
+            this.LV_Messages.CheckBoxes = true;
             this.LV_Messages.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader0,
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
@@ -554,6 +556,10 @@ namespace QueueInator
             this.P_Bottom.Name = "P_Bottom";
             this.P_Bottom.Size = new System.Drawing.Size(945, 29);
             this.P_Bottom.TabIndex = 8;
+            // 
+            // columnHeader0
+            // 
+            this.columnHeader0.Text = "";
             // 
             // MainScreen
             // 
@@ -643,6 +649,7 @@ namespace QueueInator
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.TreeView TV_Queues;
         private System.Windows.Forms.Splitter splitter2;
+        private System.Windows.Forms.ColumnHeader columnHeader0;
     }
 }
 

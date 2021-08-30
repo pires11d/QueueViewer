@@ -29,7 +29,7 @@ namespace QueueInator
             InitializeComponent();
             LoadTreeView();
             LoadListView();
-            CBB_Refresh.SelectedIndex = 2;
+            CBB_Refresh.SelectedIndex = 0;
         }
 
         #region LOAD
@@ -219,6 +219,7 @@ namespace QueueInator
 
                         var values = new string[]
                         {
+                            "✉",
                             message.Id,
                             message.ResponseQueue?.CreateTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
                             message.ResponseQueue?.QueueName.ToQueueLabel() ?? "",
@@ -395,7 +396,7 @@ namespace QueueInator
             if (LV_Messages.SelectedItems.Count > 0)
             {
                 var item = LV_Messages.SelectedItems[0];
-                var body = item.SubItems[3].Text;
+                var body = item.SubItems[4].Text;
                 TB_Message.Text = body.Prettify();
             }
         }
@@ -438,7 +439,7 @@ namespace QueueInator
             if (e.Item is ListViewItem)
             {
                 var selectedItem = (ListViewItem)e.Item;
-                CurrentMessage = selectedItem.SubItems[3]?.Text ?? "";
+                CurrentMessage = selectedItem.SubItems[4]?.Text ?? "";
             }
         }
 
