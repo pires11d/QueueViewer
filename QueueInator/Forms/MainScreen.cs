@@ -440,17 +440,74 @@ namespace QueueInator
             {
                 var selectedItem = (ListViewItem)e.Item;
                 CurrentMessage = selectedItem.SubItems[4]?.Text ?? "";
+                DoDragDrop((selectedItem), DragDropEffects.Move);
             }
-        }
-
-        private void TV_Queues_DragDrop(object sender, DragEventArgs e)
-        {
-
         }
 
         private void TV_Queues_DragEnter(object sender, DragEventArgs e)
         {
+            e.Effect = e.AllowedEffect;
+        }
+        private void TV_Queues_DragOver(object sender, DragEventArgs e)
+        {
+            // Retrieve the client coordinates of the mouse position.
+            Point targetPoint = TV_Queues.PointToClient(new Point(e.X, e.Y));
 
+            // Select the node at the mouse position.
+            TV_Queues.SelectedNode = TV_Queues.GetNodeAt(targetPoint);
+
+            if (TV_Queues.SelectedNode != null)
+                TV_Queues.SelectedNode.Expand();
+        }
+
+        private void TV_Queues_DragDrop(object sender, DragEventArgs e)
+        {
+            // Retrieve the client coordinates of the drop location.
+            Point targetPoint = TV_Queues.PointToClient(new Point(e.X, e.Y));
+
+            // Retrieve the node at the drop location.
+            TreeNode targetNode = TV_Queues.GetNodeAt(targetPoint);
+
+            // Retrieve the node that was dragged.
+            ListViewItem draggedItem = (ListViewItem)e.Data.GetData(typeof(ListViewItem));
+
+            // Confirm that the node at the drop location is not 
+            // the dragged node or a descendant of the dragged node.
+            if (!draggedItem.Equals(targetNode) && !ContainsNode(targetNode))
+            {
+                // If it is a move operation, remove the node from its current 
+                // location and add it to the node at the drop location.
+                if (e.Effect == DragDropEffects.Move)
+                {
+                    draggedItem.Remove();
+                    var msg = draggedItem.SubItems[4].Text;
+                    InsertMessage(msg);
+                }
+                // If it is a copy operation, clone the dragged node 
+                // and add it to the node at the drop location.
+                else if (e.Effect == DragDropEffects.Copy)
+                {
+                    var msg = draggedItem.SubItems[3].Text;
+                    InsertMessage(msg);
+                }
+
+                // Expand the node at the location 
+                // to show the dropped node.
+                targetNode.Expand();
+            }
+        }
+
+        // Determine whether one node is a parent 
+        // or ancestor of a second node.
+        private bool ContainsNode(TreeNode node)
+        {
+            // Check the parent node of the second node.
+            if (node.Parent == null) return false;
+
+            // If the parent node is not null or equal to the first node, 
+            // call the ContainsNode method recursively using the parent of 
+            // the second node.
+            return ContainsNode(node.Parent);
         }
 
         #endregion CONTROLS

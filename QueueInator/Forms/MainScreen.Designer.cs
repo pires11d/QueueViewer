@@ -535,6 +535,7 @@ namespace QueueInator
             // 
             // TV_Queues
             // 
+            this.TV_Queues.AllowDrop = true;
             this.TV_Queues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TV_Queues.Location = new System.Drawing.Point(0, 0);
             this.TV_Queues.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -545,6 +546,7 @@ namespace QueueInator
             this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
             this.TV_Queues.DragDrop += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragDrop);
             this.TV_Queues.DragEnter += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragEnter);
+            this.TV_Queues.DragOver += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragOver);
             // 
             // P_Bottom
             // 
