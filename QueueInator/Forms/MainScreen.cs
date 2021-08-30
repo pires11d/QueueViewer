@@ -1,5 +1,6 @@
 ﻿using QueueInator.Entities;
 using QueueInator.Forms;
+using QueueInator.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,7 +17,6 @@ namespace QueueInator
     {
         public string MachineId { get; set; } = Environment.MachineName;
         public string SoundsFilePath { get; set; } = Path.Combine(Application.StartupPath, "Media");
-        public string CurrentMessage { get; set; }
         public TreeNode CurrentNode { get; set; }
         public MessageQueue CurrentQueue { get; set; }
         public List<MessageQueue> PrivateQueues { get; set; } = new List<MessageQueue>();
@@ -192,7 +192,9 @@ namespace QueueInator
         {
             if (CurrentQueue != null)
             {
-                CurrentQueue.Send(content);
+                var mqService = new MessageQueueService();
+                var msg = new Message(content);
+                mqService.SendMessages(CurrentQueue.QueueName, msg);
                 PlaySound(SoundsEnum.Success);
             }
         }
@@ -436,12 +438,8 @@ namespace QueueInator
 
         private void LV_Messages_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            if (e.Item is ListViewItem)
-            {
-                var selectedItem = (ListViewItem)e.Item;
-                CurrentMessage = selectedItem.SubItems[4]?.Text ?? "";
-                DoDragDrop((selectedItem), DragDropEffects.Move);
-            }
+            var selectedItems = LV_Messages.SelectedItems;
+            DoDragDrop(selectedItems, DragDropEffects.Move);
         }
 
         private void TV_Queues_DragEnter(object sender, DragEventArgs e)
@@ -468,12 +466,14 @@ namespace QueueInator
             // Retrieve the node at the drop location.
             TreeNode targetNode = TV_Queues.GetNodeAt(targetPoint);
 
+            CurrentQueue = GetQueueByName(targetNode.Name);
+
             // Retrieve the node that was dragged.
-            ListViewItem draggedItem = (ListViewItem)e.Data.GetData(typeof(ListViewItem));
+            ListView.SelectedListViewItemCollection draggedItems = (ListView.SelectedListViewItemCollection)e.Data.GetData(typeof(ListView.SelectedListViewItemCollection));
 
             // Confirm that the node at the drop location is not 
             // the dragged node or a descendant of the dragged node.
-            if (!draggedItem.Equals(targetNode) && !ContainsNode(targetNode))
+            foreach (ListViewItem draggedItem in draggedItems)
             {
                 // If it is a move operation, remove the node from its current 
                 // location and add it to the node at the drop location.
@@ -481,13 +481,6 @@ namespace QueueInator
                 {
                     draggedItem.Remove();
                     var msg = draggedItem.SubItems[4].Text;
-                    InsertMessage(msg);
-                }
-                // If it is a copy operation, clone the dragged node 
-                // and add it to the node at the drop location.
-                else if (e.Effect == DragDropEffects.Copy)
-                {
-                    var msg = draggedItem.SubItems[3].Text;
                     InsertMessage(msg);
                 }
 

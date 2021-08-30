@@ -78,6 +78,7 @@ namespace QueueInator
             this.TB_Message = new System.Windows.Forms.TextBox();
             this.P_TopRight = new System.Windows.Forms.Panel();
             this.LV_Messages = new System.Windows.Forms.ListView();
+            this.columnHeader0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -85,7 +86,6 @@ namespace QueueInator
             this.P_Left = new System.Windows.Forms.Panel();
             this.TV_Queues = new System.Windows.Forms.TreeView();
             this.P_Bottom = new System.Windows.Forms.Panel();
-            this.columnHeader0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
@@ -484,7 +484,6 @@ namespace QueueInator
             // 
             // LV_Messages
             // 
-            this.LV_Messages.CheckBoxes = true;
             this.LV_Messages.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader0,
             this.columnHeader1,
@@ -492,10 +491,10 @@ namespace QueueInator
             this.columnHeader3,
             this.columnHeader4});
             this.LV_Messages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LV_Messages.FullRowSelect = true;
             this.LV_Messages.GridLines = true;
             this.LV_Messages.HideSelection = false;
             this.LV_Messages.Location = new System.Drawing.Point(0, 0);
-            this.LV_Messages.MultiSelect = false;
             this.LV_Messages.Name = "LV_Messages";
             this.LV_Messages.Size = new System.Drawing.Size(665, 204);
             this.LV_Messages.TabIndex = 0;
@@ -504,6 +503,10 @@ namespace QueueInator
             this.LV_Messages.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LV_Messages_ColumnClick);
             this.LV_Messages.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.LV_Messages_ItemDrag);
             this.LV_Messages.SelectedIndexChanged += new System.EventHandler(this.LV_Messages_SelectedIndexChanged);
+            // 
+            // columnHeader0
+            // 
+            this.columnHeader0.Text = "";
             // 
             // columnHeader1
             // 
@@ -558,10 +561,6 @@ namespace QueueInator
             this.P_Bottom.Name = "P_Bottom";
             this.P_Bottom.Size = new System.Drawing.Size(945, 29);
             this.P_Bottom.TabIndex = 8;
-            // 
-            // columnHeader0
-            // 
-            this.columnHeader0.Text = "";
             // 
             // MainScreen
             // 
