@@ -143,6 +143,11 @@ namespace QueueInator
 
                 var newParent = AddNode(parentNode, queueGroup.Key, messageCount, imageIndex);
 
+                if (lastNodeItems.Any() && newItems.Any())
+                {
+                    AddNode(newParent, queueGroup.Key, messageCount, 0);
+                }
+
                 LoadNode(newParent, newItems, depth + 1);
             }
         }
