@@ -24,12 +24,10 @@ namespace System.Windows.Forms
         /// Specifies the column to be sorted
         /// </summary>
         private int ColumnToSort;
-
         /// <summary>
         /// Specifies the order in which to sort (i.e. 'Ascending').
         /// </summary>
         private SortOrder OrderOfSort;
-
         /// <summary>
         /// Case insensitive comparer object
         /// </summary>

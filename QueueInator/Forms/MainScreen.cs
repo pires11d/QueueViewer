@@ -51,13 +51,13 @@ namespace QueueInator
         private void LoadImages()
         {
             TV_Queues.ImageList = new ImageList();
-            TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.mail.ToBitmap());
-            TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.folder.ToBitmap());
-            TV_Queues.ImageList.Images.Add(QueueInator.Properties.Resources.folderX.ToBitmap());
+            TV_Queues.ImageList.Images.Add(Properties.Resources.mail.ToBitmap());
+            TV_Queues.ImageList.Images.Add(Properties.Resources.folder.ToBitmap());
+            TV_Queues.ImageList.Images.Add(Properties.Resources.folderX.ToBitmap());
 
             LV_Messages.LargeImageList = new ImageList();
             LV_Messages.LargeImageList.ImageSize = new Size(16, 16);
-            LV_Messages.LargeImageList.Images.Add(QueueInator.Properties.Resources.mail.ToBitmap());
+            LV_Messages.LargeImageList.Images.Add(Properties.Resources.mail.ToBitmap());
         }
 
         private void LoadQueues()
@@ -200,11 +200,23 @@ namespace QueueInator
         {
             if (CurrentQueue != null)
             {
-                var mqService = new MessageQueueService();
-                var msg = new Message(content);
-                mqService.SendMessages(CurrentQueue.QueueName, msg);
-                PlaySound(SoundsEnum.Success);
+                try
+                {
+                    MessageQueueService.SendMessage(CurrentQueue, content);
+                    PlaySound(SoundsEnum.Success);
+                }
+                catch (Exception)
+                {
+                    PlaySound(SoundsEnum.Fail);
+                    throw;
+                }
             }
+        }
+
+        public void RemoveMessage(string queueName, string msgId)
+        {
+            var originQueue = GetQueueByName(queueName);
+            originQueue.ReceiveById(msgId);
         }
 
         public void PurgeQueue()
@@ -447,11 +459,14 @@ namespace QueueInator
             {
                 var item = LV_Messages.SelectedItems[0];
                 var id = item.SubItems[1].Text;
-                var message = CurrentQueue.PeekById(id);
-                var body = GetMessageBody(message);
-                var extension = GetMessageExtension(message);
-                TB_MessageBody.Text = body.Prettify();
-                TB_MessageExtension.Text = extension;
+                if (!string.IsNullOrEmpty(id))
+                {
+                    var message = CurrentQueue.PeekById(id);
+                    var body = GetMessageBody(message);
+                    var extension = GetMessageExtension(message);
+                    TB_MessageBody.Text = body.Prettify();
+                    TB_MessageExtension.Text = extension;
+                }
             }
         }
 
@@ -464,27 +479,16 @@ namespace QueueInator
 
         private void LV_Messages_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            // Determine if clicked column is already the column that is being sorted.
             if (e.Column == ColumnSorter.SortColumn)
             {
-                // Reverse the current sort direction for this column.
-                if (ColumnSorter.Order == SortOrder.Ascending)
-                {
-                    ColumnSorter.Order = SortOrder.Descending;
-                }
-                else
-                {
-                    ColumnSorter.Order = SortOrder.Ascending;
-                }
+                ColumnSorter.Order = ColumnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
             }
             else
             {
-                // Set the column number that is to be sorted; default to ascending.
                 ColumnSorter.SortColumn = e.Column;
-                ColumnSorter.Order = SortOrder.Ascending;
+                ColumnSorter.Order = SortOrder.Descending;
             }
 
-            // Perform the sort with these new sort options.
             LV_Messages.Sort();
         }
 
@@ -520,24 +524,41 @@ namespace QueueInator
 
             CurrentQueue = GetQueueByName(targetNode.Name);
 
-            // Retrieve the node that was dragged.
+            // Retrieve the dragged objects.
             ListView.SelectedListViewItemCollection draggedItems = (ListView.SelectedListViewItemCollection)e.Data.GetData(typeof(ListView.SelectedListViewItemCollection));
 
-            // Confirm that the node at the drop location is not 
-            // the dragged node or a descendant of the dragged node.
             foreach (ListViewItem draggedItem in draggedItems)
             {
-                // If it is a move operation, remove the node from its current 
-                // location and add it to the node at the drop location.
-                if (e.Effect == DragDropEffects.Move)
+                if (e.Effect == DragDropEffects.Copy)
                 {
-                    draggedItem.Remove();
-                    var msg = draggedItem.SubItems[5].Text;
-                    InsertMessage(msg);
+                    try
+                    {
+                        var msg = draggedItem.SubItems[5].Text;
+                        InsertMessage(msg);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+                }
+                else if (e.Effect == DragDropEffects.Move)
+                {
+                    try
+                    {
+                        draggedItem.Remove();
+                        var msg = draggedItem.SubItems[5].Text;
+                        var msgId = draggedItem.SubItems[1].Text; 
+                        InsertMessage(msg);
+                        RemoveMessage(CurrentNode.Name, msgId);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
                 }
 
-                // Expand the node at the location 
-                // to show the dropped node.
                 targetNode.Expand();
             }
         }

@@ -6,72 +6,58 @@ using System.Text;
 
 namespace QueueInator.Services
 {
-    public class MessageQueueService
+    public static class MessageQueueService
     {
-        public void SendMessages(string queueName, object @event)
+        public static void SendMessage(MessageQueue queue, string message)
         {
-            Console.WriteLine("Iniciado processamento de inserção de mensagens na fila.");
+            var formatter = new JsonMessageFormatter();
+            queue.Formatter = formatter;
 
-            var queue = new MessageQueue(queueName)
+            var msg = new Message
             {
-                Formatter = new JsonMessageFormatter(),
+                BodyStream = new MemoryStream(formatter.Encoding.GetBytes(message)),
+                BodyType = 0
             };
 
-            if (MessageQueue.Exists($".\\{queue.QueueName}"))
+            using (var trn = new MessageQueueTransaction())
             {
-                Console.WriteLine($"Fila {queue.QueueName} encontrada. Iniciando inserção das mensagens.");
-
-                using (var trn = new MessageQueueTransaction())
+                try
                 {
-                    try
+                    using (queue)
                     {
-                        using (queue)
-                        {
-                            trn.Begin();
-                            queue.Send(@event, trn);
-                            trn.Commit();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Erro ao inserir mensagem. {ex.Message}. Aperte ENTER para encerrar.");
-                        trn.Abort();
+                        trn.Begin();
+                        queue.Send(msg, trn);
+                        trn.Commit();
                     }
                 }
+                catch (Exception ex)
+                {
+                    trn.Abort();
+                    throw new ApplicationException($"Erro ao inserir mensagem. {ex.Message}.");
+                }
             }
-            else
-            {
-                Console.WriteLine($"Fila {queue.QueueName} nao encontrada.");
-            }
-
-            Console.WriteLine("Finalizado processamento de inserção de mensagens na fila. Aperte ENTER para encerrar.");
         }
 
         public class JsonMessageFormatter : System.Messaging.IMessageFormatter
         {
-            private static readonly JsonSerializerSettings DefaultSerializerSettings =
-                    new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.Objects
-                    };
+            public static readonly JsonSerializerSettings DefaultSerializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects
+            };
 
             private readonly JsonSerializerSettings _serializerSettings;
 
-
             public Encoding Encoding { get; set; }
 
-
-            public JsonMessageFormatter(Encoding encoding = null)
-                : this(encoding, null)
+            public JsonMessageFormatter(Encoding encoding = null) : this(encoding, null)
             {
             }
 
-            internal JsonMessageFormatter(Encoding encoding, JsonSerializerSettings serializerSettings = null)
+            public JsonMessageFormatter(Encoding encoding, JsonSerializerSettings serializerSettings = null)
             {
                 Encoding = encoding ?? Encoding.UTF8;
                 _serializerSettings = serializerSettings ?? DefaultSerializerSettings;
             }
-
 
             public bool CanRead(Message message)
             {
@@ -126,9 +112,6 @@ namespace QueueInator.Services
                 string json = JsonConvert.SerializeObject(obj, Formatting.None, _serializerSettings);
 
                 message.BodyStream = new MemoryStream(Encoding.GetBytes(json));
-
-                //Need to reset the body type, in case the same message
-                //is reused by some other formatter.
                 message.BodyType = 0;
             }
         }
