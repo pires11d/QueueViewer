@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8D27E731-E240-447F-B42E-A8FF3FE7D59E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>QueueInator</RootNamespace>
-    <AssemblyName>QueueInator</AssemblyName>
+    <RootNamespace>QueueViewer.Forms</RootNamespace>
+    <AssemblyName>QueueViewer.Forms</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -53,9 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Constants.cs" />
-    <Compile Include="Entities\SoundsEnum.cs" />
-    <Compile Include="Extensions\FileSizeExtension.cs" />
+    <Compile Include="Extensions\FormExtensions.cs" />
     <Compile Include="Forms\NewMessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,7 +66,6 @@
     <Compile Include="Forms\NewQueueDialog.Designer.cs">
       <DependentUpon>NewQueueDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\FormsExtensions.cs" />
     <Compile Include="Forms\MainScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,8 +74,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Services\MessageQueueService.cs" />
     <EmbeddedResource Include="Forms\NewMessageDialog.resx">
       <DependentUpon>NewMessageDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -125,6 +120,12 @@
     <Content Include="Resources\folder.ico" />
     <None Include="Resources\mail.ico" />
     <None Include="Resources\folderX.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QueueViewer.Lib\QueueViewer.Lib.csproj">
+      <Project>{960969f1-0c08-43af-a592-b39941be8c97}</Project>
+      <Name>QueueViewer.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

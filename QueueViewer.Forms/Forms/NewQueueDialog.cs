@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace QueueInator.Forms
+namespace QueueViewer.Forms
 {
     public partial class NewQueueDialog : Form
     {

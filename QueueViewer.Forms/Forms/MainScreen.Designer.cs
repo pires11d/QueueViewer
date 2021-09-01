@@ -1,5 +1,5 @@
 ﻿
-namespace QueueInator
+namespace QueueViewer.Forms
 {
     partial class MainScreen
     {

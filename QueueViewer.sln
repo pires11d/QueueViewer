@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueInator", "QueueInator\QueueInator.csproj", "{8D27E731-E240-447F-B42E-A8FF3FE7D59E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueViewer.Lib", "QueueViewer.Lib\QueueViewer.Lib.csproj", "{960969F1-0C08-43AF-A592-B39941BE8C97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueViewer.Forms", "QueueViewer.Forms\QueueViewer.Forms.csproj", "{8D27E731-E240-447F-B42E-A8FF3FE7D59E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{960969F1-0C08-43AF-A592-B39941BE8C97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{960969F1-0C08-43AF-A592-B39941BE8C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{960969F1-0C08-43AF-A592-B39941BE8C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{960969F1-0C08-43AF-A592-B39941BE8C97}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D27E731-E240-447F-B42E-A8FF3FE7D59E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D27E731-E240-447F-B42E-A8FF3FE7D59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D27E731-E240-447F-B42E-A8FF3FE7D59E}.Release|Any CPU.ActiveCfg = Release|Any CPU

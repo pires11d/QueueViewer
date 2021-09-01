@@ -2,7 +2,7 @@
 using System.Messaging;
 using System.Windows.Forms;
 
-namespace QueueInator.Forms
+namespace QueueViewer.Forms
 {
     public partial class NewMessageDialog : Form
     {

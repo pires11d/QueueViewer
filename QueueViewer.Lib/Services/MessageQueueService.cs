@@ -4,7 +4,7 @@ using System.IO;
 using System.Messaging;
 using System.Text;
 
-namespace QueueInator.Services
+namespace QueueViewer.Lib.Services
 {
     public static class MessageQueueService
     {

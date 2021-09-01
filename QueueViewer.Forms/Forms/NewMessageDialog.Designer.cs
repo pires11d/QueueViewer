@@ -1,5 +1,5 @@
 ﻿
-namespace QueueInator.Forms
+namespace QueueViewer.Forms
 {
     partial class NewMessageDialog
     {

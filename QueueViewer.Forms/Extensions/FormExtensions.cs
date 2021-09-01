@@ -2,7 +2,7 @@
 
 namespace System.Windows.Forms
 {
-    public static class FormsExtensions
+    public static class FormExtensions
     {
         public static TreeNode GetNode(this TreeNode rootNode, string name)
         {

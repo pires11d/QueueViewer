@@ -1,6 +1,5 @@
-﻿using QueueInator.Entities;
-using QueueInator.Forms;
-using QueueInator.Services;
+﻿using QueueViewer.Lib.Entities;
+using QueueViewer.Lib.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,22 +10,21 @@ using System.Messaging;
 using System.Windows.Forms;
 using Message = System.Messaging.Message;
 
-namespace QueueInator
+namespace QueueViewer.Forms
 {
     public partial class MainScreen : Form
     {
-        public string MachineId { get; set; } = Environment.MachineName;
         public string SoundsFilePath { get; set; } = Path.Combine(Application.StartupPath, "Media");
         public TreeNode CurrentNode { get; set; }
-        public MessageQueue CurrentQueue { get; set; }
-        public List<MessageQueue> PrivateQueues { get; set; } = new List<MessageQueue>();
-        public List<MessageQueue> PublicQueues { get; set; } = new List<MessageQueue>();
-        public List<MessageQueue> SystemQueues { get; set; } = new List<MessageQueue>();
         public ListViewColumnSorter ColumnSorter { get; set; }
+        public QueueService Service { get; set; }
 
         public MainScreen()
         {
             InitializeComponent();
+
+            Service = new QueueService();
+
             LoadTreeView();
             LoadListView();
             CBB_Refresh.SelectedIndex = 0;
@@ -64,8 +62,8 @@ namespace QueueInator
         {
             try
             {
-                var machine = MachineId == Environment.MachineName ? "." : MachineId;
-                PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(machine).OrderBy(x => x.QueueName).ToList();
+                var machine = Service.MachineId == Environment.MachineName ? "." : Service.MachineId;
+                Service.PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(machine).OrderBy(x => x.QueueName).ToList();
             }
             catch (Exception)
             {
@@ -73,7 +71,7 @@ namespace QueueInator
 
             try
             {
-                PublicQueues = MessageQueue.GetPublicQueues().OrderBy(x => x.QueueName).ToList();
+                Service.PublicQueues = MessageQueue.GetPublicQueues().OrderBy(x => x.QueueName).ToList();
             }
             catch (Exception)
             {
@@ -81,13 +79,15 @@ namespace QueueInator
 
             try
             {
-                string prefix = $"DIRECT=OS:{MachineId.ToLower()}";
+                string prefix = $"DIRECT=OS:{Service.MachineId.ToLower()}";
                 var dead1 = new MessageQueue(prefix + @"\SYSTEM$\DEADXACT", accessMode: QueueAccessMode.PeekAndAdmin);
+                Service.SetFilter(dead1);
                 var dead2 = new MessageQueue(prefix + @"\SYSTEM$\DEADLETTER", accessMode: QueueAccessMode.PeekAndAdmin);
+                Service.SetFilter(dead2);
 
-                SystemQueues = new List<MessageQueue>();
-                SystemQueues.Add(dead1);
-                SystemQueues.Add(dead2);
+                Service.SystemQueues = new List<MessageQueue>();
+                Service.SystemQueues.Add(dead1);
+                Service.SystemQueues.Add(dead2);
             }
             catch (Exception)
             {
@@ -98,7 +98,7 @@ namespace QueueInator
         {
             TV_Queues.Nodes.Clear();
 
-            var machine = MachineId == Environment.MachineName ? "localhost" : MachineId;
+            var machine = Service.MachineId == Environment.MachineName ? "localhost" : Service.MachineId;
             TreeNode rootNode = TV_Queues.Nodes.Add(machine, machine, 1, 1);
             rootNode.Nodes.Add(nameof(Constants.Private), Constants.Private, 1, 1);
             rootNode.Nodes.Add(nameof(Constants.Public), Constants.Public, 1, 1);
@@ -111,11 +111,11 @@ namespace QueueInator
             }
 
             var privateNode = rootNode.GetNode(nameof(Constants.Private));
-            LoadNode(privateNode, PrivateQueues);
+            LoadNode(privateNode, Service.PrivateQueues);
             var publicNode = rootNode.GetNode(nameof(Constants.Public));
-            LoadNode(publicNode, PublicQueues);
+            LoadNode(publicNode, Service.PublicQueues);
             var systemNode = rootNode.GetNode(nameof(Constants.System));
-            LoadNode(systemNode, SystemQueues);
+            LoadNode(systemNode, Service.SystemQueues);
         }
 
         private void LoadNode(TreeNode parentNode, List<MessageQueue> queues, int depth = 0)
@@ -198,11 +198,11 @@ namespace QueueInator
 
         public void InsertMessage(string content)
         {
-            if (CurrentQueue != null)
+            if (Service.CurrentQueue != null)
             {
                 try
                 {
-                    MessageQueueService.SendMessage(CurrentQueue, content);
+                    MessageQueueService.SendMessage(Service.CurrentQueue, content);
                     PlaySound(SoundsEnum.Success);
                 }
                 catch (Exception)
@@ -215,15 +215,15 @@ namespace QueueInator
 
         public void RemoveMessage(string queueName, string msgId)
         {
-            var originQueue = GetQueueByName(queueName);
+            var originQueue = Service.GetQueueByName(queueName);
             originQueue.ReceiveById(msgId);
         }
 
         public void PurgeQueue()
         {
-            if (CurrentQueue != null)
+            if (Service.CurrentQueue != null)
             {
-                CurrentQueue.Purge();
+                Service.CurrentQueue.Purge();
             }
         }
 
@@ -237,8 +237,8 @@ namespace QueueInator
                 {
                     foreach (var message in messages)
                     {
-                        var size = GetMessageSize(message);
-                        var body = GetMessageBody(message);
+                        var size = Service.GetMessageSize(message);
+                        var body = Service.GetMessageBody(message);
 
                         var values = new string[]
                         {
@@ -260,72 +260,12 @@ namespace QueueInator
             }
         }
 
-        private string GetMessageBody(Message message)
-        {
-            string result = "";
-            message.Formatter = new System.Messaging.XmlMessageFormatter(new String[] { });
-            StreamReader reader = new StreamReader(message.BodyStream);
-
-            while (reader.Peek() >= 0)
-            {
-                result += reader.ReadLine();
-            }
-
-            return result;
-        }
-
-        private string GetMessageExtension(Message message)
-        {
-            try
-            {
-                return StringExtensions.BytesToString(message.Extension);
-            }
-            catch (Exception)
-            {
-                return "";
-            }
-        }
-
-        private string GetMessageSize(Message message)
-        {
-            return message.BodyStream?.Length.ToString().ToSize() ?? "0 Bytes";
-        }
-
-        private MessageQueue GetQueueByName(string name)
-        {
-            var queues = GetQueuesByName(name);
-            if (queues == null)
-                return null;
-
-            var queueName = name.ToQueueName();
-            var selectedQueue = queues.FirstOrDefault(x => x.QueueName == queueName);
-
-            return selectedQueue;
-        }
-
         private void ResizeListViewColumns(ListView lv)
         {
             foreach (ColumnHeader column in lv.Columns)
             {
                 column.Width = -2;
             }
-        }
-
-        private List<MessageQueue> GetQueuesByName(string name)
-        {
-            var prefix = name.Split('.').FirstOrDefault();
-            switch (prefix)
-            {
-                case nameof(Constants.Private):
-                    return PrivateQueues;
-                case nameof(Constants.Public):
-                    return PublicQueues;
-                case nameof(Constants.System):
-                    return SystemQueues;
-                default:
-                    break;
-            }
-            return null;
         }
 
         private void PlaySound(SoundsEnum value)
@@ -400,7 +340,7 @@ namespace QueueInator
 
         private void TSMI_Insert_Click(object sender, EventArgs e)
         {
-            var dialog = new NewMessageDialog(this, CurrentQueue);
+            var dialog = new NewMessageDialog(this, Service.CurrentQueue);
             dialog.Show();
         }
 
@@ -421,30 +361,15 @@ namespace QueueInator
             try
             {
                 CurrentNode = e.Node;
-                CurrentQueue = GetQueueByName(CurrentNode.Name);
-                SetFilter(CurrentQueue);
+                Service.CurrentQueue = Service.GetQueueByName(CurrentNode.Name);
+                Service.SetFilter(Service.CurrentQueue);
 
-                ShowMessages(CurrentQueue);
+                ShowMessages(Service.CurrentQueue);
                 ResizeListViewColumns(LV_Messages);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void SetFilter(MessageQueue currentQueue)
-        {
-            if (currentQueue != null)
-            {
-                MessagePropertyFilter filter = new MessagePropertyFilter();
-                filter.ClearAll();
-                filter.Id = true;
-                filter.Body = true;
-                filter.Priority = true;
-                filter.Extension = true;
-                filter.ResponseQueue = true;
-                currentQueue.MessageReadPropertyFilter = filter;
             }
         }
 
@@ -461,9 +386,9 @@ namespace QueueInator
                 var id = item.SubItems[1].Text;
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var message = CurrentQueue.PeekById(id);
-                    var body = GetMessageBody(message);
-                    var extension = GetMessageExtension(message);
+                    var message = Service.CurrentQueue.PeekById(id);
+                    var body = Service.GetMessageBody(message);
+                    var extension = Service.GetMessageExtension(message);
                     TB_MessageBody.Text = body.Prettify();
                     TB_MessageExtension.Text = extension;
                 }
@@ -522,7 +447,7 @@ namespace QueueInator
             // Retrieve the node at the drop location.
             TreeNode targetNode = TV_Queues.GetNodeAt(targetPoint);
 
-            CurrentQueue = GetQueueByName(targetNode.Name);
+            Service.CurrentQueue = Service.GetQueueByName(targetNode.Name);
 
             // Retrieve the dragged objects.
             ListView.SelectedListViewItemCollection draggedItems = (ListView.SelectedListViewItemCollection)e.Data.GetData(typeof(ListView.SelectedListViewItemCollection));

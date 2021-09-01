@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QueueInator.Entities
+namespace QueueViewer.Lib.Entities
 {
     public enum SoundsEnum
     {

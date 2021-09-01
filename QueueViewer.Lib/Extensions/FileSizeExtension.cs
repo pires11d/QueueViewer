@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QueueInator.Extensions
+namespace QueueViewer.Extensions
 {
     public static class FileSizeExtension
     {
