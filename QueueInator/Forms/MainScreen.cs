@@ -145,6 +145,7 @@ namespace QueueInator
 
                 if (lastNodeItems.Any() && newItems.Any())
                 {
+                    messageCount = lastNodeItems.Sum(x => x.GetAllMessages()?.Count() ?? 0);
                     AddNode(newParent, queueGroup.Key, messageCount, 0);
                 }
 
@@ -154,7 +155,9 @@ namespace QueueInator
 
         private TreeNode AddNode(TreeNode node, string name, int n = 0, int imageIndex = 0)
         {
-            var fullName = $"{node.Name}.{name}";
+            string lastName = node.Name.Split('.').LastOrDefault();
+            bool folder = imageIndex == 0 && lastName == name;
+            var fullName = folder ? $"{node.Name}" : $"{node.Name}.{name}";
             return node.Nodes.Add(fullName, name + $" ({n})", imageIndex, imageIndex);
         }
 
@@ -222,17 +225,19 @@ namespace QueueInator
                 {
                     foreach (var message in messages)
                     {
+                        var size = GetMessageSize(message);
                         var body = GetMessageBody(message);
 
                         var values = new string[]
                         {
                             "✉",
                             message.Id,
+                            size,
                             message.ResponseQueue?.CreateTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
                             message.ResponseQueue?.QueueName.ToQueueLabel() ?? "",
                             body
                         };
-                        var item = new ListViewItem(values, 0);
+                        var item = new ListViewItem(values);
                         LV_Messages.Items.Add(item);
                     }
                 }
@@ -255,6 +260,23 @@ namespace QueueInator
             }
 
             return result;
+        }
+
+        private string GetMessageExtension(Message message)
+        {
+            try
+            {
+                return StringExtensions.BytesToString(message.Extension);
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        private string GetMessageSize(Message message)
+        {
+            return message.BodyStream?.Length.ToString().ToSize() ?? "0 Bytes";
         }
 
         private MessageQueue GetQueueByName(string name)
@@ -388,6 +410,7 @@ namespace QueueInator
             {
                 CurrentNode = e.Node;
                 CurrentQueue = GetQueueByName(CurrentNode.Name);
+                SetFilter(CurrentQueue);
 
                 ShowMessages(CurrentQueue);
                 ResizeListViewColumns(LV_Messages);
@@ -398,13 +421,37 @@ namespace QueueInator
             }
         }
 
+        private void SetFilter(MessageQueue currentQueue)
+        {
+            if (currentQueue != null)
+            {
+                MessagePropertyFilter filter = new MessagePropertyFilter();
+                filter.ClearAll();
+                filter.Id = true;
+                filter.Body = true;
+                filter.Priority = true;
+                filter.Extension = true;
+                filter.ResponseQueue = true;
+                currentQueue.MessageReadPropertyFilter = filter;
+            }
+        }
+
         private void LV_Messages_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ShowMessageInfo();
+        }
+
+        private void ShowMessageInfo()
         {
             if (LV_Messages.SelectedItems.Count > 0)
             {
                 var item = LV_Messages.SelectedItems[0];
-                var body = item.SubItems[4].Text;
-                TB_Message.Text = body.Prettify();
+                var id = item.SubItems[1].Text;
+                var message = CurrentQueue.PeekById(id);
+                var body = GetMessageBody(message);
+                var extension = GetMessageExtension(message);
+                TB_MessageBody.Text = body.Prettify();
+                TB_MessageExtension.Text = extension;
             }
         }
 
@@ -485,7 +532,7 @@ namespace QueueInator
                 if (e.Effect == DragDropEffects.Move)
                 {
                     draggedItem.Remove();
-                    var msg = draggedItem.SubItems[4].Text;
+                    var msg = draggedItem.SubItems[5].Text;
                     InsertMessage(msg);
                 }
 

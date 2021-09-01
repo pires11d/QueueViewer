@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using QueueInator.Extensions;
 using System.IO;
 
 namespace System
@@ -36,15 +37,39 @@ namespace System
 
         public static string Prettify(this string json)
         {
-            if (string.IsNullOrEmpty(json))
-                return "";
-            using (var stringReader = new StringReader(json))
-            using (var stringWriter = new StringWriter())
+            try
             {
-                var jsonReader = new JsonTextReader(stringReader);
-                var jsonWriter = new JsonTextWriter(stringWriter) { Formatting = Formatting.Indented };
-                jsonWriter.WriteToken(jsonReader);
-                return stringWriter.ToString();
+                if (string.IsNullOrEmpty(json))
+                    return "";
+                using (var stringReader = new StringReader(json))
+                using (var stringWriter = new StringWriter())
+                {
+                    var jsonReader = new JsonTextReader(stringReader);
+                    var jsonWriter = new JsonTextWriter(stringWriter) { Formatting = Formatting.Indented };
+                    jsonWriter.WriteToken(jsonReader);
+                    return stringWriter.ToString();
+                }
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        public static string ToSize(this string bytes)
+        {
+            var bytesCount = long.TryParse(bytes, out long n) ? n : 0;
+            return FileSizeExtension.FormatSize(bytesCount);
+        }
+
+        public static string BytesToString(byte[] bytes)
+        {
+            using (var stream = new MemoryStream(bytes))
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                    return streamReader.ReadToEnd();
+                }
             }
         }
     }

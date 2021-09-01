@@ -66,7 +66,6 @@ namespace QueueInator
             this.TSMI_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Purge = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Delete = new System.Windows.Forms.ToolStripMenuItem();
-            this.messageQueue1 = new System.Messaging.MessageQueue();
             this.CB_Refresh = new System.Windows.Forms.CheckBox();
             this.CBB_Refresh = new System.Windows.Forms.ComboBox();
             this.L_Unit = new System.Windows.Forms.Label();
@@ -75,7 +74,7 @@ namespace QueueInator
             this.P_Right = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.P_BotttomRight = new System.Windows.Forms.Panel();
-            this.TB_Message = new System.Windows.Forms.TextBox();
+            this.TB_MessageBody = new System.Windows.Forms.TextBox();
             this.P_TopRight = new System.Windows.Forms.Panel();
             this.LV_Messages = new System.Windows.Forms.ListView();
             this.columnHeader0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -86,6 +85,11 @@ namespace QueueInator
             this.P_Left = new System.Windows.Forms.Panel();
             this.TV_Queues = new System.Windows.Forms.TreeView();
             this.P_Bottom = new System.Windows.Forms.Panel();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.TC_Message = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.TB_MessageExtension = new System.Windows.Forms.TextBox();
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
@@ -94,6 +98,9 @@ namespace QueueInator
             this.P_TopRight.SuspendLayout();
             this.P_Left.SuspendLayout();
             this.P_Bottom.SuspendLayout();
+            this.TC_Message.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // MS_Header
@@ -374,12 +381,6 @@ namespace QueueInator
             this.TSMI_Delete.Text = "Delete Queue";
             this.TSMI_Delete.Click += new System.EventHandler(this.TSMI_Delete_Click);
             // 
-            // messageQueue1
-            // 
-            this.messageQueue1.DefaultPropertiesToSend.HashAlgorithm = System.Messaging.HashAlgorithm.Sha512;
-            this.messageQueue1.MessageReadPropertyFilter.LookupId = true;
-            this.messageQueue1.SynchronizingObject = this;
-            // 
             // CB_Refresh
             // 
             this.CB_Refresh.AutoSize = true;
@@ -429,7 +430,7 @@ namespace QueueInator
             // 
             // splitter2
             // 
-            this.splitter2.Location = new System.Drawing.Point(269, 0);
+            this.splitter2.Location = new System.Drawing.Point(295, 0);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(3, 467);
             this.splitter2.TabIndex = 12;
@@ -441,37 +442,38 @@ namespace QueueInator
             this.P_Right.Controls.Add(this.P_BotttomRight);
             this.P_Right.Controls.Add(this.P_TopRight);
             this.P_Right.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.P_Right.Location = new System.Drawing.Point(269, 0);
+            this.P_Right.Location = new System.Drawing.Point(295, 0);
             this.P_Right.Name = "P_Right";
-            this.P_Right.Size = new System.Drawing.Size(665, 467);
+            this.P_Right.Size = new System.Drawing.Size(639, 467);
             this.P_Right.TabIndex = 11;
             // 
             // splitter1
             // 
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter1.Location = new System.Drawing.Point(0, 204);
+            this.splitter1.Location = new System.Drawing.Point(0, 266);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(665, 3);
+            this.splitter1.Size = new System.Drawing.Size(639, 3);
             this.splitter1.TabIndex = 12;
             this.splitter1.TabStop = false;
             // 
             // P_BotttomRight
             // 
-            this.P_BotttomRight.Controls.Add(this.TB_Message);
+            this.P_BotttomRight.Controls.Add(this.TC_Message);
             this.P_BotttomRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.P_BotttomRight.Location = new System.Drawing.Point(0, 204);
+            this.P_BotttomRight.Location = new System.Drawing.Point(0, 266);
             this.P_BotttomRight.Name = "P_BotttomRight";
-            this.P_BotttomRight.Size = new System.Drawing.Size(665, 263);
+            this.P_BotttomRight.Size = new System.Drawing.Size(639, 201);
             this.P_BotttomRight.TabIndex = 11;
             // 
-            // TB_Message
+            // TB_MessageBody
             // 
-            this.TB_Message.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB_Message.Location = new System.Drawing.Point(0, 0);
-            this.TB_Message.Multiline = true;
-            this.TB_Message.Name = "TB_Message";
-            this.TB_Message.Size = new System.Drawing.Size(665, 263);
-            this.TB_Message.TabIndex = 0;
+            this.TB_MessageBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageBody.Multiline = true;
+            this.TB_MessageBody.Name = "TB_MessageBody";
+            this.TB_MessageBody.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.TB_MessageBody.Size = new System.Drawing.Size(625, 157);
+            this.TB_MessageBody.TabIndex = 0;
             // 
             // P_TopRight
             // 
@@ -479,7 +481,7 @@ namespace QueueInator
             this.P_TopRight.Dock = System.Windows.Forms.DockStyle.Top;
             this.P_TopRight.Location = new System.Drawing.Point(0, 0);
             this.P_TopRight.Name = "P_TopRight";
-            this.P_TopRight.Size = new System.Drawing.Size(665, 204);
+            this.P_TopRight.Size = new System.Drawing.Size(639, 266);
             this.P_TopRight.TabIndex = 10;
             // 
             // LV_Messages
@@ -489,14 +491,15 @@ namespace QueueInator
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
-            this.columnHeader4});
+            this.columnHeader4,
+            this.columnHeader5});
             this.LV_Messages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LV_Messages.FullRowSelect = true;
             this.LV_Messages.GridLines = true;
             this.LV_Messages.HideSelection = false;
             this.LV_Messages.Location = new System.Drawing.Point(0, 0);
             this.LV_Messages.Name = "LV_Messages";
-            this.LV_Messages.Size = new System.Drawing.Size(665, 204);
+            this.LV_Messages.Size = new System.Drawing.Size(639, 266);
             this.LV_Messages.TabIndex = 0;
             this.LV_Messages.UseCompatibleStateImageBehavior = false;
             this.LV_Messages.View = System.Windows.Forms.View.Details;
@@ -511,20 +514,21 @@ namespace QueueInator
             // columnHeader1
             // 
             this.columnHeader1.Text = "MessageId";
+            this.columnHeader1.Width = 74;
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Creation Time";
-            this.columnHeader2.Width = 95;
+            this.columnHeader2.Text = "Size";
+            this.columnHeader2.Width = 55;
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Response Queue";
-            this.columnHeader3.Width = 115;
+            this.columnHeader3.Text = "Creation Time";
+            this.columnHeader3.Width = 99;
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "Body Content";
+            this.columnHeader4.Text = "Response Queue";
             this.columnHeader4.Width = 123;
             // 
             // P_Left
@@ -533,7 +537,7 @@ namespace QueueInator
             this.P_Left.Dock = System.Windows.Forms.DockStyle.Left;
             this.P_Left.Location = new System.Drawing.Point(0, 0);
             this.P_Left.Name = "P_Left";
-            this.P_Left.Size = new System.Drawing.Size(269, 467);
+            this.P_Left.Size = new System.Drawing.Size(295, 467);
             this.P_Left.TabIndex = 10;
             // 
             // TV_Queues
@@ -544,7 +548,7 @@ namespace QueueInator
             this.TV_Queues.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.TV_Queues.Name = "TV_Queues";
             this.TV_Queues.ShowNodeToolTips = true;
-            this.TV_Queues.Size = new System.Drawing.Size(269, 467);
+            this.TV_Queues.Size = new System.Drawing.Size(295, 467);
             this.TV_Queues.TabIndex = 0;
             this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
             this.TV_Queues.DragDrop += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragDrop);
@@ -561,6 +565,57 @@ namespace QueueInator
             this.P_Bottom.Name = "P_Bottom";
             this.P_Bottom.Size = new System.Drawing.Size(945, 29);
             this.P_Bottom.TabIndex = 8;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Body Content";
+            this.columnHeader5.Width = 129;
+            // 
+            // TC_Message
+            // 
+            this.TC_Message.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.TC_Message.Controls.Add(this.tabPage1);
+            this.TC_Message.Controls.Add(this.tabPage2);
+            this.TC_Message.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TC_Message.ItemSize = new System.Drawing.Size(90, 30);
+            this.TC_Message.Location = new System.Drawing.Point(0, 0);
+            this.TC_Message.Name = "TC_Message";
+            this.TC_Message.SelectedIndex = 0;
+            this.TC_Message.Size = new System.Drawing.Size(639, 201);
+            this.TC_Message.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.TC_Message.TabIndex = 1;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.TB_MessageBody);
+            this.tabPage1.Location = new System.Drawing.Point(4, 4);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(631, 163);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Body";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.TB_MessageExtension);
+            this.tabPage2.Location = new System.Drawing.Point(4, 4);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(631, 163);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Extension";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // TB_MessageExtension
+            // 
+            this.TB_MessageExtension.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageExtension.Multiline = true;
+            this.TB_MessageExtension.Name = "TB_MessageExtension";
+            this.TB_MessageExtension.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.TB_MessageExtension.Size = new System.Drawing.Size(625, 157);
+            this.TB_MessageExtension.TabIndex = 1;
             // 
             // MainScreen
             // 
@@ -585,11 +640,15 @@ namespace QueueInator
             this.P_Top.ResumeLayout(false);
             this.P_Right.ResumeLayout(false);
             this.P_BotttomRight.ResumeLayout(false);
-            this.P_BotttomRight.PerformLayout();
             this.P_TopRight.ResumeLayout(false);
             this.P_Left.ResumeLayout(false);
             this.P_Bottom.ResumeLayout(false);
             this.P_Bottom.PerformLayout();
+            this.TC_Message.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -629,7 +688,6 @@ namespace QueueInator
         private System.Windows.Forms.ContextMenuStrip CMS_Queues;
         private System.Windows.Forms.ToolStripMenuItem TSMI_Delete;
         private System.Windows.Forms.ToolStripMenuItem TSMI_Insert;
-        private System.Messaging.MessageQueue messageQueue1;
         private System.Windows.Forms.ToolStripMenuItem TSMI_Purge;
         private System.Windows.Forms.ToolStripMenuItem TSMI_Create;
         private System.Windows.Forms.ComboBox CBB_Refresh;
@@ -642,7 +700,7 @@ namespace QueueInator
         private System.Windows.Forms.Panel P_TopRight;
         private System.Windows.Forms.ListView LV_Messages;
         private System.Windows.Forms.Panel P_Left;
-        private System.Windows.Forms.TextBox TB_Message;
+        private System.Windows.Forms.TextBox TB_MessageBody;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -651,6 +709,11 @@ namespace QueueInator
         private System.Windows.Forms.TreeView TV_Queues;
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.ColumnHeader columnHeader0;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.TabControl TC_Message;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TextBox TB_MessageExtension;
     }
 }
 

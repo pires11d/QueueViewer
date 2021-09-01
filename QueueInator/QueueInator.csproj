@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Entities\Constants.cs" />
     <Compile Include="Entities\SoundsEnum.cs" />
+    <Compile Include="Extensions\FileSizeExtension.cs" />
     <Compile Include="Forms\NewMessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
