@@ -532,40 +532,35 @@ namespace QueueViewer.Forms
             // Retrieve the dragged objects.
             ListView.SelectedListViewItemCollection draggedItems = (ListView.SelectedListViewItemCollection)e.Data.GetData(typeof(ListView.SelectedListViewItemCollection));
 
-            foreach (ListViewItem draggedItem in draggedItems)
+            if (e.Effect == DragDropEffects.Move)
             {
-                if (e.Effect == DragDropEffects.Copy)
+                try
                 {
-                    try
+                    foreach (ListViewItem draggedItem in draggedItems)
                     {
-                        var msg = draggedItem.SubItems[5].Text;
-                        InsertMessageIntoQueue(targetQueue, msg);
-                        UpdateNodesAfterDragging(targetNode, null);
-                    }
-                    catch (Exception)
-                    {
-                        return;
-                    }
-                }
-                else if (e.Effect == DragDropEffects.Move)
-                {
-                    try
-                    {
-                        draggedItem.Remove();
                         var msg = draggedItem.SubItems[5].Text;
                         var msgId = draggedItem.SubItems[1].Text;
                         InsertMessageIntoQueue(targetQueue, msg);
                         Service.RemoveMessage(CurrentNode.Name, msgId);
-                        UpdateNodesAfterDragging(targetNode, CurrentNode);
+                        draggedItem.Remove();
                     }
-                    catch (Exception)
-                    {
-                        return;
-                    }
-                }
+                    //Parallel.ForEach(draggedItems.Cast<ListViewItem>(), x =>
+                    //{
+                    //    var msg = x.SubItems[5].Text;
+                    //    var msgId = x.SubItems[1].Text;
+                    //    InsertMessageIntoQueue(targetQueue, msg);
+                    //    Service.RemoveMessage(CurrentNode.Name, msgId);
+                    //    x.Remove();
+                    //});
 
-                targetNode.Expand();
-                ShowMessages(Service.CurrentQueue);
+                    UpdateNodesAfterDragging(targetNode, CurrentNode);
+                    targetNode.Expand();
+                    ShowMessages(Service.CurrentQueue);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
             }
         }
 
