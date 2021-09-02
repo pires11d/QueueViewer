@@ -11,14 +11,14 @@ namespace QueueViewer.Forms
         {
             InitializeComponent();
             Main = main;
-            BTN_OK.Text = BTN_OK.Text.Replace("@", queue.QueueName.ToQueuePath());
+            BTN_OK.Text = BTN_OK.Text.Replace("@", queue.QueueName);
         }
 
         private void BTN_OK_Click(object sender, EventArgs e)
         {
             try
             {
-                Main.InsertMessage(TB_Value.Text);
+                Main.InsertMessageIntoQueue(Main.Service.CurrentQueue, TB_Value.Text);
             }
             catch (Exception ex)
             {

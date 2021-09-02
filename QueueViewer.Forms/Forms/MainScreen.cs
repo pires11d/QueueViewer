@@ -2,11 +2,13 @@
 using QueueViewer.Lib.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
 using System.Messaging;
+using System.Threading;
 using System.Windows.Forms;
 using Message = System.Messaging.Message;
 
@@ -27,6 +29,7 @@ namespace QueueViewer.Forms
 
             LoadTreeView();
             LoadListView();
+
             CBB_Refresh.SelectedIndex = 0;
         }
 
@@ -35,7 +38,6 @@ namespace QueueViewer.Forms
         private void LoadTreeView()
         {
             LoadImages();
-            LoadQueues();
             LoadNodes();
         }
 
@@ -56,42 +58,6 @@ namespace QueueViewer.Forms
             LV_Messages.LargeImageList = new ImageList();
             LV_Messages.LargeImageList.ImageSize = new Size(16, 16);
             LV_Messages.LargeImageList.Images.Add(Properties.Resources.mail.ToBitmap());
-        }
-
-        private void LoadQueues()
-        {
-            try
-            {
-                var machine = Service.MachineId == Environment.MachineName ? "." : Service.MachineId;
-                Service.PrivateQueues = MessageQueue.GetPrivateQueuesByMachine(machine).OrderBy(x => x.QueueName).ToList();
-            }
-            catch (Exception)
-            {
-            }
-
-            try
-            {
-                Service.PublicQueues = MessageQueue.GetPublicQueues().OrderBy(x => x.QueueName).ToList();
-            }
-            catch (Exception)
-            {
-            }
-
-            try
-            {
-                string prefix = $"DIRECT=OS:{Service.MachineId.ToLower()}";
-                var dead1 = new MessageQueue(prefix + @"\SYSTEM$\DEADXACT", accessMode: QueueAccessMode.PeekAndAdmin);
-                Service.SetFilter(dead1);
-                var dead2 = new MessageQueue(prefix + @"\SYSTEM$\DEADLETTER", accessMode: QueueAccessMode.PeekAndAdmin);
-                Service.SetFilter(dead2);
-
-                Service.SystemQueues = new List<MessageQueue>();
-                Service.SystemQueues.Add(dead1);
-                Service.SystemQueues.Add(dead2);
-            }
-            catch (Exception)
-            {
-            }
         }
 
         private void LoadNodes()
@@ -158,51 +124,76 @@ namespace QueueViewer.Forms
             string lastName = node.Name.Split('.').LastOrDefault();
             bool folder = imageIndex == 0 && lastName == name;
             var fullName = folder ? $"{node.Name}" : $"{node.Name}.{name}";
-            return node.Nodes.Add(fullName, name + $" ({n})", imageIndex, imageIndex);
+            var createdNode = node.Nodes.Add(fullName, name + $" ({n})", imageIndex, imageIndex);
+            createdNode.Tag = n;
+            return createdNode;
+        }
+
+        private void UpdateNodesAfterDragging(TreeNode nextNode, TreeNode prevNode = null)
+        {
+            if (nextNode != null)
+            {
+                UpdateNode(nextNode);
+            }
+
+            if (prevNode != null)
+            {
+                UpdateNode(prevNode);
+            }
+        }
+
+        private void UpdateNode(TreeNode node)
+        {
+            var queue = Service.GetQueueByName(node.Name);
+            int lastCount = queue.GetAllMessages()?.Count() ?? 0;
+            node.Text = node.Text.UpdateCount(lastCount);
+            SetNodeColor(node, lastCount);
+        }
+
+        private void SetNodeColor(TreeNode node, int lastCount)
+        {
+            if (lastCount > (int)node.Tag)
+            {
+                ChangeColor(node, Color.Blue);
+            }
+            else if (lastCount < (int)node.Tag)
+            {
+                ChangeColor(node, Color.Red);
+            }
+        }
+
+        private void ChangeColor(TreeNode node, Color color)
+        {
+            node.BackColor = color;
+
+            new Thread(() =>
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                while (true)
+                {
+                    if (stopwatch.ElapsedMilliseconds > 3000)
+                    {
+                        break;
+                    }
+                }
+                stopwatch.Stop();
+                node.BackColor = SystemColors.Window;
+
+            }).Start();
         }
 
         #endregion LOAD
 
         #region ACTIONS
 
-        public void CreateQueue(string queueName)
+        public void InsertMessageIntoQueue(MessageQueue queue, string content)
         {
-            if (string.IsNullOrEmpty(queueName))
-                return;
-
-            var queueFullName = $"{CurrentNode.Name}.{queueName}";
-
-            var queuePath = queueFullName.ToQueuePath();
-
-            if (!MessageQueue.Exists(queuePath))
-            {
-                MessageQueue.Create(queuePath);
-                CurrentNode.Nodes.Add(queueFullName, queueName);
-            }
-        }
-
-        public void DeleteQueue()
-        {
-            var queueName = CurrentNode?.Name;
-            if (string.IsNullOrEmpty(queueName))
-                return;
-
-            var queuePath = queueName.ToQueuePath();
-
-            if (MessageQueue.Exists(queuePath))
-            {
-                MessageQueue.Delete(queuePath);
-                CurrentNode.Remove();
-            }
-        }
-
-        public void InsertMessage(string content)
-        {
-            if (Service.CurrentQueue != null)
+            if (queue != null)
             {
                 try
                 {
-                    MessageQueueService.SendMessage(Service.CurrentQueue, content);
+                    MessageQueueService.SendMessage(queue, content);
                     PlaySound(SoundsEnum.Success);
                 }
                 catch (Exception)
@@ -210,20 +201,6 @@ namespace QueueViewer.Forms
                     PlaySound(SoundsEnum.Fail);
                     throw;
                 }
-            }
-        }
-
-        public void RemoveMessage(string queueName, string msgId)
-        {
-            var originQueue = Service.GetQueueByName(queueName);
-            originQueue.ReceiveById(msgId);
-        }
-
-        public void PurgeQueue()
-        {
-            if (Service.CurrentQueue != null)
-            {
-                Service.CurrentQueue.Purge();
             }
         }
 
@@ -296,6 +273,23 @@ namespace QueueViewer.Forms
             }
         }
 
+        private void ShowMessageInfo()
+        {
+            if (LV_Messages.SelectedItems.Count > 0)
+            {
+                var item = LV_Messages.SelectedItems[0];
+                var id = item.SubItems[1].Text;
+                if (!string.IsNullOrEmpty(id))
+                {
+                    var message = Service.CurrentQueue.PeekById(id);
+                    var body = Service.GetMessageBody(message);
+                    var extension = Service.GetMessageExtension(message);
+                    TB_MessageBody.Text = body.Prettify();
+                    TB_MessageExtension.Text = extension;
+                }
+            }
+        }
+
         #endregion ACTIONS
 
         #region CONTROLS
@@ -306,6 +300,11 @@ namespace QueueViewer.Forms
             dialog.Show();
         }
 
+        public string CreateNewQueue(string queueName)
+        {
+            return Service.CreateQueue(CurrentNode.Name, queueName);
+        }
+
         private void TSMI_Delete_Click(object sender, EventArgs e)
         {
             var result = YesNoDialog("delete this queue");
@@ -314,7 +313,8 @@ namespace QueueViewer.Forms
 
             try
             {
-                DeleteQueue();
+                Service.DeleteQueue(CurrentNode?.Name);
+                CurrentNode.Remove();
             }
             catch (Exception ex)
             {
@@ -348,7 +348,7 @@ namespace QueueViewer.Forms
         {
             try
             {
-                PurgeQueue();
+                Service.PurgeQueue();
             }
             catch (Exception ex)
             {
@@ -375,23 +375,12 @@ namespace QueueViewer.Forms
 
         private void LV_Messages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ShowMessageInfo();
-        }
-
-        private void ShowMessageInfo()
-        {
-            if (LV_Messages.SelectedItems.Count > 0)
+            try
             {
-                var item = LV_Messages.SelectedItems[0];
-                var id = item.SubItems[1].Text;
-                if (!string.IsNullOrEmpty(id))
-                {
-                    var message = Service.CurrentQueue.PeekById(id);
-                    var body = Service.GetMessageBody(message);
-                    var extension = Service.GetMessageExtension(message);
-                    TB_MessageBody.Text = body.Prettify();
-                    TB_MessageExtension.Text = extension;
-                }
+                ShowMessageInfo();
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -437,6 +426,8 @@ namespace QueueViewer.Forms
 
             if (TV_Queues.SelectedNode != null)
                 TV_Queues.SelectedNode.Expand();
+
+            TV_Queues.Scroll();
         }
 
         private void TV_Queues_DragDrop(object sender, DragEventArgs e)
@@ -447,7 +438,7 @@ namespace QueueViewer.Forms
             // Retrieve the node at the drop location.
             TreeNode targetNode = TV_Queues.GetNodeAt(targetPoint);
 
-            Service.CurrentQueue = Service.GetQueueByName(targetNode.Name);
+            MessageQueue targetQueue = Service.GetQueueByName(targetNode.Name);
 
             // Retrieve the dragged objects.
             ListView.SelectedListViewItemCollection draggedItems = (ListView.SelectedListViewItemCollection)e.Data.GetData(typeof(ListView.SelectedListViewItemCollection));
@@ -459,7 +450,8 @@ namespace QueueViewer.Forms
                     try
                     {
                         var msg = draggedItem.SubItems[5].Text;
-                        InsertMessage(msg);
+                        InsertMessageIntoQueue(targetQueue, msg);
+                        UpdateNodesAfterDragging(targetNode, null);
                     }
                     catch (Exception ex)
                     {
@@ -474,8 +466,9 @@ namespace QueueViewer.Forms
                         draggedItem.Remove();
                         var msg = draggedItem.SubItems[5].Text;
                         var msgId = draggedItem.SubItems[1].Text; 
-                        InsertMessage(msg);
-                        RemoveMessage(CurrentNode.Name, msgId);
+                        InsertMessageIntoQueue(targetQueue, msg);
+                        Service.RemoveMessage(CurrentNode.Name, msgId);
+                        UpdateNodesAfterDragging(targetNode, CurrentNode);
                     }
                     catch (Exception ex)
                     {

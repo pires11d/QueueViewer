@@ -1,38 +1,55 @@
 ﻿using Newtonsoft.Json;
 using QueueViewer.Extensions;
 using System.IO;
+using System.Linq;
 
 namespace System
 {
     public static class StringExtensions
     {
-        public static string ToQueueLabel(this string arg)
+        public static string ToQueueLabel(this string str)
         {
-            arg = arg.ToLower();
-            arg = arg.Replace(@"private$\", "");
-            arg = arg.Replace(@"system$\", "");
-            arg = arg.Replace(@"\", ".");
-            return arg;
+            str = str.ToLower();
+            str = str.Replace(@"private$\", "");
+            str = str.Replace(@"system$\", "");
+            str = str.Replace(@"\", ".");
+            return str;
         }
 
-        public static string ToQueueName(this string arg)
+        public static string ToQueueName(this string str)
         {
-            arg = arg.ToLower();
-            arg = arg.Replace(@"private", "");
-            arg = arg.StartsWith(".") ? arg.Remove(0, 1) : arg;
-            arg = arg.StartsWith("@") ? arg : $"@{arg}";
-            arg = arg.Replace(@"@", @"private$\");
-            return arg;
+            str = str.ToLower();
+            str = str.Replace(@"private", "");
+            str = str.StartsWith(".") ? str.Remove(0, 1) : str;
+            str = str.StartsWith("@") ? str : $"@{str}";
+            str = str.Replace(@"@", @"private$\");
+            return str;
         }
 
-        public static string ToQueuePath(this string arg)
+        public static string ToQueuePath(this string str)
         {
-            arg = arg.ToLower();
-            arg = arg.Replace(@"private", "");
-            arg = arg.StartsWith(".") ? arg.Remove(0,1) : arg;
-            arg = arg.StartsWith("@") ? arg : $"@{arg}";
-            arg = arg.Replace(@"@", @".\private$\");
-            return arg;
+            str = str.ToLower();
+            str = str.Replace(@"private", "");
+            str = str.StartsWith(".") ? str.Remove(0,1) : str;
+            str = str.StartsWith("@") ? str : $"@{str}";
+            str = str.Replace(@"@", @".\private$\");
+            return str;
+        }
+
+        public static string Capitalize(this string str)
+        {
+            if (str.Length == 0)
+                return "";
+            else if (str.Length == 1)
+                return char.ToUpper(str[0]).ToString();
+            else
+                return char.ToUpper(str[0]).ToString() + str.Substring(1);
+        }
+
+        public static string UpdateCount(this string str, int count = 0)
+        {
+            var text = str.Split('(').FirstOrDefault();
+            return text += $"({count})";
         }
 
         public static string Prettify(this string json)
