@@ -6,7 +6,7 @@ using System.Text;
 
 namespace QueueViewer.Lib.Services
 {
-    public static class MessageQueueService
+    public static class MessageService
     {
         public static void SendMessage(MessageQueue queue, string message)
         {

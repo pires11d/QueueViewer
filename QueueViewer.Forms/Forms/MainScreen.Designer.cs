@@ -98,6 +98,8 @@ namespace QueueViewer.Forms
             this.P_TopLeft = new System.Windows.Forms.Panel();
             this.P_Bottom = new System.Windows.Forms.Panel();
             this.T_Refresh = new System.Windows.Forms.Timer(this.components);
+            this.CMS_Messages = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.TSMI_Reprocess = new System.Windows.Forms.ToolStripMenuItem();
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
@@ -111,6 +113,7 @@ namespace QueueViewer.Forms
             this.P_Left.SuspendLayout();
             this.P_BottomLeft.SuspendLayout();
             this.P_Bottom.SuspendLayout();
+            this.CMS_Messages.SuspendLayout();
             this.SuspendLayout();
             // 
             // MS_Header
@@ -545,7 +548,7 @@ namespace QueueViewer.Forms
             this.tabPage2.Location = new System.Drawing.Point(4, 34);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(703, 126);
+            this.tabPage2.Size = new System.Drawing.Size(634, 126);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Extension";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -557,7 +560,7 @@ namespace QueueViewer.Forms
             this.TB_MessageExtension.Multiline = true;
             this.TB_MessageExtension.Name = "TB_MessageExtension";
             this.TB_MessageExtension.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TB_MessageExtension.Size = new System.Drawing.Size(697, 120);
+            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 120);
             this.TB_MessageExtension.TabIndex = 1;
             // 
             // P_TopRight
@@ -701,6 +704,22 @@ namespace QueueViewer.Forms
             // 
             this.T_Refresh.Tick += new System.EventHandler(this.T_Refresh_Tick);
             // 
+            // CMS_Messages
+            // 
+            this.CMS_Messages.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TSMI_Reprocess});
+            this.CMS_Messages.Name = "CMS_Messages";
+            this.CMS_Messages.Size = new System.Drawing.Size(181, 48);
+            this.CMS_Messages.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Messages_Opening);
+            // 
+            // TSMI_Reprocess
+            // 
+            this.TSMI_Reprocess.Name = "TSMI_Reprocess";
+            this.TSMI_Reprocess.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.TSMI_Reprocess.Size = new System.Drawing.Size(180, 22);
+            this.TSMI_Reprocess.Text = "Reprocess";
+            this.TSMI_Reprocess.Click += new System.EventHandler(this.TSMI_Reprocess_Click);
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -736,6 +755,7 @@ namespace QueueViewer.Forms
             this.P_BottomLeft.ResumeLayout(false);
             this.P_Bottom.ResumeLayout(false);
             this.P_Bottom.PerformLayout();
+            this.CMS_Messages.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -809,6 +829,8 @@ namespace QueueViewer.Forms
         private System.Windows.Forms.ToolStripMenuItem TSMI_Expand;
         private System.Windows.Forms.ToolStripMenuItem TSMI_Collapse;
         private System.Windows.Forms.ToolStripSeparator TSMI_Splitter;
+        private System.Windows.Forms.ContextMenuStrip CMS_Messages;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_Reprocess;
     }
 }
 

@@ -52,9 +52,15 @@ namespace QueueViewer.Forms
 
             foreach (var q in Service.PrivateQueues)
             {
-                var nodes = treeNodes.Find(q.QueueName.ToQueueLabel(), true).ToList();
-                var node = nodes.FirstOrDefault(x => x.ImageIndex == 0);
-                UpdateNode(node);
+                try
+                {
+                    var nodes = treeNodes.Find(q.QueueName.ToQueueLabel(), true).ToList();
+                    var node = nodes.FirstOrDefault(x => x.ImageIndex == 0);
+                    UpdateNode(node);
+                }
+                catch (Exception)
+                {
+                }
             }
             //}).Start();
         }
@@ -250,7 +256,7 @@ namespace QueueViewer.Forms
             {
                 try
                 {
-                    MessageQueueService.SendMessage(queue, content);
+                    MessageService.SendMessage(queue, content);
                     UpdateNode(CurrentNode);
                     PlaySound(SoundsEnum.Success);
                 }
@@ -281,7 +287,7 @@ namespace QueueViewer.Forms
                             "✉",
                             message.Id,
                             size,
-                            message.ResponseQueue?.CreateTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
+                            message.SentTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
                             message.ResponseQueue?.QueueName.ToQueueLabel() ?? "",
                             body
                         };
@@ -479,6 +485,12 @@ namespace QueueViewer.Forms
             if (!(activeControl is TreeView))
                 e.Cancel = true;
 
+            if (activeControl is ListView)
+            {
+                CMS_Messages_Opening(sender, new System.ComponentModel.CancelEventArgs());
+                return;
+            }
+
             Point targetPoint = TV_Queues.PointToClient(System.Windows.Forms.Cursor.Position);
             var selectedNode = TV_Queues.GetNodeAt(targetPoint);
             var isNodeSelected = selectedNode != null;
@@ -503,6 +515,38 @@ namespace QueueViewer.Forms
             CMS_Queues.Items[TSMI_Insert.Name].Enabled = showExtra;
             CMS_Queues.Items[TSMI_Purge.Name].Enabled = showExtra;
             CMS_Queues.Items[TSMI_Delete.Name].Enabled = showExtra;
+        }
+
+        private void CMS_Messages_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (LV_Messages.SelectedItems.Count > 0)
+            {
+                var startPoint = LV_Messages.PointToClient(System.Windows.Forms.Cursor.Position);
+                CMS_Messages.Show(LV_Messages, startPoint);
+            }
+        }
+
+        private void TSMI_Reprocess_Click(object sender, EventArgs e)
+        {
+            if (LV_Messages.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    var items = LV_Messages.SelectedItems.Cast<ListViewItem>().ToList();
+                    foreach (ListViewItem item in items)
+                    {
+                        var content = item.SubItems[5].Text;
+                        var queueName = item.SubItems[4].Text;
+
+                        Service.Reprocess(content, queueName);
+                    }
+                    ShowMessages(Service.CurrentQueue);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
         private void LV_Messages_ColumnClick(object sender, ColumnClickEventArgs e)

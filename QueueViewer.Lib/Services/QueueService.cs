@@ -133,7 +133,7 @@ namespace QueueViewer.Lib.Services
 
         public List<MessageQueue> GetQueuesByPath(string name)
         {
-            var prefix = name.Split(new [] { @"$\" }, StringSplitOptions.None).FirstOrDefault();
+            var prefix = name.Split(new[] { @"$\" }, StringSplitOptions.None).FirstOrDefault();
 
             if (!string.IsNullOrEmpty(prefix))
                 prefix = prefix.Capitalize();
@@ -162,6 +162,7 @@ namespace QueueViewer.Lib.Services
                 filter.Priority = true;
                 filter.Extension = true;
                 filter.ResponseQueue = true;
+                filter.SentTime = true;
                 currentQueue.MessageReadPropertyFilter = filter;
             }
         }
@@ -219,6 +220,18 @@ namespace QueueViewer.Lib.Services
             if (CurrentQueue != null)
             {
                 CurrentQueue.Purge();
+            }
+        }
+
+        public void Reprocess(string content, string queueName)
+        {
+            if (string.IsNullOrEmpty(queueName))
+                return;
+
+            var queue = GetQueueByName(queueName);
+            if (queue != null)
+            {
+                MessageService.SendMessage(queue, content);
             }
         }
     }

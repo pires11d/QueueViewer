@@ -51,7 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Constants.cs" />
     <Compile Include="Entities\SoundsEnum.cs" />
-    <Compile Include="Services\MessageQueueService.cs" />
+    <Compile Include="Services\MessageService.cs" />
     <Compile Include="Services\QueueService.cs" />
   </ItemGroup>
   <ItemGroup>
