@@ -480,17 +480,26 @@ namespace QueueViewer.Forms
                 e.Cancel = true;
 
             Point targetPoint = TV_Queues.PointToClient(System.Windows.Forms.Cursor.Position);
-
             var selectedNode = TV_Queues.GetNodeAt(targetPoint);
+            var isNodeSelected = selectedNode != null;
+            CMS_Queues.Items[TSMI_Create.Name].Visible = isNodeSelected;
+            CMS_Queues.Items[TSMI_Insert.Name].Visible = isNodeSelected;
+            CMS_Queues.Items[TSMI_Purge.Name].Visible = isNodeSelected;
+            CMS_Queues.Items[TSMI_Delete.Name].Visible = isNodeSelected;
+            CMS_Queues.Items[TSMI_Splitter.Name].Visible = isNodeSelected;
             if (selectedNode == null)
             {
-                e.Cancel = true;
+                CurrentNode = null;
+                CMS_Queues.Items[TSMI_Expand.Name].Text = "Expand All";
+                CMS_Queues.Items[TSMI_Collapse.Name].Text = "Collapse All";
                 return;
             }
             TV_Queues.SelectedNode = selectedNode;
             TV_Queues_NodeMouseClick(sender, new TreeNodeMouseClickEventArgs(selectedNode, MouseButtons.Left, 1, targetPoint.X, targetPoint.Y));
 
             bool showExtra = selectedNode.ImageIndex == 0;
+            bool isFolder = selectedNode.ImageIndex == 1;
+            CMS_Queues.Items[TSMI_Create.Name].Enabled = isFolder;
             CMS_Queues.Items[TSMI_Insert.Name].Enabled = showExtra;
             CMS_Queues.Items[TSMI_Purge.Name].Enabled = showExtra;
             CMS_Queues.Items[TSMI_Delete.Name].Enabled = showExtra;
@@ -570,7 +579,33 @@ namespace QueueViewer.Forms
 
         private void BTN_Collapse_Click(object sender, EventArgs e)
         {
-            TV_Queues.CollapseAll();
+        }
+
+        private void TSMI_Expand_Click(object sender, EventArgs e)
+        {
+            if (CurrentNode != null)
+                TV_Queues.SelectedNode.ExpandAll();
+            else
+                TV_Queues.ExpandAll();
+        }
+
+        private void TSMI_Collapse_Click(object sender, EventArgs e)
+        {
+            if (CurrentNode != null)
+                TV_Queues.SelectedNode.Collapse(false);
+            else
+                TV_Queues.CollapseAll();
+        }
+
+        private void LV_Messages_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (ActiveControl is ListView && e.Control && e.KeyCode == Keys.A)
+            {
+                foreach (ListViewItem item in LV_Messages.Items)
+                {
+                    item.Selected = true;
+                }
+            }
         }
 
         private void TV_Queues_DragDrop(object sender, DragEventArgs e)

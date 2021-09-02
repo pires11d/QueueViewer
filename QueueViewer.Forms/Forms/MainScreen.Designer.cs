@@ -62,6 +62,9 @@ namespace QueueViewer.Forms
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CMS_Queues = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.TSMI_Expand = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Collapse = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Splitter = new System.Windows.Forms.ToolStripSeparator();
             this.TSMI_Create = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Purge = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,8 +96,6 @@ namespace QueueViewer.Forms
             this.P_BottomLeft = new System.Windows.Forms.Panel();
             this.TV_Queues = new System.Windows.Forms.TreeView();
             this.P_TopLeft = new System.Windows.Forms.Panel();
-            this.BTN_Collapse = new System.Windows.Forms.Button();
-            this.BTN_Expand = new System.Windows.Forms.Button();
             this.P_Bottom = new System.Windows.Forms.Panel();
             this.T_Refresh = new System.Windows.Forms.Timer(this.components);
             this.MS_Header.SuspendLayout();
@@ -109,7 +110,6 @@ namespace QueueViewer.Forms
             this.P_BottomTopRight.SuspendLayout();
             this.P_Left.SuspendLayout();
             this.P_BottomLeft.SuspendLayout();
-            this.P_TopLeft.SuspendLayout();
             this.P_Bottom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -351,16 +351,42 @@ namespace QueueViewer.Forms
             // CMS_Queues
             // 
             this.CMS_Queues.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TSMI_Expand,
+            this.TSMI_Collapse,
+            this.TSMI_Splitter,
             this.TSMI_Create,
             this.TSMI_Insert,
             this.TSMI_Purge,
             this.TSMI_Delete});
             this.CMS_Queues.Name = "CMS_Queues";
-            this.CMS_Queues.Size = new System.Drawing.Size(217, 92);
+            this.CMS_Queues.Size = new System.Drawing.Size(217, 142);
             this.CMS_Queues.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Queues_Opening);
+            // 
+            // TSMI_Expand
+            // 
+            this.TSMI_Expand.Name = "TSMI_Expand";
+            this.TSMI_Expand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.D0)));
+            this.TSMI_Expand.Size = new System.Drawing.Size(216, 22);
+            this.TSMI_Expand.Text = "Expand";
+            this.TSMI_Expand.Click += new System.EventHandler(this.TSMI_Expand_Click);
+            // 
+            // TSMI_Collapse
+            // 
+            this.TSMI_Collapse.Name = "TSMI_Collapse";
+            this.TSMI_Collapse.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
+            this.TSMI_Collapse.Size = new System.Drawing.Size(216, 22);
+            this.TSMI_Collapse.Text = "Collapse";
+            this.TSMI_Collapse.Click += new System.EventHandler(this.TSMI_Collapse_Click);
+            // 
+            // TSMI_Splitter
+            // 
+            this.TSMI_Splitter.Name = "TSMI_Splitter";
+            this.TSMI_Splitter.Size = new System.Drawing.Size(213, 6);
             // 
             // TSMI_Create
             // 
+            this.TSMI_Create.Enabled = false;
             this.TSMI_Create.Name = "TSMI_Create";
             this.TSMI_Create.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.TSMI_Create.Size = new System.Drawing.Size(216, 22);
@@ -369,6 +395,7 @@ namespace QueueViewer.Forms
             // 
             // TSMI_Insert
             // 
+            this.TSMI_Insert.Enabled = false;
             this.TSMI_Insert.Name = "TSMI_Insert";
             this.TSMI_Insert.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
             this.TSMI_Insert.Size = new System.Drawing.Size(216, 22);
@@ -377,6 +404,7 @@ namespace QueueViewer.Forms
             // 
             // TSMI_Purge
             // 
+            this.TSMI_Purge.Enabled = false;
             this.TSMI_Purge.Name = "TSMI_Purge";
             this.TSMI_Purge.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
             this.TSMI_Purge.Size = new System.Drawing.Size(216, 22);
@@ -385,6 +413,7 @@ namespace QueueViewer.Forms
             // 
             // TSMI_Delete
             // 
+            this.TSMI_Delete.Enabled = false;
             this.TSMI_Delete.Name = "TSMI_Delete";
             this.TSMI_Delete.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
             this.TSMI_Delete.Size = new System.Drawing.Size(216, 22);
@@ -441,7 +470,7 @@ namespace QueueViewer.Forms
             // 
             // splitter2
             // 
-            this.splitter2.Location = new System.Drawing.Point(295, 0);
+            this.splitter2.Location = new System.Drawing.Point(364, 0);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(3, 566);
             this.splitter2.TabIndex = 12;
@@ -453,9 +482,9 @@ namespace QueueViewer.Forms
             this.P_Right.Controls.Add(this.P_BotttomRight);
             this.P_Right.Controls.Add(this.P_TopRight);
             this.P_Right.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.P_Right.Location = new System.Drawing.Point(295, 0);
+            this.P_Right.Location = new System.Drawing.Point(364, 0);
             this.P_Right.Name = "P_Right";
-            this.P_Right.Size = new System.Drawing.Size(711, 566);
+            this.P_Right.Size = new System.Drawing.Size(642, 566);
             this.P_Right.TabIndex = 11;
             // 
             // splitter1
@@ -463,7 +492,7 @@ namespace QueueViewer.Forms
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
             this.splitter1.Location = new System.Drawing.Point(0, 402);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(711, 3);
+            this.splitter1.Size = new System.Drawing.Size(642, 3);
             this.splitter1.TabIndex = 12;
             this.splitter1.TabStop = false;
             // 
@@ -473,7 +502,7 @@ namespace QueueViewer.Forms
             this.P_BotttomRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.P_BotttomRight.Location = new System.Drawing.Point(0, 402);
             this.P_BotttomRight.Name = "P_BotttomRight";
-            this.P_BotttomRight.Size = new System.Drawing.Size(711, 164);
+            this.P_BotttomRight.Size = new System.Drawing.Size(642, 164);
             this.P_BotttomRight.TabIndex = 11;
             // 
             // TC_Message
@@ -485,7 +514,7 @@ namespace QueueViewer.Forms
             this.TC_Message.Location = new System.Drawing.Point(0, 0);
             this.TC_Message.Name = "TC_Message";
             this.TC_Message.SelectedIndex = 0;
-            this.TC_Message.Size = new System.Drawing.Size(711, 164);
+            this.TC_Message.Size = new System.Drawing.Size(642, 164);
             this.TC_Message.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.TC_Message.TabIndex = 1;
             // 
@@ -495,7 +524,7 @@ namespace QueueViewer.Forms
             this.tabPage1.Location = new System.Drawing.Point(4, 34);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(703, 126);
+            this.tabPage1.Size = new System.Drawing.Size(634, 126);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Body";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -507,7 +536,7 @@ namespace QueueViewer.Forms
             this.TB_MessageBody.Multiline = true;
             this.TB_MessageBody.Name = "TB_MessageBody";
             this.TB_MessageBody.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TB_MessageBody.Size = new System.Drawing.Size(697, 120);
+            this.TB_MessageBody.Size = new System.Drawing.Size(628, 120);
             this.TB_MessageBody.TabIndex = 0;
             // 
             // tabPage2
@@ -538,7 +567,7 @@ namespace QueueViewer.Forms
             this.P_TopRight.Dock = System.Windows.Forms.DockStyle.Top;
             this.P_TopRight.Location = new System.Drawing.Point(0, 0);
             this.P_TopRight.Name = "P_TopRight";
-            this.P_TopRight.Size = new System.Drawing.Size(711, 402);
+            this.P_TopRight.Size = new System.Drawing.Size(642, 402);
             this.P_TopRight.TabIndex = 10;
             // 
             // P_BottomTopRight
@@ -547,7 +576,7 @@ namespace QueueViewer.Forms
             this.P_BottomTopRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.P_BottomTopRight.Location = new System.Drawing.Point(0, 27);
             this.P_BottomTopRight.Name = "P_BottomTopRight";
-            this.P_BottomTopRight.Size = new System.Drawing.Size(711, 375);
+            this.P_BottomTopRight.Size = new System.Drawing.Size(642, 375);
             this.P_BottomTopRight.TabIndex = 2;
             // 
             // LV_Messages
@@ -566,13 +595,14 @@ namespace QueueViewer.Forms
             this.LV_Messages.HideSelection = false;
             this.LV_Messages.Location = new System.Drawing.Point(0, 0);
             this.LV_Messages.Name = "LV_Messages";
-            this.LV_Messages.Size = new System.Drawing.Size(711, 375);
+            this.LV_Messages.Size = new System.Drawing.Size(642, 375);
             this.LV_Messages.TabIndex = 0;
             this.LV_Messages.UseCompatibleStateImageBehavior = false;
             this.LV_Messages.View = System.Windows.Forms.View.Details;
             this.LV_Messages.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LV_Messages_ColumnClick);
             this.LV_Messages.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.LV_Messages_ItemDrag);
             this.LV_Messages.SelectedIndexChanged += new System.EventHandler(this.LV_Messages_SelectedIndexChanged);
+            this.LV_Messages.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_Messages_KeyDown);
             // 
             // columnHeader0
             // 
@@ -609,7 +639,7 @@ namespace QueueViewer.Forms
             this.P_TopTopRight.Dock = System.Windows.Forms.DockStyle.Top;
             this.P_TopTopRight.Location = new System.Drawing.Point(0, 0);
             this.P_TopTopRight.Name = "P_TopTopRight";
-            this.P_TopTopRight.Size = new System.Drawing.Size(711, 27);
+            this.P_TopTopRight.Size = new System.Drawing.Size(642, 27);
             this.P_TopTopRight.TabIndex = 1;
             // 
             // P_Left
@@ -619,7 +649,7 @@ namespace QueueViewer.Forms
             this.P_Left.Dock = System.Windows.Forms.DockStyle.Left;
             this.P_Left.Location = new System.Drawing.Point(0, 0);
             this.P_Left.Name = "P_Left";
-            this.P_Left.Size = new System.Drawing.Size(295, 566);
+            this.P_Left.Size = new System.Drawing.Size(364, 566);
             this.P_Left.TabIndex = 10;
             // 
             // P_BottomLeft
@@ -628,7 +658,7 @@ namespace QueueViewer.Forms
             this.P_BottomLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.P_BottomLeft.Location = new System.Drawing.Point(0, 27);
             this.P_BottomLeft.Name = "P_BottomLeft";
-            this.P_BottomLeft.Size = new System.Drawing.Size(295, 539);
+            this.P_BottomLeft.Size = new System.Drawing.Size(364, 539);
             this.P_BottomLeft.TabIndex = 3;
             // 
             // TV_Queues
@@ -639,7 +669,7 @@ namespace QueueViewer.Forms
             this.TV_Queues.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.TV_Queues.Name = "TV_Queues";
             this.TV_Queues.ShowNodeToolTips = true;
-            this.TV_Queues.Size = new System.Drawing.Size(295, 539);
+            this.TV_Queues.Size = new System.Drawing.Size(364, 539);
             this.TV_Queues.TabIndex = 0;
             this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
             this.TV_Queues.DragDrop += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragDrop);
@@ -650,33 +680,11 @@ namespace QueueViewer.Forms
             // P_TopLeft
             // 
             this.P_TopLeft.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.P_TopLeft.Controls.Add(this.BTN_Collapse);
-            this.P_TopLeft.Controls.Add(this.BTN_Expand);
             this.P_TopLeft.Dock = System.Windows.Forms.DockStyle.Top;
             this.P_TopLeft.Location = new System.Drawing.Point(0, 0);
             this.P_TopLeft.Name = "P_TopLeft";
-            this.P_TopLeft.Size = new System.Drawing.Size(295, 27);
+            this.P_TopLeft.Size = new System.Drawing.Size(364, 27);
             this.P_TopLeft.TabIndex = 2;
-            // 
-            // BTN_Collapse
-            // 
-            this.BTN_Collapse.Location = new System.Drawing.Point(74, 1);
-            this.BTN_Collapse.Name = "BTN_Collapse";
-            this.BTN_Collapse.Size = new System.Drawing.Size(75, 26);
-            this.BTN_Collapse.TabIndex = 0;
-            this.BTN_Collapse.Text = "Collapse All";
-            this.BTN_Collapse.UseVisualStyleBackColor = true;
-            this.BTN_Collapse.Click += new System.EventHandler(this.BTN_Collapse_Click);
-            // 
-            // BTN_Expand
-            // 
-            this.BTN_Expand.Location = new System.Drawing.Point(0, 1);
-            this.BTN_Expand.Name = "BTN_Expand";
-            this.BTN_Expand.Size = new System.Drawing.Size(75, 26);
-            this.BTN_Expand.TabIndex = 0;
-            this.BTN_Expand.Text = "Expand All";
-            this.BTN_Expand.UseVisualStyleBackColor = true;
-            this.BTN_Expand.Click += new System.EventHandler(this.BTN_Expand_Click);
             // 
             // P_Bottom
             // 
@@ -726,7 +734,6 @@ namespace QueueViewer.Forms
             this.P_BottomTopRight.ResumeLayout(false);
             this.P_Left.ResumeLayout(false);
             this.P_BottomLeft.ResumeLayout(false);
-            this.P_TopLeft.ResumeLayout(false);
             this.P_Bottom.ResumeLayout(false);
             this.P_Bottom.PerformLayout();
             this.ResumeLayout(false);
@@ -799,8 +806,9 @@ namespace QueueViewer.Forms
         private System.Windows.Forms.Panel P_BottomTopRight;
         private System.Windows.Forms.Panel P_BottomLeft;
         private System.Windows.Forms.Panel P_TopLeft;
-        private System.Windows.Forms.Button BTN_Collapse;
-        private System.Windows.Forms.Button BTN_Expand;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_Expand;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_Collapse;
+        private System.Windows.Forms.ToolStripSeparator TSMI_Splitter;
     }
 }
 
