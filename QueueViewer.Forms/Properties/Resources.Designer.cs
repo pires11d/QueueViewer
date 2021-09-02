@@ -61,6 +61,15 @@ namespace QueueViewer.Forms.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream aiai {
+            get {
+                return ResourceManager.GetStream("aiai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon folder {
@@ -97,6 +106,15 @@ namespace QueueViewer.Forms.Properties {
             get {
                 object obj = ResourceManager.GetObject("q", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream swoosh {
+            get {
+                return ResourceManager.GetStream("swoosh", resourceCulture);
             }
         }
     }

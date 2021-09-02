@@ -17,7 +17,6 @@ namespace QueueViewer.Forms
 {
     public partial class MainScreen : Form
     {
-        public string SoundsFilePath { get; set; } = Path.Combine(Application.StartupPath, "Media");
         public int RefreshTime { get; set; }
         public bool Refreshing { get; set; }
         public bool Running { get; set; }
@@ -35,7 +34,7 @@ namespace QueueViewer.Forms
             LoadListView();
 
             Running = true;
-            CBB_Refresh.SelectedIndex = 0;
+            CBB_Refresh.SelectedIndex = 1;
             CB_Refresh.Checked = true;
         }
 
@@ -317,11 +316,11 @@ namespace QueueViewer.Forms
                         simpleSound.Play();
                         break;
                     case SoundsEnum.Success:
-                        simpleSound = new SoundPlayer(Path.Combine(SoundsFilePath, "swoosh.wav"));
+                        simpleSound = new SoundPlayer(Properties.Resources.swoosh);
                         simpleSound.Play();
                         break;
                     case SoundsEnum.Fail:
-                        simpleSound = new SoundPlayer(Path.Combine(SoundsFilePath, "aiai.wav"));
+                        simpleSound = new SoundPlayer(Properties.Resources.aiai);
                         simpleSound.Play();
                         break;
                     default:
@@ -534,6 +533,7 @@ namespace QueueViewer.Forms
 
             if (e.Effect == DragDropEffects.Move)
             {
+                targetNode.Expand();
                 try
                 {
                     foreach (ListViewItem draggedItem in draggedItems)
@@ -554,7 +554,6 @@ namespace QueueViewer.Forms
                     //});
 
                     UpdateNodesAfterDragging(targetNode, CurrentNode);
-                    targetNode.Expand();
                     ShowMessages(Service.CurrentQueue);
                 }
                 catch (Exception)
