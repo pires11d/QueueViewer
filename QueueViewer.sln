@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueViewer.Lib", "QueueVie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueViewer.Forms", "QueueViewer.Forms\QueueViewer.Forms.csproj", "{8D27E731-E240-447F-B42E-A8FF3FE7D59E}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "QueueSetup", "QueueSetup\QueueSetup.vdproj", "{55254306-FD21-46D2-B490-0F5A8C6E5180}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{8D27E731-E240-447F-B42E-A8FF3FE7D59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D27E731-E240-447F-B42E-A8FF3FE7D59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D27E731-E240-447F-B42E-A8FF3FE7D59E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55254306-FD21-46D2-B490-0F5A8C6E5180}.Debug|Any CPU.ActiveCfg = Debug
+		{55254306-FD21-46D2-B490-0F5A8C6E5180}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
