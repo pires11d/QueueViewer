@@ -194,6 +194,8 @@ namespace QueueViewer.Forms
                 try
                 {
                     MessageQueueService.SendMessage(queue, content);
+                    UpdateNode(CurrentNode);
+                    ShowMessages(Service.CurrentQueue);
                     PlaySound(SoundsEnum.Success);
                 }
                 catch (Exception)

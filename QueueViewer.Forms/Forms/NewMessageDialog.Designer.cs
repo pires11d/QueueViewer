@@ -82,7 +82,7 @@ namespace QueueViewer.Forms
             this.Name = "NewMessageDialog";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "NewMessageDialog";
+            this.Text = "New Message";
             this.ResumeLayout(false);
             this.PerformLayout();
 

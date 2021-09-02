@@ -67,7 +67,7 @@ namespace QueueViewer.Forms
             this.Name = "NewQueueDialog";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Queue Name";
+            this.Text = "New queue";
             this.ResumeLayout(false);
             this.PerformLayout();
 
