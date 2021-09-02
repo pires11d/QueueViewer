@@ -4,12 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Media;
 using System.Messaging;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Message = System.Messaging.Message;
 
@@ -21,6 +19,7 @@ namespace QueueViewer.Forms
         public bool Refreshing { get; set; }
         public bool Running { get; set; }
         public TreeNode CurrentNode { get; set; }
+        public TreeNode HoveredNode { get; set; }
         public ListViewColumnSorter ColumnSorter { get; set; }
         public QueueService Service { get; set; }
 
@@ -271,6 +270,7 @@ namespace QueueViewer.Forms
                 var messages = selectedQueue?.GetAllMessages()?.ToList();
                 if (messages != null)
                 {
+                    messages = messages.Take(100).ToList();
                     foreach (var message in messages)
                     {
                         var size = Service.GetMessageSize(message);
@@ -288,6 +288,7 @@ namespace QueueViewer.Forms
                         var item = new ListViewItem(values);
                         LV_Messages.Items.Add(item);
                     }
+                    LV_Messages.Sort();
                 }
             }
             catch (Exception)
@@ -474,9 +475,25 @@ namespace QueueViewer.Forms
 
         private void CMS_Queues_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var activeControl = ActiveControl;
+            Control activeControl = ActiveControl;
             if (!(activeControl is TreeView))
                 e.Cancel = true;
+
+            Point targetPoint = TV_Queues.PointToClient(System.Windows.Forms.Cursor.Position);
+
+            var selectedNode = TV_Queues.GetNodeAt(targetPoint);
+            if (selectedNode == null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            TV_Queues.SelectedNode = selectedNode;
+            TV_Queues_NodeMouseClick(sender, new TreeNodeMouseClickEventArgs(selectedNode, MouseButtons.Left, 1, targetPoint.X, targetPoint.Y));
+
+            bool showExtra = selectedNode.ImageIndex == 0;
+            CMS_Queues.Items[TSMI_Insert.Name].Enabled = showExtra;
+            CMS_Queues.Items[TSMI_Purge.Name].Enabled = showExtra;
+            CMS_Queues.Items[TSMI_Delete.Name].Enabled = showExtra;
         }
 
         private void LV_Messages_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -504,36 +521,72 @@ namespace QueueViewer.Forms
         {
             e.Effect = e.AllowedEffect;
         }
+
         private void TV_Queues_DragOver(object sender, DragEventArgs e)
         {
-            // Retrieve the client coordinates of the mouse position.
             Point targetPoint = TV_Queues.PointToClient(new Point(e.X, e.Y));
 
-            // Select the node at the mouse position.
             TV_Queues.SelectedNode = TV_Queues.GetNodeAt(targetPoint);
 
             if (TV_Queues.SelectedNode != null)
+            {
+                if (HoveredNode != null && TV_Queues.SelectedNode != HoveredNode)
+                {
+                    HoveredNode.BackColor = SystemColors.Window;
+                }
+
                 TV_Queues.SelectedNode.Expand();
+                if (TV_Queues.SelectedNode.ImageIndex == 0)
+                {
+                    HoveredNode = TV_Queues.SelectedNode;
+                    TV_Queues.SelectedNode.BackColor = SystemColors.ActiveCaption;
+                }
+            }
 
             TV_Queues.Scroll();
         }
 
+        private void TV_Queues_DragLeave(object sender, EventArgs e)
+        {
+            ResetNodesBackColor(TV_Queues.Nodes);
+        }
+
+        private void ResetNodesBackColor(TreeNodeCollection nodes)
+        {
+            if (nodes.Count > 0)
+            {
+                foreach (TreeNode node in nodes)
+                {
+                    node.BackColor = SystemColors.Window;
+                    ResetNodesBackColor(node.Nodes);
+                }
+            }
+        }
+
+        private void BTN_Expand_Click(object sender, EventArgs e)
+        {
+            TV_Queues.ExpandAll();
+        }
+
+        private void BTN_Collapse_Click(object sender, EventArgs e)
+        {
+            TV_Queues.CollapseAll();
+        }
+
         private void TV_Queues_DragDrop(object sender, DragEventArgs e)
         {
-            // Retrieve the client coordinates of the drop location.
             Point targetPoint = TV_Queues.PointToClient(new Point(e.X, e.Y));
 
-            // Retrieve the node at the drop location.
             TreeNode targetNode = TV_Queues.GetNodeAt(targetPoint);
 
             MessageQueue targetQueue = Service.GetQueueByName(targetNode.Name);
 
-            // Retrieve the dragged objects.
             ListView.SelectedListViewItemCollection draggedItems = (ListView.SelectedListViewItemCollection)e.Data.GetData(typeof(ListView.SelectedListViewItemCollection));
 
-            if (e.Effect == DragDropEffects.Move)
+            targetNode.Expand();
+
+            if (targetNode.ImageIndex == 0 && e.Effect == DragDropEffects.Move)
             {
-                targetNode.Expand();
                 try
                 {
                     foreach (ListViewItem draggedItem in draggedItems)
@@ -544,21 +597,12 @@ namespace QueueViewer.Forms
                         Service.RemoveMessage(CurrentNode.Name, msgId);
                         draggedItem.Remove();
                     }
-                    //Parallel.ForEach(draggedItems.Cast<ListViewItem>(), x =>
-                    //{
-                    //    var msg = x.SubItems[5].Text;
-                    //    var msgId = x.SubItems[1].Text;
-                    //    InsertMessageIntoQueue(targetQueue, msg);
-                    //    Service.RemoveMessage(CurrentNode.Name, msgId);
-                    //    x.Remove();
-                    //});
 
                     UpdateNodesAfterDragging(targetNode, CurrentNode);
                     ShowMessages(Service.CurrentQueue);
                 }
                 catch (Exception)
                 {
-                    return;
                 }
             }
         }

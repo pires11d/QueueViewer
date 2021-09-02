@@ -45,7 +45,6 @@ namespace QueueViewer.Lib.Services
 
         private void LoadPrivateQueues()
         {
-
             try
             {
                 var machine = MachineId == Environment.MachineName ? "." : MachineId;

@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         public ListViewColumnSorter()
         {
             // Initialize the column to '0'
-            ColumnToSort = 0;
+            ColumnToSort = 3;
 
             // Initialize the sort order to 'none'
             OrderOfSort = SortOrder.None;
