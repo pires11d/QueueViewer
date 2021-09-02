@@ -9,6 +9,7 @@ using System.Linq;
 using System.Media;
 using System.Messaging;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Message = System.Messaging.Message;
 
@@ -17,6 +18,9 @@ namespace QueueViewer.Forms
     public partial class MainScreen : Form
     {
         public string SoundsFilePath { get; set; } = Path.Combine(Application.StartupPath, "Media");
+        public int RefreshTime { get; set; }
+        public bool Refreshing { get; set; }
+        public bool Running { get; set; }
         public TreeNode CurrentNode { get; set; }
         public ListViewColumnSorter ColumnSorter { get; set; }
         public QueueService Service { get; set; }
@@ -30,7 +34,30 @@ namespace QueueViewer.Forms
             LoadTreeView();
             LoadListView();
 
+            Running = true;
             CBB_Refresh.SelectedIndex = 0;
+            CB_Refresh.Checked = true;
+        }
+
+        private void T_Refresh_Tick(object sender, EventArgs e)
+        {
+            RefreshScreen(TV_Queues.Nodes[0]);
+        }
+
+        public void RefreshScreen(TreeNode rootNode)
+        {
+            var treeNodes = rootNode.Nodes;
+            //new Thread(() =>
+            //{
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            foreach (var x in Service.PrivateQueues)
+            {
+                var node = treeNodes.Find(x.QueueName.ToQueueLabel(), true).FirstOrDefault();
+                UpdateNode(node);
+            }
+            //}).Start();
         }
 
         #region LOAD
@@ -76,11 +103,11 @@ namespace QueueViewer.Forms
                 node.Expand();
             }
 
-            var privateNode = rootNode.GetNode(nameof(Constants.Private));
+            var privateNode = rootNode.Nodes.Find(nameof(Constants.Private), false).FirstOrDefault();
             LoadNode(privateNode, Service.PrivateQueues);
-            var publicNode = rootNode.GetNode(nameof(Constants.Public));
+            var publicNode = rootNode.Nodes.Find(nameof(Constants.Public), false).FirstOrDefault();
             LoadNode(publicNode, Service.PublicQueues);
-            var systemNode = rootNode.GetNode(nameof(Constants.System));
+            var systemNode = rootNode.Nodes.Find(nameof(Constants.System), false).FirstOrDefault();
             LoadNode(systemNode, Service.SystemQueues);
         }
 
@@ -88,7 +115,7 @@ namespace QueueViewer.Forms
         {
             if (!queues.Any()) return;
 
-            var groupedQueues = queues.GroupBy(x => x.QueueName.ToQueueLabel().Split('.')[depth]);
+            var groupedQueues = queues.GroupBy(x => x.QueueName.ToQueueLabel(true).Split('.')[depth]);
 
             foreach (var queueGroup in groupedQueues)
             {
@@ -131,32 +158,33 @@ namespace QueueViewer.Forms
 
         private void UpdateNodesAfterDragging(TreeNode nextNode, TreeNode prevNode = null)
         {
-            if (nextNode != null)
-            {
-                UpdateNode(nextNode);
-            }
-
-            if (prevNode != null)
-            {
-                UpdateNode(prevNode);
-            }
+            UpdateNode(nextNode);
+            UpdateNode(prevNode);
         }
 
         private void UpdateNode(TreeNode node)
         {
-            var queue = Service.GetQueueByName(node.Name);
-            int lastCount = queue.GetAllMessages()?.Count() ?? 0;
-            node.Text = node.Text.UpdateCount(lastCount);
-            SetNodeColor(node, lastCount);
+            if (node != null)
+            {
+                var queue = Service.GetQueueByName(node.Name);
+                int oldCount = (int)node.Tag;
+                int newCount = queue.GetAllMessages()?.Count() ?? 0;
+                if (newCount != oldCount)
+                {
+                    node.Text = node.Text.UpdateCount(newCount);
+                    node.Tag = newCount;
+                    SetNodeColor(node, oldCount, newCount);
+                }
+            }
         }
 
-        private void SetNodeColor(TreeNode node, int lastCount)
+        private void SetNodeColor(TreeNode node, int oldCount, int newCount)
         {
-            if (lastCount > (int)node.Tag)
+            if (newCount > oldCount)
             {
                 ChangeColor(node, Color.Blue);
             }
-            else if (lastCount < (int)node.Tag)
+            else if (newCount < oldCount)
             {
                 ChangeColor(node, Color.Red);
             }
@@ -172,7 +200,7 @@ namespace QueueViewer.Forms
                 stopwatch.Start();
                 while (true)
                 {
-                    if (stopwatch.ElapsedMilliseconds > 3000)
+                    if (stopwatch.ElapsedMilliseconds > 2000)
                     {
                         break;
                     }
@@ -386,9 +414,38 @@ namespace QueueViewer.Forms
             }
         }
 
+        private void CBB_Refresh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(CBB_Refresh.Text, out int result))
+            {
+                RefreshTime = result;
+                T_Refresh.Stop();
+                T_Refresh.Interval = RefreshTime * 1000;
+                StartOrStop();
+            }
+        }
+
+        private void StartOrStop()
+        {
+            if (Refreshing)
+            {
+                T_Refresh.Start();
+            }
+            else
+            {
+                T_Refresh.Stop();
+            }
+        }
+
+        private void CB_Refresh_CheckedChanged(object sender, EventArgs e)
+        {
+            Refreshing = CB_Refresh.Checked;
+            StartOrStop();
+        }
+
         private void CMS_Queues_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var activeControl = this.ActiveControl;
+            var activeControl = ActiveControl;
             if (!(activeControl is TreeView))
                 e.Cancel = true;
         }
@@ -467,7 +524,7 @@ namespace QueueViewer.Forms
                     {
                         draggedItem.Remove();
                         var msg = draggedItem.SubItems[5].Text;
-                        var msgId = draggedItem.SubItems[1].Text; 
+                        var msgId = draggedItem.SubItems[1].Text;
                         InsertMessageIntoQueue(targetQueue, msg);
                         Service.RemoveMessage(CurrentNode.Name, msgId);
                         UpdateNodesAfterDragging(targetNode, CurrentNode);
@@ -494,6 +551,11 @@ namespace QueueViewer.Forms
             // call the ContainsNode method recursively using the parent of 
             // the second node.
             return ContainsNode(node.Parent);
+        }
+
+        private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Running = false;
         }
 
         #endregion CONTROLS

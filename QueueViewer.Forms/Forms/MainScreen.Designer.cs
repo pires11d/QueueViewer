@@ -90,6 +90,7 @@ namespace QueueViewer.Forms
             this.P_Left = new System.Windows.Forms.Panel();
             this.TV_Queues = new System.Windows.Forms.TreeView();
             this.P_Bottom = new System.Windows.Forms.Panel();
+            this.T_Refresh = new System.Windows.Forms.Timer(this.components);
             this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
@@ -384,19 +385,19 @@ namespace QueueViewer.Forms
             // CB_Refresh
             // 
             this.CB_Refresh.AutoSize = true;
-            this.CB_Refresh.Checked = true;
-            this.CB_Refresh.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CB_Refresh.Location = new System.Drawing.Point(16, 6);
             this.CB_Refresh.Name = "CB_Refresh";
             this.CB_Refresh.Size = new System.Drawing.Size(95, 17);
             this.CB_Refresh.TabIndex = 2;
             this.CB_Refresh.Text = "Refresh Every";
             this.CB_Refresh.UseVisualStyleBackColor = true;
+            this.CB_Refresh.CheckedChanged += new System.EventHandler(this.CB_Refresh_CheckedChanged);
             // 
             // CBB_Refresh
             // 
             this.CBB_Refresh.FormattingEnabled = true;
             this.CBB_Refresh.Items.AddRange(new object[] {
+            "2",
             "5",
             "10",
             "15",
@@ -405,6 +406,7 @@ namespace QueueViewer.Forms
             this.CBB_Refresh.Name = "CBB_Refresh";
             this.CBB_Refresh.Size = new System.Drawing.Size(43, 21);
             this.CBB_Refresh.TabIndex = 3;
+            this.CBB_Refresh.SelectedIndexChanged += new System.EventHandler(this.CBB_Refresh_SelectedIndexChanged);
             // 
             // L_Unit
             // 
@@ -616,6 +618,10 @@ namespace QueueViewer.Forms
             this.P_Bottom.Size = new System.Drawing.Size(1017, 29);
             this.P_Bottom.TabIndex = 8;
             // 
+            // T_Refresh
+            // 
+            this.T_Refresh.Tick += new System.EventHandler(this.T_Refresh_Tick);
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -633,6 +639,7 @@ namespace QueueViewer.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "My Queue Viewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainScreen_FormClosing);
             this.MS_Header.ResumeLayout(false);
             this.MS_Header.PerformLayout();
             this.CMS_Queues.ResumeLayout(false);
@@ -713,6 +720,7 @@ namespace QueueViewer.Forms
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TextBox TB_MessageExtension;
+        private System.Windows.Forms.Timer T_Refresh;
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using QueueViewer.Extensions;
+using QueueViewer.Lib.Entities;
 using System.IO;
 using System.Linq;
 
@@ -7,12 +8,16 @@ namespace System
 {
     public static class StringExtensions
     {
-        public static string ToQueueLabel(this string str)
+        public static string ToQueueLabel(this string str, bool removeRoot = false)
         {
             str = str.ToLower();
-            str = str.Replace(@"private$\", "");
-            str = str.Replace(@"system$\", "");
+            str = str.Capitalize();
+            str = str.Replace(@"$", "");
             str = str.Replace(@"\", ".");
+            str = removeRoot ? str.Replace(nameof(Constants.Private), "") : str;
+            str = removeRoot ? str.Replace(nameof(Constants.Public), "") : str;
+            str = removeRoot ? str.Replace(nameof(Constants.System), "") : str;
+            str = str.StartsWith(".") ? str.Remove(0, 1) : str;
             return str;
         }
 
