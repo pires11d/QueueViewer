@@ -19,6 +19,7 @@ namespace QueueViewer.Forms
             try
             {
                 Main.InsertMessageIntoQueue(Main.Service.CurrentQueue, TB_Value.Text);
+                Main.ShowMessages(Main.Service.CurrentQueue);
             }
             catch (Exception ex)
             {
