@@ -70,13 +70,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_603832464193D501327D53607690F472"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
+        "OwnerKey" = "8:_2D6A641C667F49E1B3C261CF5EF128AF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,13 +82,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2D6A641C667F49E1B3C261CF5EF128AF"
+        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_85236EABEF046047A54A72A0279BD678"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_603832464193D501327D53607690F472"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -115,6 +115,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -131,6 +139,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -328,14 +352,14 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:QueueSetup"
+        "ProductName" = "8:My QueueViewer"
         "ProductCode" = "8:{6A542D75-AE9E-4412-9F5F-532DC8D70461}"
-        "PackageCode" = "8:{3C829FD3-86F5-4E42-9FE1-C35DE9A34A71}"
+        "PackageCode" = "8:{B6D0D36B-5554-45A4-8D8F-E47392F2FDFE}"
         "UpgradeCode" = "8:{BFCC3D6D-F003-4D03-9B13-9BD1931C5E46}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
-        "DetectNewerInstalledVersion" = "11:TRUE"
+        "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
         "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:Jarbas"
@@ -345,7 +369,7 @@
         "Subject" = "8:"
         "ARPCONTACT" = "8:Jarbas"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Message queue management tool"
+        "ARPCOMMENTS" = "8:Message Queue management tool"
         "ARPURLINFOABOUT" = "8:https://github.com/pires11d"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -460,6 +484,20 @@
             "Transitive" = "11:FALSE"
             "Target" = "8:_81388104227D43DDBD23D5564A08DE71"
             "Folder" = "8:_258E4363FD5E4C0BBC8A1DA41C83D467"
+            "WorkingFolder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Icon" = "8:_C5D4391A3778427A83ABA4C931BE00E1"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_DD6AEAF6E4E04A2581A1FB6268D71F03"
+            {
+            "Name" = "8:My QueueViewer"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_81388104227D43DDBD23D5564A08DE71"
+            "Folder" = "8:_D137517BFC1940DDBB4A2D2A4E5E62DB"
             "WorkingFolder" = "8:_93B554099DAA4F8C8D8864E091051A47"
             "Icon" = "8:_C5D4391A3778427A83ABA4C931BE00E1"
             "Feature" = "8:"
