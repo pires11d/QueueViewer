@@ -76,13 +76,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
+        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
+        "OwnerKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -122,6 +122,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -354,7 +362,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:My QueueViewer"
         "ProductCode" = "8:{6A542D75-AE9E-4412-9F5F-532DC8D70461}"
-        "PackageCode" = "8:{B6D0D36B-5554-45A4-8D8F-E47392F2FDFE}"
+        "PackageCode" = "8:{80814765-49AA-410D-9E7A-513B6942D339}"
         "UpgradeCode" = "8:{BFCC3D6D-F003-4D03-9B13-9BD1931C5E46}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -371,7 +379,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Message Queue management tool"
         "ARPURLINFOABOUT" = "8:https://github.com/pires11d"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_C5D4391A3778427A83ABA4C931BE00E1"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"

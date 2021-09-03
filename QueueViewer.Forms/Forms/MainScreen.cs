@@ -364,7 +364,8 @@ namespace QueueViewer.Forms
         {
             foreach (ColumnHeader column in lv.Columns)
             {
-                column.Width = -2;
+                if (!column.Text.Contains("Id"))
+                    column.Width = -2;
             }
         }
 
