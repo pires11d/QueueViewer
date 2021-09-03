@@ -66,6 +66,18 @@ namespace QueueViewer.Forms
                 }
             }
 
+            foreach (var pq in Service.PublicQueues)
+            {
+                try
+                {
+                    var node = treeNodes.Find(pq.QueueName, true).FirstOrDefault();
+                    UpdateNode(node);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
             foreach (var sq in Service.SystemQueues)
             {
                 try
