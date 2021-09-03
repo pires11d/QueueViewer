@@ -8,11 +8,22 @@ namespace System
 {
     public static class StringExtensions
     {
+        public static string ToSystemQueueLabel(this string str, string machineId)
+        {
+            str = str.Replace($"DIRECT=OS:{machineId}", "");
+            str = str.Replace(@"\", "");
+            str = str.Replace(@"$", "");
+            str = str.Replace(@";", ".");
+            str = str.ToLower();
+            str = str.Capitalize();
+            return str;
+        }
+
         public static string ToQueueLabel(this string str, bool removeRoot = false)
         {
             str = str.ToLower();
             str = str.Capitalize();
-            str = str.Replace(@"$", "");
+            str = str.Replace("$", "");
             str = str.Replace(@"\", ".");
             str = removeRoot ? str.Replace(nameof(Constants.Private), "") : str;
             str = removeRoot ? str.Replace(nameof(Constants.Public), "") : str;
@@ -24,20 +35,20 @@ namespace System
         public static string ToQueueName(this string str)
         {
             str = str.ToLower();
-            str = str.Replace(@"private", "");
+            str = str.Replace("private", "");
             str = str.StartsWith(".") ? str.Remove(0, 1) : str;
             str = str.StartsWith("@") ? str : $"@{str}";
-            str = str.Replace(@"@", @"private$\");
+            str = str.Replace("@", @"private$\");
             return str;
         }
 
         public static string ToQueuePath(this string str)
         {
             str = str.ToLower();
-            str = str.Replace(@"private", "");
-            str = str.StartsWith(".") ? str.Remove(0,1) : str;
+            str = str.Replace("private", "");
+            str = str.StartsWith(".") ? str.Remove(0, 1) : str;
             str = str.StartsWith("@") ? str : $"@{str}";
-            str = str.Replace(@"@", @".\private$\");
+            str = str.Replace("@", @".\private$\");
             return str;
         }
 

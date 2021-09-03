@@ -18,6 +18,8 @@ namespace QueueViewer.Forms
         public int RefreshTime { get; set; }
         public bool Refreshing { get; set; }
         public bool Running { get; set; }
+        public int MaxMessages { get; set; }
+        public int CurrentPage { get; set; }
         public TreeNode CurrentNode { get; set; }
         public TreeNode HoveredNode { get; set; }
         public ListViewColumnSorter ColumnSorter { get; set; }
@@ -34,6 +36,7 @@ namespace QueueViewer.Forms
 
             Running = true;
             CBB_Refresh.SelectedIndex = 1;
+            CBB_MaxMessages.SelectedIndex = 0;
             CB_Refresh.Checked = true;
         }
 
@@ -62,6 +65,18 @@ namespace QueueViewer.Forms
                 {
                 }
             }
+
+            foreach (var sq in Service.SystemQueues)
+            {
+                try
+                {
+                    var node = treeNodes.Find(sq.FormatName, true).FirstOrDefault();
+                    UpdateNode(node);
+                }
+                catch (Exception)
+                {
+                }
+            }
             //}).Start();
         }
 
@@ -69,8 +84,10 @@ namespace QueueViewer.Forms
         {
             if (parentNode != null && !IsRootNode(parentNode))
             {
-                UpdateNode(parentNode, oldCount, newCount);
-                UpdateParentNode(parentNode.Parent, oldCount, newCount);
+                int parentOldCount = (int)parentNode.Tag;
+                int parentNewCount = parentOldCount + newCount - oldCount;
+                UpdateNode(parentNode, parentOldCount, parentNewCount);
+                UpdateParentNode(parentNode.Parent, parentOldCount, parentNewCount);
             }
         }
 
@@ -137,7 +154,25 @@ namespace QueueViewer.Forms
             var publicNode = rootNode.Nodes.Find(nameof(Constants.Public), false).FirstOrDefault();
             LoadNode(publicNode, Service.PublicQueues);
             var systemNode = rootNode.Nodes.Find(nameof(Constants.System), false).FirstOrDefault();
-            LoadNode(systemNode, Service.SystemQueues);
+            LoadSystemNode(systemNode, Service.SystemQueues);
+        }
+
+        private void LoadSystemNode(TreeNode parentNode, List<MessageQueue> systemQueues)
+        {
+            foreach (var systemQueue in systemQueues)
+            {
+                var queueName = systemQueue.FormatName;
+                var queueLabel = queueName.ToSystemQueueLabel(Service.MachineId);
+                var messageCount = systemQueue.GetAllMessages()?.Count() ?? 0;
+                AddSystemNode(parentNode, queueName, queueLabel, messageCount, 0);
+            }
+        }
+
+        private TreeNode AddSystemNode(TreeNode parentNode, string queueName, string queueLabel, int n = 0, int imageIndex = 0)
+        {
+            var node = parentNode.Nodes.Add(queueName, queueLabel + $" ({n})", imageIndex, imageIndex);
+            node.Tag = n;
+            return node;
         }
 
         private void LoadNode(TreeNode parentNode, List<MessageQueue> queues, int depth = 0)
@@ -175,14 +210,15 @@ namespace QueueViewer.Forms
             }
         }
 
-        private TreeNode AddNode(TreeNode node, string name, int n = 0, int imageIndex = 0)
+        private TreeNode AddNode(TreeNode parentNode, string name, int n = 0, int imageIndex = 0)
         {
-            string lastName = node.Name.Split('.').LastOrDefault();
+            string lastName = parentNode.Name.Split('.').LastOrDefault();
             bool folder = imageIndex == 0 && lastName == name;
-            var fullName = folder ? $"{node.Name}" : $"{node.Name}.{name}";
-            var createdNode = node.Nodes.Add(fullName, name + $" ({n})", imageIndex, imageIndex);
-            createdNode.Tag = n;
-            return createdNode;
+            var fullName = folder ? $"{parentNode.Name}" : $"{parentNode.Name}.{name}";
+
+            var node = parentNode.Nodes.Add(fullName, name + $" ({n})", imageIndex, imageIndex);
+            node.Tag = n;
+            return node;
         }
 
         private void UpdateNodesAfterDragging(TreeNode nextNode, TreeNode prevNode = null)
@@ -268,15 +304,28 @@ namespace QueueViewer.Forms
             }
         }
 
-        public void ShowMessages(MessageQueue selectedQueue)
+        public void ShowMessages(MessageQueue selectedQueue, int operation = 0)
         {
             LV_Messages.Items.Clear();
             try
             {
-                var messages = selectedQueue?.GetAllMessages()?.ToList();
-                if (messages != null)
+                var allMessages = selectedQueue?.GetAllMessages()?.ToList();
+                if (allMessages != null)
                 {
-                    messages = messages.Take(100).ToList();
+                    var messages = allMessages.OrderByDescending(x => x.SentTime).ToList();
+
+                    if (MaxMessages > 0)
+                        messages = messages.Skip(CurrentPage * MaxMessages).Take(MaxMessages).ToList();
+                    else
+                        CurrentPage = 0;
+
+                    if (operation > 0)
+                        Service.CurrentMessages += messages.Count;
+                    else if (operation < 0)
+                        Service.CurrentMessages -= messages.Count;
+                    else
+                        Service.CurrentMessages = messages.Count;
+
                     foreach (var message in messages)
                     {
                         var size = Service.GetMessageSize(message);
@@ -295,6 +344,14 @@ namespace QueueViewer.Forms
                         LV_Messages.Items.Add(item);
                     }
                     LV_Messages.Sort();
+
+                    BTN_Next.Enabled = allMessages.Count > Service.CurrentMessages;
+                    BTN_Prev.Enabled = CurrentPage > 0;
+                }
+                else
+                {
+                    BTN_Next.Enabled = false;
+                    BTN_Prev.Enabled = false;
                 }
             }
             catch (Exception)
@@ -415,6 +472,7 @@ namespace QueueViewer.Forms
             try
             {
                 Service.PurgeQueue();
+                UpdateNode(CurrentNode);
             }
             catch (Exception ex)
             {
@@ -424,19 +482,42 @@ namespace QueueViewer.Forms
 
         private void TV_Queues_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            CurrentNode = e.Node;
             try
             {
-                CurrentNode = e.Node;
-                Service.CurrentQueue = Service.GetQueueByName(CurrentNode.Name);
-                Service.SetFilter(Service.CurrentQueue);
+                if (CurrentNode.Parent == null)
+                    return;
 
-                ShowMessages(Service.CurrentQueue);
+                if (CurrentNode.Parent.Parent == null)
+                    return;
+
+                CurrentPage = 0;
+                Service.CurrentMessages = 0;
+                Service.CurrentQueue = Service.GetQueueByName(CurrentNode.Name);
+
+                if (Service.IsSystemQueue(CurrentNode.Name))
+                {
+                    LV_Messages.Items.Clear();
+                    SetListViewColor(SystemColors.ControlLight);
+                }
+                else
+                {
+                    Service.SetFilter(Service.CurrentQueue);
+                    ShowMessages(Service.CurrentQueue);
+                    SetListViewColor(SystemColors.ControlLightLight);
+                }
+
                 ResizeListViewColumns(LV_Messages);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void SetListViewColor(Color color)
+        {
+            LV_Messages.BackColor = color;
         }
 
         private void LV_Messages_SelectedIndexChanged(object sender, EventArgs e)
@@ -616,13 +697,45 @@ namespace QueueViewer.Forms
             }
         }
 
-        private void BTN_Expand_Click(object sender, EventArgs e)
+        private void BTN_RefreshMessages_Click(object sender, EventArgs e)
         {
-            TV_Queues.ExpandAll();
+            if (CurrentNode.Parent.ImageIndex != 2)
+            {
+                ShowMessages(Service.CurrentQueue);
+            }
         }
 
-        private void BTN_Collapse_Click(object sender, EventArgs e)
+        private void BTN_Next_Click(object sender, EventArgs e)
         {
+            if (MaxMessages > 0)
+            {
+                CurrentPage++;
+                ShowMessages(Service.CurrentQueue, +1);
+            }
+        }
+
+        private void BTN_Prev_Click(object sender, EventArgs e)
+        {
+            if (CurrentPage > 0)
+            {
+                CurrentPage--;
+                ShowMessages(Service.CurrentQueue, -1);
+            }
+        }
+
+        private void BTN_RefreshQueues_Click(object sender, EventArgs e)
+        {
+            RefreshScreen(TV_Queues.Nodes[0]);
+        }
+
+        private void CBB_MaxMessages_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(CBB_MaxMessages.Text, out int result))
+                MaxMessages = result;
+            else
+                MaxMessages = 0;
+
+            ShowMessages(Service.CurrentQueue);
         }
 
         private void TSMI_Expand_Click(object sender, EventArgs e)

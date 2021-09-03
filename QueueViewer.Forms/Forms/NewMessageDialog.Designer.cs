@@ -32,6 +32,7 @@ namespace QueueViewer.Forms
             this.BTN_OK = new System.Windows.Forms.Button();
             this.TB_Value = new System.Windows.Forms.TextBox();
             this.BTN_Prettify = new System.Windows.Forms.Button();
+            this.LBL_Body = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // BTN_OK
@@ -54,10 +55,10 @@ namespace QueueViewer.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TB_Value.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_Value.Location = new System.Drawing.Point(12, 12);
+            this.TB_Value.Location = new System.Drawing.Point(12, 34);
             this.TB_Value.Multiline = true;
             this.TB_Value.Name = "TB_Value";
-            this.TB_Value.Size = new System.Drawing.Size(776, 371);
+            this.TB_Value.Size = new System.Drawing.Size(776, 349);
             this.TB_Value.TabIndex = 2;
             // 
             // BTN_Prettify
@@ -70,11 +71,21 @@ namespace QueueViewer.Forms
             this.BTN_Prettify.UseVisualStyleBackColor = true;
             this.BTN_Prettify.Click += new System.EventHandler(this.BTN_Prettify_Click);
             // 
+            // LBL_Body
+            // 
+            this.LBL_Body.AutoSize = true;
+            this.LBL_Body.Location = new System.Drawing.Point(12, 15);
+            this.LBL_Body.Name = "LBL_Body";
+            this.LBL_Body.Size = new System.Drawing.Size(80, 13);
+            this.LBL_Body.TabIndex = 5;
+            this.LBL_Body.Text = "Message Body:";
+            // 
             // NewMessageDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.LBL_Body);
             this.Controls.Add(this.BTN_Prettify);
             this.Controls.Add(this.BTN_OK);
             this.Controls.Add(this.TB_Value);
@@ -93,5 +104,6 @@ namespace QueueViewer.Forms
         private System.Windows.Forms.Button BTN_OK;
         private System.Windows.Forms.TextBox TB_Value;
         private System.Windows.Forms.Button BTN_Prettify;
+        private System.Windows.Forms.Label LBL_Body;
     }
 }

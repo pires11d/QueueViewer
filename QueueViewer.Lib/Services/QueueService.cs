@@ -12,6 +12,7 @@ namespace QueueViewer.Lib.Services
         public List<MessageQueue> PrivateQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> PublicQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> SystemQueues { get; set; } = new List<MessageQueue>();
+        public int CurrentMessages { get; set; }
         public MessageQueue CurrentQueue { get; set; }
         public string MachineId { get; set; }
 
@@ -70,13 +71,17 @@ namespace QueueViewer.Lib.Services
         {
             try
             {
-                string prefix = $"DIRECT=OS:{MachineId.ToLower()}";
-                var dead1 = new MessageQueue(prefix + @"\SYSTEM$\DEADXACT", accessMode: QueueAccessMode.PeekAndAdmin);
+                string prefix = $"FormatName:DIRECT=OS:{MachineId}";
+                var dead0 = new MessageQueue(prefix + @"\system$;JOURNAL");
+                var dead1 = new MessageQueue(prefix + @"\system$;DEADLETTER");
+                var dead2 = new MessageQueue(prefix + @"\system$;DEADXACT");
+
+                SetFilter(dead0);
                 SetFilter(dead1);
-                var dead2 = new MessageQueue(prefix + @"\SYSTEM$\DEADLETTER", accessMode: QueueAccessMode.PeekAndAdmin);
                 SetFilter(dead2);
 
                 SystemQueues = new List<MessageQueue>();
+                SystemQueues.Add(dead0);
                 SystemQueues.Add(dead1);
                 SystemQueues.Add(dead2);
             }
@@ -104,14 +109,35 @@ namespace QueueViewer.Lib.Services
 
         public MessageQueue GetQueueByName(string name)
         {
-            var queues = GetQueuesByName(name) ?? GetQueuesByPath(name);
+            if (IsSystemQueue(name))
+                return SystemQueues.FirstOrDefault(x => x.FormatName == name);
+
+            var queues = GetQueuesByName(name);
             if (queues == null)
                 return null;
 
             var queueName = name.ToQueueName();
-            var selectedQueue = queues.FirstOrDefault(x => x.QueueName == queueName);
+            return queues.FirstOrDefault(x => x.QueueName == queueName);
+        }
 
-            return selectedQueue;
+        public bool IsSystemQueue(string queueName)
+        {
+            var lastPart = queueName.ToLower().Split(';')?.LastOrDefault() ?? "";
+
+            if (string.IsNullOrEmpty(lastPart))
+                return false;
+
+            switch (lastPart)
+            {
+                case "journal":
+                    return true;
+                case "deadletter":
+                    return true;
+                case "deadxact":
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         public List<MessageQueue> GetQueuesByName(string name)
