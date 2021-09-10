@@ -17,13 +17,14 @@ namespace QueueViewer.Forms
     {
         public int RefreshTime { get; set; }
         public bool Refreshing { get; set; }
-        public bool Running { get; set; }
         public int MaxMessages { get; set; }
         public int CurrentPage { get; set; }
         public TreeNode CurrentNode { get; set; }
         public TreeNode HoveredNode { get; set; }
         public ListViewColumnSorter ColumnSorter { get; set; }
         public QueueService Service { get; set; }
+        public Dictionary<TreeNode, int> NodesToUpdate { get; set; }
+        public Stopwatch ScreenTimer { get; private set; }
 
         public MainScreen()
         {
@@ -34,10 +35,10 @@ namespace QueueViewer.Forms
             LoadTreeView();
             LoadListView();
 
-            Running = true;
             CBB_Refresh.SelectedIndex = 1;
             CBB_MaxMessages.SelectedIndex = 0;
             CB_Refresh.Checked = true;
+            ActiveControl = CB_Refresh;
         }
 
         private void T_Refresh_Tick(object sender, EventArgs e)
@@ -48,10 +49,7 @@ namespace QueueViewer.Forms
         public void RefreshScreen(TreeNode rootNode)
         {
             var treeNodes = rootNode.Nodes;
-            //new Thread(() =>
-            //{
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
+            NodesToUpdate = new Dictionary<TreeNode, int>();
 
             foreach (var q in Service.PrivateQueues)
             {
@@ -89,7 +87,39 @@ namespace QueueViewer.Forms
                 {
                 }
             }
-            //}).Start();
+
+            RefreshNodeInfo();
+        }
+
+        private void RefreshNodeInfo()
+        {
+            if (NodesToUpdate?.Count() > 0)
+            {
+                foreach (var n in NodesToUpdate)
+                {
+                    var node = n.Key;
+                    int newCount = n.Value;
+                    int oldCount = (int)node.Tag;
+                    node.Text = node.Text.UpdateCount(newCount);
+                    node.Tag = newCount;
+                    SetNodeColor(node, oldCount, newCount);
+                }
+
+                new Thread(() =>
+                {
+                    ScreenTimer = new Stopwatch();
+                    ScreenTimer.Start();
+                    while (true)
+                    {
+                        if (ScreenTimer.ElapsedMilliseconds > 1500)
+                        {
+                            break;
+                        }
+                    }
+                    ScreenTimer.Stop();
+                    ResetNodesBackColor(NodesToUpdate.Keys.ToList());
+                }).Start();
+            }            
         }
 
         private void UpdateParentNode(TreeNode parentNode, int oldCount = 0, int newCount = 0)
@@ -101,6 +131,12 @@ namespace QueueViewer.Forms
                 UpdateNode(parentNode, parentOldCount, parentNewCount);
                 UpdateParentNode(parentNode.Parent, parentOldCount, parentNewCount);
             }
+        }
+
+        private void UpdateNodesAfterDragging(TreeNode nextNode, TreeNode prevNode = null)
+        {
+            UpdateNode(nextNode);
+            UpdateNode(prevNode);
         }
 
         private bool IsRootNode(TreeNode node)
@@ -233,12 +269,6 @@ namespace QueueViewer.Forms
             return node;
         }
 
-        private void UpdateNodesAfterDragging(TreeNode nextNode, TreeNode prevNode = null)
-        {
-            UpdateNode(nextNode);
-            UpdateNode(prevNode);
-        }
-
         private void UpdateNode(TreeNode node)
         {
             if (node != null)
@@ -253,11 +283,12 @@ namespace QueueViewer.Forms
 
         private void UpdateNode(TreeNode node, int oldCount, int newCount)
         {
+            if (NodesToUpdate == null)
+                NodesToUpdate = new Dictionary<TreeNode, int>();
+
             if (newCount != oldCount)
             {
-                node.Text = node.Text.UpdateCount(newCount);
-                node.Tag = newCount;
-                SetNodeColor(node, oldCount, newCount);
+                NodesToUpdate.Add(node,newCount);
             }
         }
 
@@ -265,33 +296,17 @@ namespace QueueViewer.Forms
         {
             if (newCount > oldCount)
             {
-                ChangeColor(node, Color.Blue);
+                ChangeColor(node, Color.LightGreen);
             }
             else if (newCount < oldCount)
             {
-                ChangeColor(node, Color.Red);
+                ChangeColor(node, Color.Salmon);
             }
         }
 
         private void ChangeColor(TreeNode node, Color color)
         {
             node.BackColor = color;
-
-            new Thread(() =>
-            {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                while (true)
-                {
-                    if (stopwatch.ElapsedMilliseconds > 2000)
-                    {
-                        break;
-                    }
-                }
-                stopwatch.Stop();
-                node.BackColor = SystemColors.Window;
-
-            }).Start();
         }
 
         #endregion LOAD
@@ -613,7 +628,7 @@ namespace QueueViewer.Forms
 
         private void CMS_Messages_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (LV_Messages.SelectedItems.Count > 0)
+            if (LV_Messages.SelectedItems?.Count > 0)
             {
                 var startPoint = LV_Messages.PointToClient(System.Windows.Forms.Cursor.Position);
                 CMS_Messages.Show(LV_Messages, startPoint);
@@ -622,7 +637,7 @@ namespace QueueViewer.Forms
 
         private void TSMI_Reprocess_Click(object sender, EventArgs e)
         {
-            if (LV_Messages.SelectedItems.Count > 0)
+            if (LV_Messages.SelectedItems?.Count > 0)
             {
                 try
                 {
@@ -710,9 +725,17 @@ namespace QueueViewer.Forms
             }
         }
 
+        private void ResetNodesBackColor(List<TreeNode> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                node.BackColor = SystemColors.Window;
+            }
+        }
+
         private void BTN_RefreshMessages_Click(object sender, EventArgs e)
         {
-            if (CurrentNode.Parent.ImageIndex != 2)
+            if (CurrentNode != null && CurrentNode.Parent.ImageIndex != 2)
             {
                 ShowMessages(Service.CurrentQueue);
             }
@@ -827,7 +850,17 @@ namespace QueueViewer.Forms
 
         private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Running = false;
+
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
         #endregion CONTROLS
