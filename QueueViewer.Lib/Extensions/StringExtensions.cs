@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using QueueViewer.Extensions;
 using QueueViewer.Lib.Entities;
+using QueueViewer.Lib.Extensions;
 using System.IO;
 using System.Linq;
 

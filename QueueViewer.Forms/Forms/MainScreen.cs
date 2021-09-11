@@ -43,8 +43,35 @@ namespace QueueViewer.Forms
             LoadTreeView();
             LoadListView();
             LoadConfig();
+            ChangeLanguage();
 
             ActiveControl = CB_Refresh;
+        }
+
+        public void ChangeLanguage()
+        {
+            ChangeLanguage(_config.Language, this);
+        }
+
+        public void ChangeLanguage(string languageName, Control control)
+        {
+            _config.Language = languageName;
+
+            if (!Culture.Languages.Contains(languageName))
+                return;
+
+            if (control == null)
+                return;
+
+            if (Culture.MainScreen[languageName].TryGetValue(control.Name, out string result))
+            {
+                control.Text = result;
+            }
+
+            foreach (Control c in control.Controls)
+            {
+                ChangeLanguage(languageName, c);
+            }
         }
 
         public void LoadConfig()
@@ -72,7 +99,7 @@ namespace QueueViewer.Forms
             CBB_MaxMessages.SelectedIndex = int.TryParse(_config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
             CB_Refresh.Checked = bool.TryParse(_config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
             Theme = int.TryParse(_config.Theme, out int themeInt) ? themeInt : 0;
-            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(_config.Language);
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(_config.Language) ?? CultureInfo.CurrentCulture;
         }
 
         private void SaveConfig()
@@ -81,7 +108,6 @@ namespace QueueViewer.Forms
             _config.AutoRefresh = CB_Refresh.Checked.ToString();
             _config.RefreshTime = CBB_Refresh.SelectedIndex.ToString();
             _config.MaxMessages = CBB_MaxMessages.SelectedIndex.ToString();
-            _config.Language = CultureInfo.CurrentCulture.Name;
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Config));
             TextWriter writer = new StreamWriter(_configPath);
