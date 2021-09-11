@@ -59,17 +59,17 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Extensions\FormExtensions.cs" />
-    <Compile Include="Forms\NewMessageDialog.cs">
+    <Compile Include="Forms\NewMessageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\NewMessageDialog.Designer.cs">
-      <DependentUpon>NewMessageDialog.cs</DependentUpon>
+    <Compile Include="Forms\NewMessageForm.Designer.cs">
+      <DependentUpon>NewMessageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\NewQueueDialog.cs">
+    <Compile Include="Forms\NewQueueForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\NewQueueDialog.Designer.cs">
-      <DependentUpon>NewQueueDialog.cs</DependentUpon>
+    <Compile Include="Forms\NewQueueForm.Designer.cs">
+      <DependentUpon>NewQueueForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainScreen.cs">
       <SubType>Form</SubType>
@@ -78,16 +78,25 @@
       <DependentUpon>MainScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="Culture.cs" />
+    <Compile Include="Forms\OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\NewMessageDialog.resx">
-      <DependentUpon>NewMessageDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\NewMessageForm.resx">
+      <DependentUpon>NewMessageForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NewQueueDialog.resx">
-      <DependentUpon>NewQueueDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\NewQueueForm.resx">
+      <DependentUpon>NewQueueForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

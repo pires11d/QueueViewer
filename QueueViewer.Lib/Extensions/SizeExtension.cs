@@ -2,7 +2,7 @@
 
 namespace QueueViewer.Lib.Extensions
 {
-    public static class FileSizeExtension
+    public static class SizeExtension
     {
         private static readonly string[] suffixes =
         { "Bytes", "KB", "MB", "GB", "TB", "PB" };

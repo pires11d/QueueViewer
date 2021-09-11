@@ -92,7 +92,7 @@ namespace System
         public static string ToSize(this string bytes)
         {
             var bytesCount = long.TryParse(bytes, out long n) ? n : 0;
-            return FileSizeExtension.FormatSize(bytesCount);
+            return SizeExtension.FormatSize(bytesCount);
         }
 
         public static string BytesToString(byte[] bytes)

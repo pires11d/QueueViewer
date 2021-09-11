@@ -15,7 +15,7 @@ namespace QueueViewer.Forms
         /// </summary>
         public static Dictionary<string, string> MainScreenPT = new Dictionary<string, string>()
         {
-            {"T_Body","Corpo" },
+            {"T_Body","Corpinho" },
             {"T_Extension","Extensão" }
         };
 

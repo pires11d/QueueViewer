@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\FileSizeExtension.cs" />
+    <Compile Include="Extensions\FileExtension.cs" />
+    <Compile Include="Extensions\SizeExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Constants.cs" />

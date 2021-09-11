@@ -1,4 +1,5 @@
 ﻿using QueueViewer.Lib.Entities;
+using QueueViewer.Lib.Extensions;
 using QueueViewer.Lib.Services;
 using System;
 using System.Collections.Generic;
@@ -76,30 +77,13 @@ namespace QueueViewer.Forms
 
         public void LoadConfig()
         {
-            if (File.Exists(_configPath))
-            {
-                try
-                {
-                    var file = File.ReadAllText(_configPath);
-                    var xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(file);
-
-                    _config.AutoRefresh = xmlDoc.SelectSingleNode("Config/AutoRefresh").InnerXml;
-                    _config.RefreshTime = xmlDoc.SelectSingleNode("Config/RefreshTime").InnerXml;
-                    _config.MaxMessages = xmlDoc.SelectSingleNode("Config/MaxMessages").InnerXml;
-                    _config.Language = xmlDoc.SelectSingleNode("Config/Language").InnerXml;
-                    _config.Theme = xmlDoc.SelectSingleNode("Config/Theme").InnerXml;
-                }
-                catch (Exception)
-                {
-                }
-            }
+            _config = (Config)FileExtension.LoadXML(_configPath, _config);
 
             CBB_Refresh.SelectedIndex = int.TryParse(_config.RefreshTime, out int refreshTimeInt) ? refreshTimeInt : 0;
             CBB_MaxMessages.SelectedIndex = int.TryParse(_config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
             CB_Refresh.Checked = bool.TryParse(_config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
             Theme = int.TryParse(_config.Theme, out int themeInt) ? themeInt : 0;
-            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(_config.Language) ?? CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = _config.Language != null ? CultureInfo.GetCultureInfo(_config.Language) : CultureInfo.CurrentCulture;
         }
 
         private void SaveConfig()
@@ -108,10 +92,9 @@ namespace QueueViewer.Forms
             _config.AutoRefresh = CB_Refresh.Checked.ToString();
             _config.RefreshTime = CBB_Refresh.SelectedIndex.ToString();
             _config.MaxMessages = CBB_MaxMessages.SelectedIndex.ToString();
+            _config.Language = CultureInfo.CurrentCulture.Name;
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Config));
-            TextWriter writer = new StreamWriter(_configPath);
-            xmlSerializer.Serialize(writer, _config);
+            FileExtension.SaveXML(_config, _configPath);
         }
 
         private void T_Refresh_Tick(object sender, EventArgs e)
