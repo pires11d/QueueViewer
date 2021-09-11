@@ -1,5 +1,6 @@
 <Config>
 	<AutoRefresh>True</AutoRefresh>
+	<Sounds>True</Sounds>
 	<RefreshTime>1</RefreshTime>
 	<MaxMessages>0</MaxMessages>
 	<Language>en-US</Language>

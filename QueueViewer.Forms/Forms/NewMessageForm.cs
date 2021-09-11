@@ -6,11 +6,12 @@ namespace QueueViewer.Forms
 {
     public partial class NewMessageDialog : Form
     {
-        public MainScreen Main { get; set; }
+        private MainScreen _main { get; set; }
+
         public NewMessageDialog(MainScreen main, MessageQueue queue)
         {
             InitializeComponent();
-            Main = main;
+            _main = main;
             BTN_OK.Text = BTN_OK.Text.Replace("@", queue.QueueName);
         }
 
@@ -18,8 +19,8 @@ namespace QueueViewer.Forms
         {
             try
             {
-                Main.InsertMessageIntoQueue(Main.Service.CurrentQueue, TB_Value.Text);
-                Main.ShowMessages(Main.Service.CurrentQueue);
+                _main.InsertMessageIntoQueue(_main.Service.CurrentQueue, TB_Value.Text);
+                _main.ShowMessages(_main.Service.CurrentQueue);
             }
             catch (Exception ex)
             {

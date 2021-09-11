@@ -5,12 +5,12 @@ namespace QueueViewer.Forms
 {
     public partial class NewQueueDialog : Form
     {
-        public MainScreen Main { get; set; }
+        private MainScreen _main { get; set; }
 
         public NewQueueDialog(MainScreen main)
         {
             InitializeComponent();
-            Main = main;
+            _main = main;
             AcceptButton = BTN_OK;
         }
 
@@ -18,8 +18,8 @@ namespace QueueViewer.Forms
         {
             try
             {
-                var queueFullName = Main.CreateNewQueue(TB_Value.Text);
-                Main.CurrentNode.Nodes.Add(queueFullName, TB_Value.Text);
+                var queueFullName = _main.CreateNewQueue(TB_Value.Text);
+                _main.CurrentNode.Nodes.Add(queueFullName, TB_Value.Text);
             }
             catch (Exception ex)
             {

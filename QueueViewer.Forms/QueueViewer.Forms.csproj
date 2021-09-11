@@ -66,6 +66,8 @@
     </Compile>
     <Compile Include="Custom\XmlRichTextBox.Designer.cs" />
     <Compile Include="Custom\XmlStateMachine.cs" />
+    <Compile Include="Entities\SoundsEnum.cs" />
+    <Compile Include="Entities\ThemesEnum.cs" />
     <Compile Include="Extensions\FormExtensions.cs" />
     <Compile Include="Forms\NewMessageForm.cs">
       <SubType>Form</SubType>
@@ -109,20 +111,20 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -133,11 +135,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\pt-BR.png" />
     <None Include="Resources\refresh.png" />
     <None Include="Resources\qq.ico" />
     <None Include="Resources\swoosh.wav" />
     <None Include="Resources\aiai.wav" />
     <Content Include="config.xml" />
+    <None Include="Resources\en-US.png" />
     <Content Include="Resources\folder.ico" />
     <None Include="Resources\mail.ico" />
     <None Include="Resources\folderX.ico" />

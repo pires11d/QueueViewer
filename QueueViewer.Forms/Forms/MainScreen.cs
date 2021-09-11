@@ -1,4 +1,5 @@
 ﻿using Custom;
+using QueueViewer.Forms.Entities;
 using QueueViewer.Lib.Entities;
 using QueueViewer.Lib.Extensions;
 using QueueViewer.Lib.Services;
@@ -6,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -28,17 +28,18 @@ namespace QueueViewer.Forms
         public QueueService Service { get; set; }
         public Dictionary<TreeNode, int> NodesToUpdate { get; set; }
         public Stopwatch ScreenTimer { get; private set; }
-        public int Theme { get; set; }
+        public Config Config { get; set; }
+        public ThemesEnum Theme { get; set; }
+        public bool EnableSounds { get; set; }
         private string _appDataFolder { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.Combine(Application.CompanyName, Application.ProductName));
         private string _configPath { get; set; }
-        private Config _config { get; set; }
 
         public MainScreen()
         {
             InitializeComponent();
             TB_MessageBody.Initialize();
             _configPath = Path.Combine(_appDataFolder, "config.xml");
-            _config = new Config();
+            Config = new Config();
             Service = new QueueService();
 
             LoadTreeView();
@@ -51,20 +52,18 @@ namespace QueueViewer.Forms
 
         public void ChangeLanguage()
         {
-            ChangeLanguage(_config.Language, this);
+            ChangeLanguage(Config.Language, this);
         }
 
         public void ChangeLanguage(string languageName, Control control)
         {
-            _config.Language = languageName;
-
             if (!Culture.Languages.Contains(languageName))
                 return;
 
             if (control == null)
                 return;
 
-            if (Culture.MainScreen[languageName].TryGetValue(control.Name, out string result))
+            if (Culture.Words[languageName].TryGetValue(control.Name, out string result))
             {
                 control.Text = result;
             }
@@ -77,24 +76,29 @@ namespace QueueViewer.Forms
 
         public void LoadConfig()
         {
-            _config = (Config)FileExtension.LoadXML(_configPath, _config);
+            Config = (Config)FileExtension.LoadXML(_configPath, Config);
 
-            CBB_Refresh.SelectedIndex = int.TryParse(_config.RefreshTime, out int refreshTimeInt) ? refreshTimeInt : 0;
-            CBB_MaxMessages.SelectedIndex = int.TryParse(_config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
-            CB_Refresh.Checked = bool.TryParse(_config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
-            Theme = int.TryParse(_config.Theme, out int themeInt) ? themeInt : 0;
-            CultureInfo.CurrentCulture = _config.Language != null ? CultureInfo.GetCultureInfo(_config.Language) : CultureInfo.CurrentCulture;
+            CBB_Refresh.SelectedIndex = int.TryParse(Config.RefreshTime, out int refreshTimeInt) ? refreshTimeInt : 0;
+            CBB_MaxMessages.SelectedIndex = int.TryParse(Config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
+            CB_Refresh.Checked = bool.TryParse(Config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
+            EnableSounds = bool.TryParse(Config.Sounds, out bool enableSoundsBool) ? enableSoundsBool : true;
+            SetTheme(Config.Theme);
+        }
+
+        public void SetTheme(string theme)
+        {
+            Theme = Enum.TryParse(theme, out ThemesEnum themeEnum) ? themeEnum : ThemesEnum.Light;
         }
 
         private void SaveConfig()
         {
-            _config.Theme = Theme.ToString();
-            _config.AutoRefresh = CB_Refresh.Checked.ToString();
-            _config.RefreshTime = CBB_Refresh.SelectedIndex.ToString();
-            _config.MaxMessages = CBB_MaxMessages.SelectedIndex.ToString();
-            _config.Language = CultureInfo.CurrentCulture.Name;
+            Config.Theme = Theme.ToString();
+            Config.Sounds = EnableSounds.ToString();
+            Config.AutoRefresh = CB_Refresh.Checked.ToString();
+            Config.RefreshTime = CBB_Refresh.SelectedIndex.ToString();
+            Config.MaxMessages = CBB_MaxMessages.SelectedIndex.ToString();
 
-            FileExtension.SaveXML(_config, _configPath);
+            FileExtension.SaveXML(Config, _configPath);
         }
 
         private void T_Refresh_Tick(object sender, EventArgs e)
@@ -447,6 +451,9 @@ namespace QueueViewer.Forms
 
         private void PlaySound(SoundsEnum value)
         {
+            if (!EnableSounds)
+                return;
+
             try
             {
                 SoundPlayer simpleSound;
@@ -896,7 +903,8 @@ namespace QueueViewer.Forms
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var form = new OptionsForm(this,Config);
+            form.Show();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)

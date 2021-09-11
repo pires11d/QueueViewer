@@ -70,6 +70,16 @@ namespace QueueViewer.Forms.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap en_US {
+            get {
+                object obj = ResourceManager.GetObject("en_US", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon folder {
@@ -96,6 +106,16 @@ namespace QueueViewer.Forms.Properties {
             get {
                 object obj = ResourceManager.GetObject("mail", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pt_BR {
+            get {
+                object obj = ResourceManager.GetObject("pt_BR", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

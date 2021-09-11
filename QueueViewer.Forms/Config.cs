@@ -9,6 +9,7 @@ namespace QueueViewer.Forms
     public class Config
     {
         public string AutoRefresh { get; set; }
+        public string Sounds { get; set; }
         public string RefreshTime { get; set; }
         public string MaxMessages { get; set; }
         public string Language { get; set; }

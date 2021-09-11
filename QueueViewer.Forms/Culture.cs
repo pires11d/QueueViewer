@@ -13,28 +13,38 @@ namespace QueueViewer.Forms
         /// <summary>
         /// { "Control.Name" : "Control.Text" }
         /// </summary>
-        public static Dictionary<string, string> MainScreenPT = new Dictionary<string, string>()
+        public static Dictionary<string, string> WordsPT = new Dictionary<string, string>()
         {
+            {"Light","Claro" },
+            {"Dark","Escuro" },
             {"T_Body","Corpinho" },
-            {"T_Extension","Extensão" }
+            {"T_Extension","Extensão" },
+            {"L_Language","Idioma:" },
+            {"L_Theme","Tema:" },
+            {"L_Sounds","Habilitar Sons:" },
         };
 
         /// <summary>
         /// { "Control.Name" : "Control.Text" }
         /// </summary>
-        public static Dictionary<string, string> MainScreenUS = new Dictionary<string, string>()
+        public static Dictionary<string, string> WordsEN = new Dictionary<string, string>()
         {
+            {"Light","Light" },
+            {"Dark","Dark" },
             {"T_Body","Body" },
-            {"T_Extension","Extension" }
+            {"T_Extension","Extension" },
+            {"L_Language","Language:" },
+            {"L_Theme","Color Theme:" },
+            {"L_Sounds","Enable Sounds:" },
         };
 
         /// <summary>
         /// { "language" : { "Control.Name" : "Control.Text" } }
         /// </summary>
-        public static Dictionary<string, Dictionary<string, string>> MainScreen = new Dictionary<string, Dictionary<string, string>>()
+        public static Dictionary<string, Dictionary<string, string>> Words = new Dictionary<string, Dictionary<string, string>>()
         {
-            {"pt-BR", MainScreenPT },
-            {"en-US", MainScreenUS },
+            {"pt-BR", WordsPT },
+            {"en-US", WordsEN },
         };
 
     }
