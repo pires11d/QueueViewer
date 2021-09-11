@@ -21,12 +21,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
-        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_603832464193D501327D53607690F472"
         "OwnerKey" = "8:_2D6A641C667F49E1B3C261CF5EF128AF"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,7 +46,7 @@
         "Entry"
         {
         "MsmKey" = "8:_85236EABEF046047A54A72A0279BD678"
-        "OwnerKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
+        "OwnerKey" = "8:_F3588C6C691F5D372CE0839BD7251E73"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -64,6 +58,18 @@
         "Entry"
         {
         "MsmKey" = "8:_C5D4391A3778427A83ABA4C931BE00E1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F3588C6C691F5D372CE0839BD7251E73"
+        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F6F834C24527453D9699330DB547B261"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -82,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
+        "OwnerKey" = "8:_F3588C6C691F5D372CE0839BD7251E73"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -192,37 +198,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3ABC214536FB530C55CAB2F51A402104"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_3ABC214536FB530C55CAB2F51A402104"
-                    {
-                    "Name" = "8:QueueViewer.Lib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:QueueViewer.Lib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_603832464193D501327D53607690F472"
             {
             "AssemblyRegister" = "3:1"
@@ -239,7 +214,7 @@
             "SourcePath" = "8:System.Net.Http.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -270,7 +245,7 @@
             "SourcePath" = "8:Newtonsoft.Json.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -290,7 +265,58 @@
             "SourcePath" = "8:..\\QueueViewer.Forms\\Resources\\qq.ico"
             "TargetName" = "8:qq.ico"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F3588C6C691F5D372CE0839BD7251E73"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F3588C6C691F5D372CE0839BD7251E73"
+                    {
+                    "Name" = "8:QueueViewer.Lib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:QueueViewer.Lib.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F6F834C24527453D9699330DB547B261"
+            {
+            "SourcePath" = "8:..\\QueueViewer.Forms\\config.xml"
+            "TargetName" = "8:config.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_EADD8C431C634CD9AB701A63BDF993DC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -322,6 +348,28 @@
                 {
                 }
             }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_6D8A539249134574BD2A8E70EE8B0B6E"
+            {
+            "Name" = "8:#1915"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:AppDataFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_EADD8C431C634CD9AB701A63BDF993DC"
+                    {
+                    "Name" = "8:QueueViewer"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_9943AB298718439FB4D70F8E2427B810"
+                        "Folders"
+                        {
+                        }
+                    }
+                }
+            }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_93B554099DAA4F8C8D8864E091051A47"
             {
             "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
@@ -332,6 +380,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_D5432AE27E69489183234522FD41C1B8"
+                    {
+                    "Name" = "8:QueueViewer"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_7C46CB6643BB4FD3BF05A45EF271CB0C"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_D137517BFC1940DDBB4A2D2A4E5E62DB"
@@ -914,7 +973,7 @@
             "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -939,10 +998,10 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2D6A641C667F49E1B3C261CF5EF128AF"
             {
-            "SourcePath" = "8:..\\QueueViewer.Lib\\obj\\Release\\QueueViewer.Lib.dll"
+            "SourcePath" = "8:..\\QueueViewer.Lib\\obj\\Debug\\QueueViewer.Lib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -970,7 +1029,7 @@
             "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -998,7 +1057,7 @@
             "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1023,10 +1082,10 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_81388104227D43DDBD23D5564A08DE71"
             {
-            "SourcePath" = "8:..\\QueueViewer.Forms\\obj\\Release\\QueueViewer.Forms.exe"
+            "SourcePath" = "8:..\\QueueViewer.Forms\\obj\\Debug\\QueueViewer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1054,7 +1113,7 @@
             "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Folder" = "8:_D5432AE27E69489183234522FD41C1B8"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"

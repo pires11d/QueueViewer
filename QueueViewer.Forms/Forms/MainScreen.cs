@@ -4,11 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Messaging;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 using Message = System.Messaging.Message;
 
 namespace QueueViewer.Forms
@@ -25,20 +29,61 @@ namespace QueueViewer.Forms
         public QueueService Service { get; set; }
         public Dictionary<TreeNode, int> NodesToUpdate { get; set; }
         public Stopwatch ScreenTimer { get; private set; }
+        private string _appDataFolder { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.Combine(Application.CompanyName, Application.ProductName));
+        private string _configPath { get; set; }
+        public Config _config { get; set; }
 
         public MainScreen()
         {
             InitializeComponent();
-
+            _configPath = Path.Combine(_appDataFolder, "config.xml");
+            _config = new Config();
             Service = new QueueService();
 
             LoadTreeView();
             LoadListView();
+            LoadConfig();
 
-            CBB_Refresh.SelectedIndex = 1;
-            CBB_MaxMessages.SelectedIndex = 0;
-            CB_Refresh.Checked = true;
             ActiveControl = CB_Refresh;
+        }
+
+        public void LoadConfig()
+        {
+            if (File.Exists(_configPath))
+            {
+                try
+                {
+                    var file = File.ReadAllText(_configPath);
+                    var xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(file);
+
+                    _config.AutoRefresh = xmlDoc.SelectSingleNode("Config/AutoRefresh").InnerXml;
+                    _config.RefreshTime = xmlDoc.SelectSingleNode("Config/RefreshTime").InnerXml;
+                    _config.MaxMessages = xmlDoc.SelectSingleNode("Config/MaxMessages").InnerXml;
+                    _config.Language = xmlDoc.SelectSingleNode("Config/Language").InnerXml;
+                    _config.Theme = xmlDoc.SelectSingleNode("Config/Theme").InnerXml;
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            CBB_Refresh.SelectedIndex = int.TryParse(_config.RefreshTime, out int refreshTimeInt) ? refreshTimeInt : 0;
+            CBB_MaxMessages.SelectedIndex = int.TryParse(_config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
+            CB_Refresh.Checked = bool.TryParse(_config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
+        }
+
+        private void SaveConfig()
+        {
+            _config.AutoRefresh = CB_Refresh.Checked.ToString();
+            _config.RefreshTime = CBB_Refresh.SelectedIndex.ToString();
+            _config.MaxMessages = CBB_MaxMessages.SelectedIndex.ToString();
+            _config.Language = CultureInfo.CurrentCulture.Name;
+            _config.Theme = "";
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Config));
+            TextWriter writer = new StreamWriter(_configPath);
+            xmlSerializer.Serialize(writer, _config);
         }
 
         private void T_Refresh_Tick(object sender, EventArgs e)
@@ -119,7 +164,7 @@ namespace QueueViewer.Forms
                     ScreenTimer.Stop();
                     ResetNodesBackColor(NodesToUpdate.Keys.ToList());
                 }).Start();
-            }            
+            }
         }
 
         private void UpdateParentNode(TreeNode parentNode, int oldCount = 0, int newCount = 0)
@@ -288,7 +333,7 @@ namespace QueueViewer.Forms
 
             if (newCount != oldCount)
             {
-                NodesToUpdate.Add(node,newCount);
+                NodesToUpdate.Add(node, newCount);
             }
         }
 
@@ -792,11 +837,17 @@ namespace QueueViewer.Forms
 
         private void LV_Messages_KeyDown(object sender, KeyEventArgs e)
         {
-            if (ActiveControl is ListView && e.Control && e.KeyCode == Keys.A)
+            if (ActiveControl is ListView)
             {
-                foreach (ListViewItem item in LV_Messages.Items)
+                if (e.Control && e.KeyCode == Keys.A)
                 {
-                    item.Selected = true;
+                    foreach (ListViewItem item in LV_Messages.Items)
+                    {
+                        item.Selected = true;
+                    }
+                }
+                else if (e.Control && e.KeyCode == Keys.F)
+                {
                 }
             }
         }
@@ -850,7 +901,7 @@ namespace QueueViewer.Forms
 
         private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            SaveConfig();
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)

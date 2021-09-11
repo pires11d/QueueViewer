@@ -33,7 +33,6 @@ namespace QueueViewer.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
             this.MS_Header = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,9 +56,9 @@ namespace QueueViewer.Forms
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.P_BotttomRight = new System.Windows.Forms.Panel();
             this.TC_Message = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.T_Body = new System.Windows.Forms.TabPage();
             this.TB_MessageBody = new System.Windows.Forms.TextBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.T_Extension = new System.Windows.Forms.TabPage();
             this.TB_MessageExtension = new System.Windows.Forms.TextBox();
             this.P_TopRight = new System.Windows.Forms.Panel();
             this.P_CenterTopRight = new System.Windows.Forms.Panel();
@@ -86,14 +85,13 @@ namespace QueueViewer.Forms
             this.T_Refresh = new System.Windows.Forms.Timer(this.components);
             this.CMS_Messages = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TSMI_Reprocess = new System.Windows.Forms.ToolStripMenuItem();
-            this.MS_Header.SuspendLayout();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
             this.P_Right.SuspendLayout();
             this.P_BotttomRight.SuspendLayout();
             this.TC_Message.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.T_Body.SuspendLayout();
+            this.T_Extension.SuspendLayout();
             this.P_TopRight.SuspendLayout();
             this.P_CenterTopRight.SuspendLayout();
             this.P_BottomTopRight.SuspendLayout();
@@ -107,9 +105,6 @@ namespace QueueViewer.Forms
             // 
             // MS_Header
             // 
-            this.MS_Header.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.optionsToolStripMenuItem});
             this.MS_Header.Location = new System.Drawing.Point(0, 0);
             this.MS_Header.Name = "MS_Header";
             this.MS_Header.Size = new System.Drawing.Size(1017, 24);
@@ -118,25 +113,9 @@ namespace QueueViewer.Forms
             // 
             // fileToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
-            this.openToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
-            this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.newToolStripMenuItem.Text = "&New";
             // 
             // openToolStripMenuItem
             // 
@@ -268,11 +247,11 @@ namespace QueueViewer.Forms
             // 
             this.CBB_Refresh.FormattingEnabled = true;
             this.CBB_Refresh.Items.AddRange(new object[] {
-            "2",
             "5",
             "10",
             "15",
-            "30"});
+            "30",
+            "60"});
             this.CBB_Refresh.Location = new System.Drawing.Point(117, 4);
             this.CBB_Refresh.Name = "CBB_Refresh";
             this.CBB_Refresh.Size = new System.Drawing.Size(43, 21);
@@ -340,8 +319,8 @@ namespace QueueViewer.Forms
             // 
             // TC_Message
             // 
-            this.TC_Message.Controls.Add(this.tabPage1);
-            this.TC_Message.Controls.Add(this.tabPage2);
+            this.TC_Message.Controls.Add(this.T_Body);
+            this.TC_Message.Controls.Add(this.T_Extension);
             this.TC_Message.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TC_Message.ItemSize = new System.Drawing.Size(90, 30);
             this.TC_Message.Location = new System.Drawing.Point(0, 0);
@@ -351,16 +330,16 @@ namespace QueueViewer.Forms
             this.TC_Message.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.TC_Message.TabIndex = 1;
             // 
-            // tabPage1
+            // T_Body
             // 
-            this.tabPage1.Controls.Add(this.TB_MessageBody);
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(634, 192);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Body";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.T_Body.Controls.Add(this.TB_MessageBody);
+            this.T_Body.Location = new System.Drawing.Point(4, 34);
+            this.T_Body.Name = "T_Body";
+            this.T_Body.Padding = new System.Windows.Forms.Padding(3);
+            this.T_Body.Size = new System.Drawing.Size(634, 192);
+            this.T_Body.TabIndex = 0;
+            this.T_Body.Text = "Body";
+            this.T_Body.UseVisualStyleBackColor = true;
             // 
             // TB_MessageBody
             // 
@@ -372,16 +351,16 @@ namespace QueueViewer.Forms
             this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
             this.TB_MessageBody.TabIndex = 0;
             // 
-            // tabPage2
+            // T_Extension
             // 
-            this.tabPage2.Controls.Add(this.TB_MessageExtension);
-            this.tabPage2.Location = new System.Drawing.Point(4, 34);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(634, 126);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Extension";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.T_Extension.Controls.Add(this.TB_MessageExtension);
+            this.T_Extension.Location = new System.Drawing.Point(4, 34);
+            this.T_Extension.Name = "T_Extension";
+            this.T_Extension.Padding = new System.Windows.Forms.Padding(3);
+            this.T_Extension.Size = new System.Drawing.Size(634, 192);
+            this.T_Extension.TabIndex = 1;
+            this.T_Extension.Text = "Extension";
+            this.T_Extension.UseVisualStyleBackColor = true;
             // 
             // TB_MessageExtension
             // 
@@ -390,7 +369,7 @@ namespace QueueViewer.Forms
             this.TB_MessageExtension.Multiline = true;
             this.TB_MessageExtension.Name = "TB_MessageExtension";
             this.TB_MessageExtension.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 120);
+            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
             this.TB_MessageExtension.TabIndex = 1;
             // 
             // P_TopRight
@@ -540,13 +519,14 @@ namespace QueueViewer.Forms
             // BTN_RefreshMessages
             // 
             this.BTN_RefreshMessages.BackColor = System.Drawing.SystemColors.Control;
+            this.BTN_RefreshMessages.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.refresh1;
+            this.BTN_RefreshMessages.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.BTN_RefreshMessages.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_RefreshMessages.ForeColor = System.Drawing.Color.Green;
             this.BTN_RefreshMessages.Location = new System.Drawing.Point(3, 0);
             this.BTN_RefreshMessages.Name = "BTN_RefreshMessages";
-            this.BTN_RefreshMessages.Size = new System.Drawing.Size(32, 27);
+            this.BTN_RefreshMessages.Size = new System.Drawing.Size(27, 27);
             this.BTN_RefreshMessages.TabIndex = 2;
-            this.BTN_RefreshMessages.Text = "⟳";
             this.BTN_RefreshMessages.UseVisualStyleBackColor = false;
             this.BTN_RefreshMessages.Click += new System.EventHandler(this.BTN_RefreshMessages_Click);
             // 
@@ -597,14 +577,16 @@ namespace QueueViewer.Forms
             // 
             // BTN_RefreshQueues
             // 
+            this.BTN_RefreshQueues.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BTN_RefreshQueues.BackColor = System.Drawing.SystemColors.Control;
-            this.BTN_RefreshQueues.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTN_RefreshQueues.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.refresh1;
+            this.BTN_RefreshQueues.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BTN_RefreshQueues.Font = new System.Drawing.Font("Calibri", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_RefreshQueues.ForeColor = System.Drawing.Color.Green;
             this.BTN_RefreshQueues.Location = new System.Drawing.Point(0, 0);
             this.BTN_RefreshQueues.Name = "BTN_RefreshQueues";
-            this.BTN_RefreshQueues.Size = new System.Drawing.Size(32, 27);
+            this.BTN_RefreshQueues.Size = new System.Drawing.Size(27, 27);
             this.BTN_RefreshQueues.TabIndex = 5;
-            this.BTN_RefreshQueues.Text = "⟳";
             this.BTN_RefreshQueues.UseVisualStyleBackColor = false;
             this.BTN_RefreshQueues.Click += new System.EventHandler(this.BTN_RefreshQueues_Click);
             // 
@@ -654,20 +636,18 @@ namespace QueueViewer.Forms
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "My QueueViewer";
+            this.Text = "QueueViewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainScreen_FormClosing);
-            this.MS_Header.ResumeLayout(false);
-            this.MS_Header.PerformLayout();
             this.CMS_Queues.ResumeLayout(false);
             this.P_Top.ResumeLayout(false);
             this.P_Right.ResumeLayout(false);
             this.P_BotttomRight.ResumeLayout(false);
             this.TC_Message.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.T_Body.ResumeLayout(false);
+            this.T_Body.PerformLayout();
+            this.T_Extension.ResumeLayout(false);
+            this.T_Extension.PerformLayout();
             this.P_TopRight.ResumeLayout(false);
             this.P_CenterTopRight.ResumeLayout(false);
             this.P_BottomTopRight.ResumeLayout(false);
@@ -687,7 +667,6 @@ namespace QueueViewer.Forms
         #endregion
         private System.Windows.Forms.MenuStrip MS_Header;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -718,8 +697,8 @@ namespace QueueViewer.Forms
         private System.Windows.Forms.ColumnHeader columnHeader0;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.TabControl TC_Message;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage T_Body;
+        private System.Windows.Forms.TabPage T_Extension;
         private System.Windows.Forms.TextBox TB_MessageExtension;
         private System.Windows.Forms.Timer T_Refresh;
         private System.Windows.Forms.Panel P_TopTopRight;
