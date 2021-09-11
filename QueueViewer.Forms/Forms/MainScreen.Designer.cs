@@ -1,5 +1,4 @@
-﻿
-namespace QueueViewer.Forms
+﻿namespace QueueViewer.Forms
 {
     partial class MainScreen
     {
@@ -57,9 +56,7 @@ namespace QueueViewer.Forms
             this.P_BotttomRight = new System.Windows.Forms.Panel();
             this.TC_Message = new System.Windows.Forms.TabControl();
             this.T_Body = new System.Windows.Forms.TabPage();
-            this.TB_MessageBody = new System.Windows.Forms.TextBox();
             this.T_Extension = new System.Windows.Forms.TabPage();
-            this.TB_MessageExtension = new System.Windows.Forms.TextBox();
             this.P_TopRight = new System.Windows.Forms.Panel();
             this.P_CenterTopRight = new System.Windows.Forms.Panel();
             this.LV_Messages = new System.Windows.Forms.ListView();
@@ -85,6 +82,8 @@ namespace QueueViewer.Forms
             this.T_Refresh = new System.Windows.Forms.Timer(this.components);
             this.CMS_Messages = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TSMI_Reprocess = new System.Windows.Forms.ToolStripMenuItem();
+            this.TB_MessageBody = new Custom.SyntaxRichTextBox();
+            this.TB_MessageExtension = new Custom.XmlRichTextBox();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
             this.P_Right.SuspendLayout();
@@ -319,6 +318,7 @@ namespace QueueViewer.Forms
             // 
             // TC_Message
             // 
+            this.TC_Message.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.TC_Message.Controls.Add(this.T_Body);
             this.TC_Message.Controls.Add(this.T_Extension);
             this.TC_Message.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -333,7 +333,7 @@ namespace QueueViewer.Forms
             // T_Body
             // 
             this.T_Body.Controls.Add(this.TB_MessageBody);
-            this.T_Body.Location = new System.Drawing.Point(4, 34);
+            this.T_Body.Location = new System.Drawing.Point(4, 4);
             this.T_Body.Name = "T_Body";
             this.T_Body.Padding = new System.Windows.Forms.Padding(3);
             this.T_Body.Size = new System.Drawing.Size(634, 192);
@@ -341,36 +341,16 @@ namespace QueueViewer.Forms
             this.T_Body.Text = "Body";
             this.T_Body.UseVisualStyleBackColor = true;
             // 
-            // TB_MessageBody
-            // 
-            this.TB_MessageBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
-            this.TB_MessageBody.Multiline = true;
-            this.TB_MessageBody.Name = "TB_MessageBody";
-            this.TB_MessageBody.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
-            this.TB_MessageBody.TabIndex = 0;
-            // 
             // T_Extension
             // 
             this.T_Extension.Controls.Add(this.TB_MessageExtension);
-            this.T_Extension.Location = new System.Drawing.Point(4, 34);
+            this.T_Extension.Location = new System.Drawing.Point(4, 4);
             this.T_Extension.Name = "T_Extension";
             this.T_Extension.Padding = new System.Windows.Forms.Padding(3);
             this.T_Extension.Size = new System.Drawing.Size(634, 192);
             this.T_Extension.TabIndex = 1;
             this.T_Extension.Text = "Extension";
             this.T_Extension.UseVisualStyleBackColor = true;
-            // 
-            // TB_MessageExtension
-            // 
-            this.TB_MessageExtension.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
-            this.TB_MessageExtension.Multiline = true;
-            this.TB_MessageExtension.Name = "TB_MessageExtension";
-            this.TB_MessageExtension.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
-            this.TB_MessageExtension.TabIndex = 1;
             // 
             // P_TopRight
             // 
@@ -621,6 +601,32 @@ namespace QueueViewer.Forms
             this.TSMI_Reprocess.Text = "Reprocess";
             this.TSMI_Reprocess.Click += new System.EventHandler(this.TSMI_Reprocess_Click);
             // 
+            // TB_MessageBody
+            // 
+            this.TB_MessageBody.AcceptsTab = true;
+            this.TB_MessageBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TB_MessageBody.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_MessageBody.Json = null;
+            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageBody.Name = "TB_MessageBody";
+            this.TB_MessageBody.ShowSelectionMargin = true;
+            this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
+            this.TB_MessageBody.TabIndex = 1;
+            this.TB_MessageBody.Text = "";
+            // 
+            // TB_MessageExtension
+            // 
+            this.TB_MessageExtension.AcceptsTab = true;
+            this.TB_MessageExtension.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TB_MessageExtension.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageExtension.Name = "TB_MessageExtension";
+            this.TB_MessageExtension.ShowSelectionMargin = true;
+            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
+            this.TB_MessageExtension.TabIndex = 0;
+            this.TB_MessageExtension.Text = "";
+            this.TB_MessageExtension.Xml = "";
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -645,9 +651,7 @@ namespace QueueViewer.Forms
             this.P_BotttomRight.ResumeLayout(false);
             this.TC_Message.ResumeLayout(false);
             this.T_Body.ResumeLayout(false);
-            this.T_Body.PerformLayout();
             this.T_Extension.ResumeLayout(false);
-            this.T_Extension.PerformLayout();
             this.P_TopRight.ResumeLayout(false);
             this.P_CenterTopRight.ResumeLayout(false);
             this.P_BottomTopRight.ResumeLayout(false);
@@ -686,7 +690,6 @@ namespace QueueViewer.Forms
         private System.Windows.Forms.Panel P_TopRight;
         private System.Windows.Forms.ListView LV_Messages;
         private System.Windows.Forms.Panel P_Left;
-        private System.Windows.Forms.TextBox TB_MessageBody;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -699,7 +702,6 @@ namespace QueueViewer.Forms
         private System.Windows.Forms.TabControl TC_Message;
         private System.Windows.Forms.TabPage T_Body;
         private System.Windows.Forms.TabPage T_Extension;
-        private System.Windows.Forms.TextBox TB_MessageExtension;
         private System.Windows.Forms.Timer T_Refresh;
         private System.Windows.Forms.Panel P_TopTopRight;
         private System.Windows.Forms.Panel P_CenterTopRight;
@@ -719,6 +721,8 @@ namespace QueueViewer.Forms
         private System.Windows.Forms.ComboBox CBB_MaxMessages;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private Custom.SyntaxRichTextBox TB_MessageBody;
+        private Custom.XmlRichTextBox TB_MessageExtension;
     }
 }
 

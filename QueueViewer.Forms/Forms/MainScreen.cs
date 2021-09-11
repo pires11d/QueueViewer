@@ -1,4 +1,5 @@
-﻿using QueueViewer.Lib.Entities;
+﻿using Custom;
+using QueueViewer.Lib.Entities;
 using QueueViewer.Lib.Extensions;
 using QueueViewer.Lib.Services;
 using System;
@@ -12,8 +13,6 @@ using System.Media;
 using System.Messaging;
 using System.Threading;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace QueueViewer.Forms
 {
@@ -37,6 +36,7 @@ namespace QueueViewer.Forms
         public MainScreen()
         {
             InitializeComponent();
+            TB_MessageBody.Initialize();
             _configPath = Path.Combine(_appDataFolder, "config.xml");
             _config = new Config();
             Service = new QueueService();
@@ -484,8 +484,8 @@ namespace QueueViewer.Forms
                     var message = Service.CurrentQueue.PeekById(id);
                     var body = Service.GetMessageBody(message);
                     var extension = Service.GetMessageExtension(message);
-                    TB_MessageBody.Text = body.Prettify();
-                    TB_MessageExtension.Text = extension;
+                    TB_MessageBody.Json = body.Prettify();
+                    TB_MessageExtension.Xml = extension;
                 }
             }
         }

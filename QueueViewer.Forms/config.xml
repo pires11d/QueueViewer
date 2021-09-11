@@ -1,7 +1,7 @@
 <Config>
-	<AutoRefresh>true</AutoRefresh>
+	<AutoRefresh>True</AutoRefresh>
 	<RefreshTime>1</RefreshTime>
-	<MaxMessages>1</MaxMessages>
+	<MaxMessages>0</MaxMessages>
 	<Language>en-US</Language>
 	<Theme>0</Theme>
 </Config>

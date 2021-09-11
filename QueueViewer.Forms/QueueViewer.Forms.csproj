@@ -58,6 +58,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Custom\SyntaxRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Custom\XmlRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Custom\XmlRichTextBox.Designer.cs" />
+    <Compile Include="Custom\XmlStateMachine.cs" />
     <Compile Include="Extensions\FormExtensions.cs" />
     <Compile Include="Forms\NewMessageForm.cs">
       <SubType>Form</SubType>
@@ -86,6 +94,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Custom\XmlRichTextBox.resx" />
     <EmbeddedResource Include="Forms\NewMessageForm.resx">
       <DependentUpon>NewMessageForm.cs</DependentUpon>
     </EmbeddedResource>
