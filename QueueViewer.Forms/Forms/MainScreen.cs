@@ -13,7 +13,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
-using Message = System.Messaging.Message;
 
 namespace QueueViewer.Forms
 {
@@ -29,9 +28,10 @@ namespace QueueViewer.Forms
         public QueueService Service { get; set; }
         public Dictionary<TreeNode, int> NodesToUpdate { get; set; }
         public Stopwatch ScreenTimer { get; private set; }
+        public int Theme { get; set; }
         private string _appDataFolder { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.Combine(Application.CompanyName, Application.ProductName));
         private string _configPath { get; set; }
-        public Config _config { get; set; }
+        private Config _config { get; set; }
 
         public MainScreen()
         {
@@ -71,15 +71,17 @@ namespace QueueViewer.Forms
             CBB_Refresh.SelectedIndex = int.TryParse(_config.RefreshTime, out int refreshTimeInt) ? refreshTimeInt : 0;
             CBB_MaxMessages.SelectedIndex = int.TryParse(_config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
             CB_Refresh.Checked = bool.TryParse(_config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
+            Theme = int.TryParse(_config.Theme, out int themeInt) ? themeInt : 0;
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(_config.Language);
         }
 
         private void SaveConfig()
         {
+            _config.Theme = Theme.ToString();
             _config.AutoRefresh = CB_Refresh.Checked.ToString();
             _config.RefreshTime = CBB_Refresh.SelectedIndex.ToString();
             _config.MaxMessages = CBB_MaxMessages.SelectedIndex.ToString();
             _config.Language = CultureInfo.CurrentCulture.Name;
-            _config.Theme = "";
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Config));
             TextWriter writer = new StreamWriter(_configPath);
