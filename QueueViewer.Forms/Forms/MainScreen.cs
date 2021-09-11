@@ -48,14 +48,94 @@ namespace QueueViewer.Forms
             ChangeLanguage();
 
             ActiveControl = CB_Refresh;
+            HideStandardMenuItems();
+        }
+
+        private void HideStandardMenuItems()
+        {
+            openToolStripMenuItem.Visible = false;
+            saveToolStripMenuItem.Visible = false;
+            saveAsToolStripMenuItem.Visible = false;
         }
 
         public void ChangeLanguage()
         {
-            ChangeLanguage(Config.Language, this);
+            ChangeLanguage(this, Config.Language);
+            ChangeMenuLanguage(MS_Header, Config.Language);
+            ChangeMenuLanguage(CMS_Messages, Config.Language);
+            ChangeMenuLanguage(CMS_Queues, Config.Language);
+            ChangeListViewLanguage(LV_Messages, Config.Language);
+
+            var items = new string[] { "50","100","200","500",Culture.Words[Config.Language][Constants.All]};
+            UpdateComboBox(CBB_MaxMessages, items, Config.MaxMessages);            
         }
 
-        public void ChangeLanguage(string languageName, Control control)
+        private void UpdateComboBox(ComboBox cbb, string[] items, object value)
+        {
+            cbb.Items.Clear();
+            cbb.Items.AddRange(items);
+            cbb.SelectedIndex = int.TryParse(value?.ToString(), out int result) ? result : 0;
+        }
+
+        private void ChangeListViewLanguage(ListView lv, string languageName)
+        {
+            if (!Culture.Languages.Contains(languageName))
+                return;
+
+            foreach (ColumnHeader col in lv.Columns)
+            {
+                if (Culture.Words[languageName].TryGetValue($"columnHeader{col.Index}", out string result))
+                    col.Text = result;
+            }
+        }
+
+        private void ChangeMenuLanguage(object obj, string languageName)
+        {
+            if (!Culture.Languages.Contains(languageName))
+                return;
+
+            if (obj == null)
+                return;
+
+            if (obj is MenuStrip)
+            {
+                var menu = (MenuStrip)obj;
+                if (Culture.Words[languageName].TryGetValue(menu.Name, out string result))
+                    menu.Text = result;
+
+                foreach (var c in menu.Items)
+                    ChangeMenuLanguage(c, languageName);
+            }
+            else if (obj is ContextMenuStrip)
+            {
+                var contextMenu = (ContextMenuStrip)obj;
+                if (Culture.Words[languageName].TryGetValue(contextMenu.Name, out string result))
+                    contextMenu.Text = result;
+
+                foreach (var c in contextMenu.Items)
+                    ChangeMenuLanguage(c, languageName);
+            }
+            else if (obj is ToolStripMenuItem)
+            {
+                var menuItem = (ToolStripMenuItem)obj;
+                if (Culture.Words[languageName].TryGetValue(menuItem.Name, out string result))
+                    menuItem.Text = result;
+
+                foreach (var c in menuItem.DropDownItems)
+                    ChangeMenuLanguage(c, languageName);
+            }
+            else if (obj is ToolStripDropDownItem)
+            {
+                var dropDownItem = (ToolStripDropDownItem)obj;
+                if (Culture.Words[languageName].TryGetValue(dropDownItem.Name, out string result))
+                    dropDownItem.Text = result;
+
+                foreach (var c in dropDownItem.DropDownItems)
+                    ChangeMenuLanguage(c, languageName);
+            }
+        }
+
+        public void ChangeLanguage(Control control, string languageName)
         {
             if (!Culture.Languages.Contains(languageName))
                 return;
@@ -70,7 +150,7 @@ namespace QueueViewer.Forms
 
             foreach (Control c in control.Controls)
             {
-                ChangeLanguage(languageName, c);
+                ChangeLanguage(c, languageName);
             }
         }
 
@@ -503,7 +583,7 @@ namespace QueueViewer.Forms
 
         private void TSMI_Create_Click(object sender, EventArgs e)
         {
-            var dialog = new NewQueueDialog(this);
+            var dialog = new NewQueueForm(this);
             dialog.Show();
         }
 
@@ -547,7 +627,7 @@ namespace QueueViewer.Forms
 
         private void TSMI_Insert_Click(object sender, EventArgs e)
         {
-            var dialog = new NewMessageDialog(this, Service.CurrentQueue);
+            var dialog = new NewMessageForm(this, Service.CurrentQueue);
             dialog.Show();
         }
 
@@ -675,9 +755,10 @@ namespace QueueViewer.Forms
             TV_Queues_NodeMouseClick(sender, new TreeNodeMouseClickEventArgs(selectedNode, MouseButtons.Left, 1, targetPoint.X, targetPoint.Y));
 
             bool showExtra = selectedNode.ImageIndex == 0;
+            bool isSystem = Service.IsSystemQueue(selectedNode.Name);
             bool isFolder = selectedNode.ImageIndex == 1;
             CMS_Queues.Items[TSMI_Create.Name].Enabled = isFolder;
-            CMS_Queues.Items[TSMI_Insert.Name].Enabled = showExtra;
+            CMS_Queues.Items[TSMI_Insert.Name].Enabled = showExtra && !isSystem;
             CMS_Queues.Items[TSMI_Purge.Name].Enabled = showExtra;
             CMS_Queues.Items[TSMI_Delete.Name].Enabled = showExtra;
         }
@@ -903,7 +984,7 @@ namespace QueueViewer.Forms
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new OptionsForm(this,Config);
+            var form = new OptionsForm(this, Config);
             form.Show();
         }
 

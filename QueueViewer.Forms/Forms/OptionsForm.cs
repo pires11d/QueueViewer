@@ -25,7 +25,7 @@ namespace QueueViewer.Forms
 
         private void ChangeLanguage()
         {
-            _main.ChangeLanguage(_currentLanguage, this);
+            _main.ChangeLanguage(this, _currentLanguage);
             LoadThemes();
             SelectTheme();
         }

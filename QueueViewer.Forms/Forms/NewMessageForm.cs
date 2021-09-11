@@ -1,18 +1,21 @@
-﻿using System;
+﻿using Custom;
+using System;
 using System.Messaging;
 using System.Windows.Forms;
 
 namespace QueueViewer.Forms
 {
-    public partial class NewMessageDialog : Form
+    public partial class NewMessageForm : Form
     {
         private MainScreen _main { get; set; }
 
-        public NewMessageDialog(MainScreen main, MessageQueue queue)
+        public NewMessageForm(MainScreen main, MessageQueue queue)
         {
             InitializeComponent();
+            TB_Value.Initialize();
             _main = main;
-            BTN_OK.Text = BTN_OK.Text.Replace("@", queue.QueueName);
+            _main.ChangeLanguage(this, _main.Config.Language);
+            BTN_Send.Text = BTN_Send.Text.Replace("@", queue.QueueName);
         }
 
         private void BTN_OK_Click(object sender, EventArgs e)
@@ -37,10 +40,16 @@ namespace QueueViewer.Forms
             try
             {
                 TB_Value.Text = TB_Value.Text.Prettify();
+                TB_Value.ProcessAllLines();
             }
             catch (Exception)
             {
             }
+        }
+
+        private void TB_Value_TextChanged(object sender, EventArgs e)
+        {
+            TB_Value.ProcessAllLines();
         }
     }
 }

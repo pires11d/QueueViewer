@@ -3,15 +3,16 @@ using System.Windows.Forms;
 
 namespace QueueViewer.Forms
 {
-    public partial class NewQueueDialog : Form
+    public partial class NewQueueForm : Form
     {
         private MainScreen _main { get; set; }
 
-        public NewQueueDialog(MainScreen main)
+        public NewQueueForm(MainScreen main)
         {
             InitializeComponent();
             _main = main;
-            AcceptButton = BTN_OK;
+            _main.ChangeLanguage(this, _main.Config.Language);
+            AcceptButton = BTN_Create;
         }
 
         private void BTN_OK_Click(object sender, EventArgs e)

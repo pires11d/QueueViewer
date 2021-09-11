@@ -1,7 +1,7 @@
 ﻿
 namespace QueueViewer.Forms
 {
-    partial class NewMessageDialog
+    partial class NewMessageForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,41 +29,29 @@ namespace QueueViewer.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.BTN_OK = new System.Windows.Forms.Button();
-            this.TB_Value = new System.Windows.Forms.TextBox();
+            this.BTN_Send = new System.Windows.Forms.Button();
             this.BTN_Prettify = new System.Windows.Forms.Button();
-            this.LBL_Body = new System.Windows.Forms.Label();
+            this.L_NewBody = new System.Windows.Forms.Label();
+            this.TB_Value = new Custom.SyntaxRichTextBox();
             this.SuspendLayout();
             // 
-            // BTN_OK
+            // BTN_Send
             // 
-            this.BTN_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.BTN_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BTN_OK.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTN_OK.Location = new System.Drawing.Point(217, 401);
-            this.BTN_OK.Name = "BTN_OK";
-            this.BTN_OK.Size = new System.Drawing.Size(374, 33);
-            this.BTN_OK.TabIndex = 3;
-            this.BTN_OK.Text = "Send to @";
-            this.BTN_OK.UseVisualStyleBackColor = true;
-            this.BTN_OK.Click += new System.EventHandler(this.BTN_OK_Click);
-            // 
-            // TB_Value
-            // 
-            this.TB_Value.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TB_Value.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_Value.Location = new System.Drawing.Point(12, 34);
-            this.TB_Value.Multiline = true;
-            this.TB_Value.Name = "TB_Value";
-            this.TB_Value.Size = new System.Drawing.Size(776, 349);
-            this.TB_Value.TabIndex = 2;
+            this.BTN_Send.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTN_Send.Location = new System.Drawing.Point(215, 359);
+            this.BTN_Send.Name = "BTN_Send";
+            this.BTN_Send.Size = new System.Drawing.Size(343, 33);
+            this.BTN_Send.TabIndex = 3;
+            this.BTN_Send.Text = "Send to @";
+            this.BTN_Send.UseVisualStyleBackColor = true;
+            this.BTN_Send.Click += new System.EventHandler(this.BTN_OK_Click);
             // 
             // BTN_Prettify
             // 
-            this.BTN_Prettify.Location = new System.Drawing.Point(12, 401);
+            this.BTN_Prettify.Location = new System.Drawing.Point(15, 359);
             this.BTN_Prettify.Name = "BTN_Prettify";
             this.BTN_Prettify.Size = new System.Drawing.Size(88, 33);
             this.BTN_Prettify.TabIndex = 4;
@@ -71,26 +59,39 @@ namespace QueueViewer.Forms
             this.BTN_Prettify.UseVisualStyleBackColor = true;
             this.BTN_Prettify.Click += new System.EventHandler(this.BTN_Prettify_Click);
             // 
-            // LBL_Body
+            // L_NewBody
             // 
-            this.LBL_Body.AutoSize = true;
-            this.LBL_Body.Location = new System.Drawing.Point(12, 15);
-            this.LBL_Body.Name = "LBL_Body";
-            this.LBL_Body.Size = new System.Drawing.Size(80, 13);
-            this.LBL_Body.TabIndex = 5;
-            this.LBL_Body.Text = "Message Body:";
+            this.L_NewBody.AutoSize = true;
+            this.L_NewBody.Location = new System.Drawing.Point(12, 15);
+            this.L_NewBody.Name = "L_NewBody";
+            this.L_NewBody.Size = new System.Drawing.Size(80, 13);
+            this.L_NewBody.TabIndex = 5;
+            this.L_NewBody.Text = "Message Body:";
             // 
-            // NewMessageDialog
+            // TB_Value
+            // 
+            this.TB_Value.AcceptsTab = true;
+            this.TB_Value.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_Value.Json = null;
+            this.TB_Value.Location = new System.Drawing.Point(15, 43);
+            this.TB_Value.Name = "TB_Value";
+            this.TB_Value.ShowSelectionMargin = true;
+            this.TB_Value.Size = new System.Drawing.Size(738, 296);
+            this.TB_Value.TabIndex = 6;
+            this.TB_Value.Text = "";
+            this.TB_Value.TextChanged += new System.EventHandler(this.TB_Value_TextChanged);
+            // 
+            // NewMessageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.LBL_Body);
-            this.Controls.Add(this.BTN_Prettify);
-            this.Controls.Add(this.BTN_OK);
+            this.ClientSize = new System.Drawing.Size(769, 421);
             this.Controls.Add(this.TB_Value);
+            this.Controls.Add(this.L_NewBody);
+            this.Controls.Add(this.BTN_Prettify);
+            this.Controls.Add(this.BTN_Send);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "NewMessageDialog";
+            this.Name = "NewMessageForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "New Message";
@@ -101,9 +102,9 @@ namespace QueueViewer.Forms
 
         #endregion
 
-        private System.Windows.Forms.Button BTN_OK;
-        private System.Windows.Forms.TextBox TB_Value;
+        private System.Windows.Forms.Button BTN_Send;
         private System.Windows.Forms.Button BTN_Prettify;
-        private System.Windows.Forms.Label LBL_Body;
+        private System.Windows.Forms.Label L_NewBody;
+        private Custom.SyntaxRichTextBox TB_Value;
     }
 }

@@ -48,18 +48,16 @@
             this.P_BotttomRight = new System.Windows.Forms.Panel();
             this.TC_Message = new System.Windows.Forms.TabControl();
             this.T_Body = new System.Windows.Forms.TabPage();
-            this.TB_MessageBody = new Custom.SyntaxRichTextBox();
             this.T_Extension = new System.Windows.Forms.TabPage();
-            this.TB_MessageExtension = new Custom.XmlRichTextBox();
             this.P_TopRight = new System.Windows.Forms.Panel();
             this.P_CenterTopRight = new System.Windows.Forms.Panel();
             this.LV_Messages = new System.Windows.Forms.ListView();
             this.columnHeader0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colQueue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colBody = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.P_BottomTopRight = new System.Windows.Forms.Panel();
             this.BTN_Prev = new System.Windows.Forms.Button();
             this.BTN_Next = new System.Windows.Forms.Button();
@@ -81,9 +79,11 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TB_MessageBody = new Custom.SyntaxRichTextBox();
+            this.TB_MessageExtension = new Custom.XmlRichTextBox();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
             this.P_Right.SuspendLayout();
@@ -120,8 +120,7 @@
             // TSMI_Expand
             // 
             this.TSMI_Expand.Name = "TSMI_Expand";
-            this.TSMI_Expand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.D0)));
+            this.TSMI_Expand.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Right)));
             this.TSMI_Expand.Size = new System.Drawing.Size(216, 22);
             this.TSMI_Expand.Text = "Expand";
             this.TSMI_Expand.Click += new System.EventHandler(this.TSMI_Expand_Click);
@@ -129,7 +128,7 @@
             // TSMI_Collapse
             // 
             this.TSMI_Collapse.Name = "TSMI_Collapse";
-            this.TSMI_Collapse.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
+            this.TSMI_Collapse.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Left)));
             this.TSMI_Collapse.Size = new System.Drawing.Size(216, 22);
             this.TSMI_Collapse.Text = "Collapse";
             this.TSMI_Collapse.Click += new System.EventHandler(this.TSMI_Collapse_Click);
@@ -195,7 +194,7 @@
             "15",
             "30",
             "60"});
-            this.CBB_Refresh.Location = new System.Drawing.Point(117, 4);
+            this.CBB_Refresh.Location = new System.Drawing.Point(125, 4);
             this.CBB_Refresh.Name = "CBB_Refresh";
             this.CBB_Refresh.Size = new System.Drawing.Size(43, 21);
             this.CBB_Refresh.TabIndex = 3;
@@ -204,7 +203,7 @@
             // L_Unit
             // 
             this.L_Unit.AutoSize = true;
-            this.L_Unit.Location = new System.Drawing.Point(164, 6);
+            this.L_Unit.Location = new System.Drawing.Point(172, 6);
             this.L_Unit.Name = "L_Unit";
             this.L_Unit.Size = new System.Drawing.Size(46, 13);
             this.L_Unit.TabIndex = 4;
@@ -262,10 +261,10 @@
             // 
             // TC_Message
             // 
-            this.TC_Message.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.TC_Message.Controls.Add(this.T_Body);
             this.TC_Message.Controls.Add(this.T_Extension);
             this.TC_Message.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TC_Message.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TC_Message.ItemSize = new System.Drawing.Size(90, 30);
             this.TC_Message.Location = new System.Drawing.Point(0, 0);
             this.TC_Message.Name = "TC_Message";
@@ -277,7 +276,7 @@
             // T_Body
             // 
             this.T_Body.Controls.Add(this.TB_MessageBody);
-            this.T_Body.Location = new System.Drawing.Point(4, 4);
+            this.T_Body.Location = new System.Drawing.Point(4, 34);
             this.T_Body.Name = "T_Body";
             this.T_Body.Padding = new System.Windows.Forms.Padding(3);
             this.T_Body.Size = new System.Drawing.Size(634, 192);
@@ -285,42 +284,16 @@
             this.T_Body.Text = "Body";
             this.T_Body.UseVisualStyleBackColor = true;
             // 
-            // TB_MessageBody
-            // 
-            this.TB_MessageBody.AcceptsTab = true;
-            this.TB_MessageBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB_MessageBody.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_MessageBody.Json = null;
-            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
-            this.TB_MessageBody.Name = "TB_MessageBody";
-            this.TB_MessageBody.ShowSelectionMargin = true;
-            this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
-            this.TB_MessageBody.TabIndex = 1;
-            this.TB_MessageBody.Text = "";
-            // 
             // T_Extension
             // 
             this.T_Extension.Controls.Add(this.TB_MessageExtension);
-            this.T_Extension.Location = new System.Drawing.Point(4, 4);
+            this.T_Extension.Location = new System.Drawing.Point(4, 34);
             this.T_Extension.Name = "T_Extension";
             this.T_Extension.Padding = new System.Windows.Forms.Padding(3);
             this.T_Extension.Size = new System.Drawing.Size(634, 192);
             this.T_Extension.TabIndex = 1;
             this.T_Extension.Text = "Extension";
             this.T_Extension.UseVisualStyleBackColor = true;
-            // 
-            // TB_MessageExtension
-            // 
-            this.TB_MessageExtension.AcceptsTab = true;
-            this.TB_MessageExtension.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB_MessageExtension.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
-            this.TB_MessageExtension.Name = "TB_MessageExtension";
-            this.TB_MessageExtension.ShowSelectionMargin = true;
-            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
-            this.TB_MessageExtension.TabIndex = 0;
-            this.TB_MessageExtension.Text = "";
-            this.TB_MessageExtension.Xml = "";
             // 
             // P_TopRight
             // 
@@ -347,11 +320,11 @@
             this.LV_Messages.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.LV_Messages.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader0,
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5});
+            this.colId,
+            this.colSize,
+            this.colTime,
+            this.colQueue,
+            this.colBody});
             this.LV_Messages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LV_Messages.FullRowSelect = true;
             this.LV_Messages.GridLines = true;
@@ -371,30 +344,30 @@
             // 
             this.columnHeader0.Text = "";
             // 
-            // columnHeader1
+            // colId
             // 
-            this.columnHeader1.Text = "Id";
-            this.columnHeader1.Width = 74;
+            this.colId.Text = "Id";
+            this.colId.Width = 74;
             // 
-            // columnHeader2
+            // colSize
             // 
-            this.columnHeader2.Text = "Size";
-            this.columnHeader2.Width = 55;
+            this.colSize.Text = "Size";
+            this.colSize.Width = 55;
             // 
-            // columnHeader3
+            // colTime
             // 
-            this.columnHeader3.Text = "Creation Time";
-            this.columnHeader3.Width = 99;
+            this.colTime.Text = "Creation Time";
+            this.colTime.Width = 99;
             // 
-            // columnHeader4
+            // colQueue
             // 
-            this.columnHeader4.Text = "Response Queue";
-            this.columnHeader4.Width = 123;
+            this.colQueue.Text = "Response Queue";
+            this.colQueue.Width = 123;
             // 
-            // columnHeader5
+            // colBody
             // 
-            this.columnHeader5.Text = "Body Content";
-            this.columnHeader5.Width = 129;
+            this.colBody.Text = "Body Content";
+            this.colBody.Width = 129;
             // 
             // P_BottomTopRight
             // 
@@ -412,7 +385,7 @@
             this.BTN_Prev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BTN_Prev.Location = new System.Drawing.Point(3, 0);
             this.BTN_Prev.Name = "BTN_Prev";
-            this.BTN_Prev.Size = new System.Drawing.Size(76, 26);
+            this.BTN_Prev.Size = new System.Drawing.Size(52, 26);
             this.BTN_Prev.TabIndex = 1;
             this.BTN_Prev.Text = "<<";
             this.BTN_Prev.UseVisualStyleBackColor = true;
@@ -421,9 +394,9 @@
             // BTN_Next
             // 
             this.BTN_Next.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BTN_Next.Location = new System.Drawing.Point(565, 0);
+            this.BTN_Next.Location = new System.Drawing.Point(589, 1);
             this.BTN_Next.Name = "BTN_Next";
-            this.BTN_Next.Size = new System.Drawing.Size(76, 26);
+            this.BTN_Next.Size = new System.Drawing.Size(52, 26);
             this.BTN_Next.TabIndex = 0;
             this.BTN_Next.Text = ">>";
             this.BTN_Next.UseVisualStyleBackColor = true;
@@ -445,7 +418,7 @@
             // 
             this.LB_MaxMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LB_MaxMessages.AutoSize = true;
-            this.LB_MaxMessages.Location = new System.Drawing.Point(538, 6);
+            this.LB_MaxMessages.Location = new System.Drawing.Point(530, 6);
             this.LB_MaxMessages.Name = "LB_MaxMessages";
             this.LB_MaxMessages.Size = new System.Drawing.Size(33, 13);
             this.LB_MaxMessages.TabIndex = 5;
@@ -458,6 +431,7 @@
             this.CBB_MaxMessages.Items.AddRange(new object[] {
             "50",
             "100",
+            "500",
             "1000",
             "All"});
             this.CBB_MaxMessages.Location = new System.Drawing.Point(577, 3);
@@ -574,8 +548,7 @@
             // MS_Header
             // 
             this.MS_Header.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.optionsToolStripMenuItem});
+            this.fileToolStripMenuItem});
             this.MS_Header.Location = new System.Drawing.Point(0, 0);
             this.MS_Header.Name = "MS_Header";
             this.MS_Header.Size = new System.Drawing.Size(1017, 24);
@@ -588,7 +561,8 @@
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
-            this.toolStripSeparator2,
+            this.optionsToolStripMenuItem,
+            this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -618,10 +592,17 @@
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             // 
-            // toolStripSeparator2
+            // toolStripSeparator1
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.optionsToolStripMenuItem.Text = "Options";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -630,12 +611,31 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // optionsToolStripMenuItem
+            // TB_MessageBody
             // 
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            this.TB_MessageBody.AcceptsTab = true;
+            this.TB_MessageBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TB_MessageBody.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_MessageBody.Json = null;
+            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageBody.Name = "TB_MessageBody";
+            this.TB_MessageBody.ShowSelectionMargin = true;
+            this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
+            this.TB_MessageBody.TabIndex = 1;
+            this.TB_MessageBody.Text = "";
+            // 
+            // TB_MessageExtension
+            // 
+            this.TB_MessageExtension.AcceptsTab = true;
+            this.TB_MessageExtension.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TB_MessageExtension.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageExtension.Name = "TB_MessageExtension";
+            this.TB_MessageExtension.ShowSelectionMargin = true;
+            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
+            this.TB_MessageExtension.TabIndex = 0;
+            this.TB_MessageExtension.Text = "";
+            this.TB_MessageExtension.Xml = "";
             // 
             // MainScreen
             // 
@@ -697,14 +697,14 @@
         private System.Windows.Forms.ListView LV_Messages;
         private System.Windows.Forms.Panel P_Left;
         private System.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader colId;
+        private System.Windows.Forms.ColumnHeader colSize;
+        private System.Windows.Forms.ColumnHeader colTime;
+        private System.Windows.Forms.ColumnHeader colQueue;
         private System.Windows.Forms.TreeView TV_Queues;
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.ColumnHeader columnHeader0;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ColumnHeader colBody;
         private System.Windows.Forms.TabControl TC_Message;
         private System.Windows.Forms.TabPage T_Body;
         private System.Windows.Forms.TabPage T_Extension;
@@ -732,8 +732,8 @@
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
     }
 }
