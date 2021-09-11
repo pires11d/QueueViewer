@@ -423,7 +423,7 @@ namespace QueueViewer.Forms
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "MessageId";
+            this.columnHeader1.Text = "Id";
             this.columnHeader1.Width = 74;
             // 
             // columnHeader2

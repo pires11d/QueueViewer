@@ -180,12 +180,6 @@ namespace QueueViewer.Forms
             }
         }
 
-        private void UpdateNodesAfterDragging(TreeNode nextNode, TreeNode prevNode = null)
-        {
-            UpdateNode(nextNode);
-            UpdateNode(prevNode);
-        }
-
         private bool IsRootNode(TreeNode node)
         {
             switch (node.Text)
@@ -367,7 +361,6 @@ namespace QueueViewer.Forms
                 try
                 {
                     MessageService.SendMessage(queue, content);
-                    UpdateNode(CurrentNode);
                     PlaySound(SoundsEnum.Success);
                 }
                 catch (Exception)
@@ -879,26 +872,12 @@ namespace QueueViewer.Forms
                         draggedItem.Remove();
                     }
 
-                    UpdateNodesAfterDragging(targetNode, CurrentNode);
                     ShowMessages(Service.CurrentQueue);
                 }
                 catch (Exception)
                 {
                 }
             }
-        }
-
-        // Determine whether one node is a parent 
-        // or ancestor of a second node.
-        private bool ContainsNode(TreeNode node)
-        {
-            // Check the parent node of the second node.
-            if (node.Parent == null) return false;
-
-            // If the parent node is not null or equal to the first node, 
-            // call the ContainsNode method recursively using the parent of 
-            // the second node.
-            return ContainsNode(node.Parent);
         }
 
         private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
