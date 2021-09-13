@@ -37,7 +37,6 @@ namespace QueueViewer.Forms
         public MainScreen()
         {
             InitializeComponent();
-            TB_MessageBody.Initialize();
             _configPath = Path.Combine(_appDataFolder, "config.xml");
             Config = new Config();
             Service = new QueueService();
@@ -45,7 +44,6 @@ namespace QueueViewer.Forms
             LoadTreeView();
             LoadListView();
             LoadConfig();
-            ChangeLanguage();
 
             ActiveControl = CB_Refresh;
             HideStandardMenuItems();
@@ -58,6 +56,76 @@ namespace QueueViewer.Forms
             saveAsToolStripMenuItem.Visible = false;
         }
 
+        public void ChangeColor()
+        {
+            ChangeColor(this, Theme);
+            TB_MessageBody.Initialize(Theme);
+            TB_MessageExtension.Initialize(Theme);
+        }
+
+        public void ChangeColor(Control control, ThemesEnum theme)
+        {
+            if (control == null)
+                return;
+
+            var bc = control.BackColor;
+            var fc = control.ForeColor;
+
+            UpdateColors(theme, ref bc, ref fc);
+
+            control.BackColor = bc;
+            control.ForeColor = fc;
+
+            foreach (Control c in control.Controls)
+            {
+                ChangeColor(c, theme);
+            }
+
+            if (control is ListView)
+            {
+                ChangeListViewColor((ListView)control);
+            }
+        }
+
+        private void UpdateColors(ThemesEnum theme, ref Color bc, ref Color fc)
+        {
+            switch (theme)
+            {
+                case ThemesEnum.Light:
+                    if (bc == Colors.DarkestGray || bc == SystemColors.Window || bc == Color.Gray)
+                        bc = Color.White;
+                    if (bc == Colors.DarkerGray || bc == SystemColors.Control || bc == SystemColors.ControlLightLight)
+                        bc = Colors.LightestGray;
+                    if (bc == Colors.DarkGray || bc == SystemColors.ControlLight)
+                        bc = Colors.LighterGray;
+
+                    if (fc == Color.White)
+                        fc = Color.Black;
+
+                    break;
+                case ThemesEnum.Dark:
+                    if (bc == Color.White || bc == SystemColors.Window || bc == Color.Gray)
+                        bc = Colors.DarkestGray;
+                    if (bc == Colors.LightestGray || bc == SystemColors.Control || bc == SystemColors.ControlLightLight)
+                        bc = Colors.DarkerGray;
+                    if (bc == Colors.LighterGray || bc == SystemColors.ControlLight)
+                        bc = Colors.DarkGray;
+
+                    if (fc == SystemColors.WindowText || fc == SystemColors.ControlText || fc == Color.Black)
+                        fc = Color.White;
+
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        private void ChangeListViewColor(ListView lv)
+        {
+            SetListViewColors();
+            lv.Update();
+        }
+
         public void ChangeLanguage()
         {
             ChangeLanguage(this, Config.Language);
@@ -66,8 +134,8 @@ namespace QueueViewer.Forms
             ChangeMenuLanguage(CMS_Queues, Config.Language);
             ChangeListViewLanguage(LV_Messages, Config.Language);
 
-            var items = new string[] { "50","100","200","500",Culture.Words[Config.Language][Constants.All]};
-            UpdateComboBox(CBB_MaxMessages, items, Config.MaxMessages);            
+            var items = new string[] { "50", "100", "200", "500", Culture.Words[Config.Language][Constants.All] };
+            UpdateComboBox(CBB_MaxMessages, items, Config.MaxMessages);
         }
 
         private void UpdateComboBox(ComboBox cbb, string[] items, object value)
@@ -162,7 +230,10 @@ namespace QueueViewer.Forms
             CBB_MaxMessages.SelectedIndex = int.TryParse(Config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
             CB_Refresh.Checked = bool.TryParse(Config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
             EnableSounds = bool.TryParse(Config.Sounds, out bool enableSoundsBool) ? enableSoundsBool : true;
+
             SetTheme(Config.Theme);
+            ChangeColor();
+            ChangeLanguage();
         }
 
         public void SetTheme(string theme)
@@ -172,7 +243,7 @@ namespace QueueViewer.Forms
 
         private void SaveConfig()
         {
-            Config.Theme = Theme.ToString();
+            Config.Theme = Convert.ToString((int)Theme);
             Config.Sounds = EnableSounds.ToString();
             Config.AutoRefresh = CB_Refresh.Checked.ToString();
             Config.RefreshTime = CBB_Refresh.SelectedIndex.ToString();
@@ -560,7 +631,7 @@ namespace QueueViewer.Forms
             }
         }
 
-        private void ShowMessageInfo()
+        public void ShowMessageInfo()
         {
             if (LV_Messages.SelectedItems.Count > 0)
             {
@@ -662,13 +733,13 @@ namespace QueueViewer.Forms
                 if (Service.IsSystemQueue(CurrentNode.Name))
                 {
                     LV_Messages.Items.Clear();
-                    SetListViewColor(SystemColors.ControlLight);
+                    SetListViewColor(Color.Gray);
                 }
                 else
                 {
                     Service.SetFilter(Service.CurrentQueue);
                     ShowMessages(Service.CurrentQueue);
-                    SetListViewColor(SystemColors.ControlLightLight);
+                    ChangeColor(LV_Messages, Theme);
                 }
 
                 ResizeListViewColumns(LV_Messages);
@@ -682,6 +753,15 @@ namespace QueueViewer.Forms
         private void SetListViewColor(Color color)
         {
             LV_Messages.BackColor = color;
+        }
+
+        private void SetListViewColors()
+        {
+            var backColor = Colors.GetDefaultColor(Theme);
+            var foreColor = Colors.GetForeColor(Theme);
+            
+            LV_Messages.BackColor = backColor;
+            LV_Messages.ForeColor = foreColor;
         }
 
         private void LV_Messages_SelectedIndexChanged(object sender, EventArgs e)
@@ -831,7 +911,8 @@ namespace QueueViewer.Forms
             {
                 if (HoveredNode != null && TV_Queues.SelectedNode != HoveredNode)
                 {
-                    HoveredNode.BackColor = SystemColors.Window;
+                    HoveredNode.BackColor = Colors.GetBackColor(Theme);
+                    HoveredNode.ForeColor = Colors.GetBackColor(Theme);
                 }
 
                 TV_Queues.SelectedNode.Expand();
@@ -839,6 +920,7 @@ namespace QueueViewer.Forms
                 {
                     HoveredNode = TV_Queues.SelectedNode;
                     TV_Queues.SelectedNode.BackColor = SystemColors.ActiveCaption;
+                    TV_Queues.SelectedNode.ForeColor = Color.Black;
                 }
             }
 
@@ -852,11 +934,12 @@ namespace QueueViewer.Forms
 
         private void ResetNodesBackColor(TreeNodeCollection nodes)
         {
-            if (nodes.Count > 0)
+            if (nodes?.Count > 0)
             {
                 foreach (TreeNode node in nodes)
                 {
-                    node.BackColor = SystemColors.Window;
+                    node.BackColor = Colors.GetBackColor(Theme);
+                    node.ForeColor = Colors.GetForeColor(Theme);
                     ResetNodesBackColor(node.Nodes);
                 }
             }
@@ -866,7 +949,8 @@ namespace QueueViewer.Forms
         {
             foreach (var node in nodes)
             {
-                node.BackColor = SystemColors.Window;
+                node.BackColor = Colors.GetBackColor(Theme);
+                node.ForeColor = Colors.GetForeColor(Theme);
             }
         }
 
@@ -991,6 +1075,54 @@ namespace QueueViewer.Forms
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void LV_Messages_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            var backColorBrush = new SolidBrush(Colors.GetBackColor(Theme));
+            var foreColorBrush = new SolidBrush(Colors.GetForeColor(Theme));
+
+            e.Graphics.FillRectangle(backColorBrush, e.Bounds);
+            e.Graphics.DrawString(e.Header.Text, e.Font, foreColorBrush, e.Bounds);
+            Rectangle rect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width, e.Bounds.Height);
+            e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Gray)), rect);
+        }
+
+        private void LV_Messages_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void LV_Messages_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void TC_Message_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var backColor = Colors.GetBackColor(Theme);
+            var foreColor = Colors.GetForeColor(Theme);
+            var highLightColor = Colors.GetHighlightColor(Theme);
+
+            //draw rectangle behind the tabs
+            Rectangle lasttabrect = TC_Message.GetTabRect(TC_Message.TabPages.Count - 1);
+            Rectangle background = new Rectangle();
+            background.Location = new Point(lasttabrect.Right, 0);
+
+            //pad the rectangle to cover the 1 pixel line between the top of the tabpage and the start of the tabs
+            background.Size = new Size(TC_Message.Right - background.Left, lasttabrect.Height + 1);
+            e.Graphics.FillRectangle(new SolidBrush(backColor), background);
+
+            if (e.State == DrawItemState.Selected)
+                e.Graphics.FillRectangle(new SolidBrush(highLightColor), e.Bounds);
+            else
+                e.Graphics.FillRectangle(new SolidBrush(backColor), e.Bounds);
+
+            TabPage page = TC_Message.TabPages[e.Index];
+            Rectangle paddedBounds = e.Bounds;
+            int yOffset = (e.State == DrawItemState.Selected) ? -2 : 1;
+            paddedBounds.Offset(1, yOffset);
+            TextRenderer.DrawText(e.Graphics, page.Text, Font, paddedBounds, foreColor);
         }
 
         #endregion CONTROLS

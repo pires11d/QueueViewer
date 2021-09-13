@@ -12,9 +12,11 @@ namespace QueueViewer.Forms
         public NewMessageForm(MainScreen main, MessageQueue queue)
         {
             InitializeComponent();
-            TB_Value.Initialize();
+
             _main = main;
             _main.ChangeLanguage(this, _main.Config.Language);
+            _main.ChangeColor(this, _main.Theme);
+            TB_Value.Initialize(_main.Theme);
             BTN_Send.Text = BTN_Send.Text.Replace("@", queue.QueueName);
         }
 

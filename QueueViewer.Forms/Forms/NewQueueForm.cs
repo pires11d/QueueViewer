@@ -12,6 +12,7 @@ namespace QueueViewer.Forms
             InitializeComponent();
             _main = main;
             _main.ChangeLanguage(this, _main.Config.Language);
+            _main.ChangeColor(this, _main.Theme);
             AcceptButton = BTN_Create;
         }
 

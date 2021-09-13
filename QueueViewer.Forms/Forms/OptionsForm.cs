@@ -1,4 +1,5 @@
-﻿using QueueViewer.Lib.Entities;
+﻿using QueueViewer.Forms.Entities;
+using QueueViewer.Lib.Entities;
 using System;
 using System.Windows.Forms;
 
@@ -21,6 +22,13 @@ namespace QueueViewer.Forms
 
             ChangeLanguage();
             LoadControls();
+            ChangeColor();
+        }
+
+        private void ChangeColor()
+        {
+            var theme = Enum.TryParse(_currentTheme, out ThemesEnum result) ? result : ThemesEnum.Light;
+            _main.ChangeColor(this, theme);
         }
 
         private void ChangeLanguage()
@@ -97,6 +105,7 @@ namespace QueueViewer.Forms
 
                 _main.ChangeLanguage();
                 _main.SetTheme(_currentTheme);
+                _main.ChangeColor();
                 _main.EnableSounds = CB_Sounds.Checked;
             }
             catch (Exception ex)
@@ -117,6 +126,7 @@ namespace QueueViewer.Forms
         private void CBB_Themes_SelectedIndexChanged(object sender, EventArgs e)
         {
             _currentTheme = CBB_Themes.SelectedIndex.ToString();
+            ChangeColor();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QueueViewer.Forms;
+using QueueViewer.Forms.Entities;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -185,10 +187,8 @@ namespace Custom
 
         }
 
-        public Color GetTokenColor(XmlTokenType ttype)
+        public Color GetTokenColor(XmlTokenType ttype, ThemesEnum theme)
         {
-            Color brown = Color.FromArgb(238, 149, 68);
-
             switch (ttype)
             {
                 case XmlTokenType.NodeValue:
@@ -198,7 +198,7 @@ namespace Custom
                 case XmlTokenType.DoubleQuotationMarkEnd:
                 case XmlTokenType.SingleQuotationMarkStart:
                 case XmlTokenType.SingleQuotationMarkEnd:
-                    return Color.Black;
+                    return Colors.GetForeColor(theme);
 
                 case XmlTokenType.XmlDeclarationStart:
                 case XmlTokenType.XmlDeclarationEnd:
@@ -214,22 +214,22 @@ namespace Custom
                 case XmlTokenType.DocTypeEnd:
                 case XmlTokenType.DocTypeDefStart:
                 case XmlTokenType.DocTypeDefEnd:
-                    return Color.Blue;
+                    return Colors.GetRed(theme);
 
                 case XmlTokenType.CDataValue:
                 case XmlTokenType.DocTypeDefValue:
-                    return Color.Gray;
+                    return Colors.GetYellow(theme);
 
                 case XmlTokenType.CommentValue:
-                    return Color.Green;
+                    return Colors.GetGreen(theme);
 
                 case XmlTokenType.DocTypeName:
                 case XmlTokenType.NodeName:
-                    return Color.Brown;
+                    return Colors.GetRed(theme);
 
                 case XmlTokenType.AttributeName:
                 case XmlTokenType.DocTypeDeclaration:
-                    return Color.Red;
+                    return Colors.GetViolet(theme);
 
                 default:
                     return Color.Orange;

@@ -46,11 +46,11 @@ namespace QueueViewer.Forms
             {"CB_Refresh","Atualizar a cada" },
             {"L_Unit","segundos" },
             {"LB_MaxMessages","Mostrar" },
-            {"columnHeader1","Id" },
-            {"columnHeader2","Tamanho" },
-            {"columnHeader3","Data de criação" },
-            {"columnHeader4","Fila de origem" },
-            {"columnHeader5","Conteúdo do corpinho" },
+            {"columnHeader1"," Id  " },
+            {"columnHeader2"," Tamanho  " },
+            {"columnHeader3"," Data de criação  " },
+            {"columnHeader4"," Fila de origem  " },
+            {"columnHeader5"," Conteúdo do corpinho  " },
         };
 
         /// <summary>
@@ -89,11 +89,11 @@ namespace QueueViewer.Forms
             {"CB_Refresh","Refresh every" },
             {"L_Unit","seconds" },
             {"LB_MaxMessages","Show" },
-            {"columnHeader1","Id" },
-            {"columnHeader2","Size" },
-            {"columnHeader3","Creation Time" },
-            {"columnHeader4","Response Queue" },
-            {"columnHeader5","Body Content" },
+            {"columnHeader1"," Id  " },
+            {"columnHeader2"," Size  " },
+            {"columnHeader3"," Creation Time  " },
+            {"columnHeader4"," Response Queue  " },
+            {"columnHeader5"," Body Content  " },
         };
 
         /// <summary>

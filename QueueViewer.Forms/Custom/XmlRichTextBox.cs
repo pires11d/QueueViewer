@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QueueViewer.Forms.Entities;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -19,6 +20,11 @@ namespace Custom
             miCopyText.Click += new EventHandler(miCopyText_Click);
             miSelectAll.Click += new EventHandler(miSelectAll_Click);
         }
+
+        public void Initialize(ThemesEnum theme)
+        {
+            Theme = theme;
+        }
         #endregion Constructor
 
         #region Properties
@@ -33,6 +39,8 @@ namespace Custom
                 SetXml(xml); 
             }
         }
+
+        public ThemesEnum Theme { get; set; }
         #endregion Properties
 
         #region Private Methods
@@ -61,7 +69,7 @@ namespace Custom
             while (location < formattedText.Length)
             {
                 string token = machine.GetNextToken(formattedText, location, out ttype);
-                Color color = machine.GetTokenColor(ttype);
+                Color color = machine.GetTokenColor(ttype, Theme);
                 this.AppendText(token, color);
                 location += token.Length;
                 tokenTryCount++;

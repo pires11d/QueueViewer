@@ -1,3 +1,5 @@
+using QueueViewer.Forms;
+using QueueViewer.Forms.Entities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,6 +10,7 @@ namespace Custom
 {
     public class SyntaxRichTextBox : RichTextBox
 	{
+		public ThemesEnum Theme = ThemesEnum.Light;
 		private SyntaxSettings _settings = new SyntaxSettings();
 		private static bool _bPaint = true;
 		private string _strLine = "";
@@ -16,6 +19,7 @@ namespace Custom
 		private int _nLineStart = 0;
 		private int _nLineEnd = 0;
 		private string _strKeywords = "";
+		private string _strSymbols = "";
 		private int _nCurSelection = 0;
         private string _json;
 
@@ -40,6 +44,7 @@ namespace Custom
         public SyntaxSettings Settings
 		{
 			get { return _settings; }
+			set { _settings = value; }
 		}
 		
 		/// <summary>
@@ -99,12 +104,14 @@ namespace Custom
 			int nPosition = SelectionStart;
 			SelectionStart = _nLineStart;
 			SelectionLength = _nLineLength;
-			SelectionColor = Color.Black;
+			SelectionColor = Colors.GetForeColor(Theme);
 
 			// Process the keywords
 			ProcessRegex(_strKeywords, Settings.KeywordColor);
+			// Process the symbols
+			ProcessRegex(string.Join(".*$",Settings.Symbols), Settings.SymbolColor);
 			// Process numbers
-			if(Settings.EnableIntegers)
+			if (Settings.EnableIntegers)
 				ProcessRegex("\\b(?:[0-9]*\\.)?[0-9]+\\b", Settings.IntegerColor);
 			// Process strings
 			if(Settings.EnableStrings)
@@ -115,7 +122,7 @@ namespace Custom
 
 			SelectionStart = nPosition;
 			SelectionLength = 0;
-			SelectionColor = Color.Black;
+			SelectionColor = Colors.GetForeColor(Theme);
 
 			_nCurSelection = nPosition;
 		}
@@ -193,6 +200,7 @@ namespace Custom
 	public class SyntaxSettings
 	{
 		SyntaxList m_rgKeywords = new SyntaxList();
+		SyntaxList m_rgSymbols = new SyntaxList();
 		string m_strComment = "";
 		Color m_colorComment = Color.Green;
 		Color m_colorString = Color.Gray;
@@ -202,6 +210,21 @@ namespace Custom
 		bool m_bEnableStrings = true;
 
 		#region Properties
+		/// <summary>
+		/// A list containing all symbols.
+		/// </summary>
+		public List<string> Symbols
+		{
+			get { return m_rgSymbols.m_rgList; }
+		}
+		/// <summary>
+		/// The color of symbols.
+		/// </summary>
+		public Color SymbolColor
+		{
+			get { return m_rgSymbols.m_color; }
+			set { m_rgSymbols.m_color = value; }
+		}
 		/// <summary>
 		/// A list containing all keywords.
 		/// </summary>
@@ -273,13 +296,16 @@ namespace Custom
 			get { return m_colorInteger; }
 			set { m_colorInteger = value; }
 		}
-		#endregion
-	}
+        #endregion
+    }
 
 	public static class Formatting
     {
-		public static void Initialize(this SyntaxRichTextBox control)
+		public static void Initialize(this SyntaxRichTextBox control, ThemesEnum theme)
 		{
+			control.Theme = theme;
+			control.Settings = new SyntaxSettings();
+
 			// Add the keywords to the list.
 			control.Settings.Keywords.Add("function");
 			control.Settings.Keywords.Add("if");
@@ -291,16 +317,20 @@ namespace Custom
 			control.Settings.Keywords.Add("true");
 			control.Settings.Keywords.Add("null");
 
+			// Add the symbols to the list.
+			control.Settings.Symbols.Add("$");
+
 			// Set the comment identifier. 
 			// For Lua this is two minus-signs after each other (--).
 			// For C++ code we would set this property to "//".
 			control.Settings.Comment = "//";
 
 			// Set the colors that will be used.
-			control.Settings.KeywordColor = Color.Blue;
-			control.Settings.CommentColor = Color.Gray;
-			control.Settings.StringColor = Color.DarkRed;
-			control.Settings.IntegerColor = Color.DarkGoldenrod;
+			control.Settings.SymbolColor = Color.Pink;
+			control.Settings.KeywordColor = Colors.GetBlue(theme);
+			control.Settings.CommentColor = Colors.GetGreen(theme);
+            control.Settings.StringColor = Colors.GetRed(theme);
+			control.Settings.IntegerColor = Colors.GetYellow(theme);
 
 			// Let's not process strings and integers.
 			control.Settings.EnableStrings = true;
