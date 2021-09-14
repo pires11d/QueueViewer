@@ -42,9 +42,9 @@ namespace QueueViewer.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BTN_Send.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTN_Send.Location = new System.Drawing.Point(215, 359);
+            this.BTN_Send.Location = new System.Drawing.Point(147, 359);
             this.BTN_Send.Name = "BTN_Send";
-            this.BTN_Send.Size = new System.Drawing.Size(343, 33);
+            this.BTN_Send.Size = new System.Drawing.Size(492, 33);
             this.BTN_Send.TabIndex = 3;
             this.BTN_Send.Text = "Send to @";
             this.BTN_Send.UseVisualStyleBackColor = true;

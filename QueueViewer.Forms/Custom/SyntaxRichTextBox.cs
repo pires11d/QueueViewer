@@ -33,7 +33,7 @@ namespace Custom
             set 
 			{ 
 				_json = value;
-				this.Text = _json;
+				Text = _json;
 				ProcessAllLines();
 			}
         }
@@ -164,6 +164,9 @@ namespace Custom
 
 		public void ProcessAllLines()
 		{
+			if (Text != null && Text.Length > 1000)
+				return;
+
 			_bPaint = false;
 
 			int nStartPos = 0;
@@ -307,18 +310,12 @@ namespace Custom
 			control.Settings = new SyntaxSettings();
 
 			// Add the keywords to the list.
-			control.Settings.Keywords.Add("function");
-			control.Settings.Keywords.Add("if");
-			control.Settings.Keywords.Add("then");
-			control.Settings.Keywords.Add("else");
-			control.Settings.Keywords.Add("elseif");
-			control.Settings.Keywords.Add("end");
 			control.Settings.Keywords.Add("false");
 			control.Settings.Keywords.Add("true");
 			control.Settings.Keywords.Add("null");
 
 			// Add the symbols to the list.
-			control.Settings.Symbols.Add("$");
+			//control.Settings.Symbols.Add("$");
 
 			// Set the comment identifier. 
 			// For Lua this is two minus-signs after each other (--).
@@ -326,7 +323,7 @@ namespace Custom
 			control.Settings.Comment = "//";
 
 			// Set the colors that will be used.
-			control.Settings.SymbolColor = Color.Pink;
+			//control.Settings.SymbolColor = Color.Pink;
 			control.Settings.KeywordColor = Colors.GetBlue(theme);
 			control.Settings.CommentColor = Colors.GetGreen(theme);
             control.Settings.StringColor = Colors.GetRed(theme);

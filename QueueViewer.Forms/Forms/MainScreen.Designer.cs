@@ -300,7 +300,7 @@
             this.TB_MessageBody.Json = null;
             this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
             this.TB_MessageBody.Name = "TB_MessageBody";
-            this.TB_MessageBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.TB_MessageBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             syntaxSettings1.Comment = "";
             syntaxSettings1.CommentColor = System.Drawing.Color.Green;
             syntaxSettings1.EnableComments = true;
