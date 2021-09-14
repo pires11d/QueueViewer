@@ -35,18 +35,18 @@ namespace QueueViewer.Forms
             // 
             // TB_Value
             // 
-            this.TB_Value.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_Value.Location = new System.Drawing.Point(13, 12);
+            this.TB_Value.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_Value.Location = new System.Drawing.Point(21, 22);
             this.TB_Value.Name = "TB_Value";
-            this.TB_Value.Size = new System.Drawing.Size(292, 23);
+            this.TB_Value.Size = new System.Drawing.Size(354, 23);
             this.TB_Value.TabIndex = 0;
             // 
             // BTN_Create
             // 
-            this.BTN_Create.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTN_Create.Location = new System.Drawing.Point(120, 53);
+            this.BTN_Create.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTN_Create.Location = new System.Drawing.Point(145, 76);
             this.BTN_Create.Name = "BTN_Create";
-            this.BTN_Create.Size = new System.Drawing.Size(75, 28);
+            this.BTN_Create.Size = new System.Drawing.Size(109, 36);
             this.BTN_Create.TabIndex = 1;
             this.BTN_Create.Text = "OK";
             this.BTN_Create.UseVisualStyleBackColor = true;
@@ -57,7 +57,7 @@ namespace QueueViewer.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(317, 96);
+            this.ClientSize = new System.Drawing.Size(398, 128);
             this.Controls.Add(this.BTN_Create);
             this.Controls.Add(this.TB_Value);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Custom.SyntaxSettings syntaxSettings5 = new Custom.SyntaxSettings();
+            Custom.SyntaxSettings syntaxSettings1 = new Custom.SyntaxSettings();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
             this.CMS_Queues = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TSMI_Expand = new System.Windows.Forms.ToolStripMenuItem();
@@ -181,7 +181,7 @@
             this.CB_Refresh.AutoSize = true;
             this.CB_Refresh.Location = new System.Drawing.Point(16, 6);
             this.CB_Refresh.Name = "CB_Refresh";
-            this.CB_Refresh.Size = new System.Drawing.Size(95, 17);
+            this.CB_Refresh.Size = new System.Drawing.Size(96, 19);
             this.CB_Refresh.TabIndex = 2;
             this.CB_Refresh.Text = "Refresh Every";
             this.CB_Refresh.UseVisualStyleBackColor = true;
@@ -198,7 +198,7 @@
             "60"});
             this.CBB_Refresh.Location = new System.Drawing.Point(125, 4);
             this.CBB_Refresh.Name = "CBB_Refresh";
-            this.CBB_Refresh.Size = new System.Drawing.Size(43, 21);
+            this.CBB_Refresh.Size = new System.Drawing.Size(43, 23);
             this.CBB_Refresh.TabIndex = 3;
             this.CBB_Refresh.SelectedIndexChanged += new System.EventHandler(this.CBB_Refresh_SelectedIndexChanged);
             // 
@@ -207,7 +207,7 @@
             this.L_Unit.AutoSize = true;
             this.L_Unit.Location = new System.Drawing.Point(172, 6);
             this.L_Unit.Name = "L_Unit";
-            this.L_Unit.Size = new System.Drawing.Size(46, 13);
+            this.L_Unit.Size = new System.Drawing.Size(50, 15);
             this.L_Unit.TabIndex = 4;
             this.L_Unit.Text = "seconds";
             // 
@@ -268,7 +268,7 @@
             this.TC_Message.Controls.Add(this.T_Extension);
             this.TC_Message.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TC_Message.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.TC_Message.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TC_Message.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TC_Message.ItemSize = new System.Drawing.Size(90, 30);
             this.TC_Message.Location = new System.Drawing.Point(0, 0);
             this.TC_Message.Name = "TC_Message";
@@ -301,16 +301,16 @@
             this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
             this.TB_MessageBody.Name = "TB_MessageBody";
             this.TB_MessageBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            syntaxSettings5.Comment = "";
-            syntaxSettings5.CommentColor = System.Drawing.Color.Green;
-            syntaxSettings5.EnableComments = true;
-            syntaxSettings5.EnableIntegers = true;
-            syntaxSettings5.EnableStrings = true;
-            syntaxSettings5.IntegerColor = System.Drawing.Color.Red;
-            syntaxSettings5.KeywordColor = System.Drawing.Color.Empty;
-            syntaxSettings5.StringColor = System.Drawing.Color.Gray;
-            syntaxSettings5.SymbolColor = System.Drawing.Color.Empty;
-            this.TB_MessageBody.Settings = syntaxSettings5;
+            syntaxSettings1.Comment = "";
+            syntaxSettings1.CommentColor = System.Drawing.Color.Green;
+            syntaxSettings1.EnableComments = true;
+            syntaxSettings1.EnableIntegers = true;
+            syntaxSettings1.EnableStrings = true;
+            syntaxSettings1.IntegerColor = System.Drawing.Color.Red;
+            syntaxSettings1.KeywordColor = System.Drawing.Color.Empty;
+            syntaxSettings1.StringColor = System.Drawing.Color.Gray;
+            syntaxSettings1.SymbolColor = System.Drawing.Color.Empty;
+            this.TB_MessageBody.Settings = syntaxSettings1;
             this.TB_MessageBody.ShowSelectionMargin = true;
             this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
             this.TB_MessageBody.TabIndex = 1;
@@ -375,6 +375,7 @@
             this.colQueue,
             this.colBody});
             this.LV_Messages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LV_Messages.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LV_Messages.FullRowSelect = true;
             this.LV_Messages.GridLines = true;
             this.LV_Messages.HideSelection = false;
@@ -443,6 +444,7 @@
             this.BTN_Prev.TabIndex = 1;
             this.BTN_Prev.Text = "<<";
             this.BTN_Prev.UseVisualStyleBackColor = true;
+            this.BTN_Prev.Visible = false;
             this.BTN_Prev.Click += new System.EventHandler(this.BTN_Prev_Click);
             // 
             // BTN_Next
@@ -455,6 +457,7 @@
             this.BTN_Next.TabIndex = 0;
             this.BTN_Next.Text = ">>";
             this.BTN_Next.UseVisualStyleBackColor = true;
+            this.BTN_Next.Visible = false;
             this.BTN_Next.Click += new System.EventHandler(this.BTN_Next_Click);
             // 
             // P_TopTopRight
@@ -568,6 +571,7 @@
             // 
             this.TV_Queues.AllowDrop = true;
             this.TV_Queues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TV_Queues.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TV_Queues.Location = new System.Drawing.Point(0, 0);
             this.TV_Queues.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.TV_Queues.Name = "TV_Queues";
@@ -613,6 +617,7 @@
             this.P_Bottom.Controls.Add(this.CBB_Refresh);
             this.P_Bottom.Controls.Add(this.L_Unit);
             this.P_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.P_Bottom.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.P_Bottom.Location = new System.Drawing.Point(0, 590);
             this.P_Bottom.Name = "P_Bottom";
             this.P_Bottom.Size = new System.Drawing.Size(1017, 29);

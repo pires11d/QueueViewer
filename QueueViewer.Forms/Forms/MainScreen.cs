@@ -1177,7 +1177,7 @@ namespace QueueViewer.Forms
             var foreColorBrush = new SolidBrush(Colors.GetForeColor(Theme));
 
             e.Graphics.FillRectangle(backColorBrush, e.Bounds);
-            e.Graphics.DrawString(e.Header.Text, e.Font, foreColorBrush, e.Bounds);
+            e.Graphics.DrawString(e.Header.Text, new Font(e.Font,FontStyle.Bold), foreColorBrush, e.Bounds);
             Rectangle rect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width, e.Bounds.Height);
             e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Gray)), rect);
         }

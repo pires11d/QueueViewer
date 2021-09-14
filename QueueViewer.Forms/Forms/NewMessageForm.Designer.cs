@@ -29,6 +29,7 @@ namespace QueueViewer.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            Custom.SyntaxSettings syntaxSettings1 = new Custom.SyntaxSettings();
             this.BTN_Send = new System.Windows.Forms.Button();
             this.BTN_Prettify = new System.Windows.Forms.Button();
             this.L_NewBody = new System.Windows.Forms.Label();
@@ -40,7 +41,7 @@ namespace QueueViewer.Forms
             this.BTN_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BTN_Send.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTN_Send.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_Send.Location = new System.Drawing.Point(215, 359);
             this.BTN_Send.Name = "BTN_Send";
             this.BTN_Send.Size = new System.Drawing.Size(343, 33);
@@ -51,6 +52,7 @@ namespace QueueViewer.Forms
             // 
             // BTN_Prettify
             // 
+            this.BTN_Prettify.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_Prettify.Location = new System.Drawing.Point(15, 359);
             this.BTN_Prettify.Name = "BTN_Prettify";
             this.BTN_Prettify.Size = new System.Drawing.Size(88, 33);
@@ -62,9 +64,10 @@ namespace QueueViewer.Forms
             // L_NewBody
             // 
             this.L_NewBody.AutoSize = true;
+            this.L_NewBody.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.L_NewBody.Location = new System.Drawing.Point(12, 15);
             this.L_NewBody.Name = "L_NewBody";
-            this.L_NewBody.Size = new System.Drawing.Size(80, 13);
+            this.L_NewBody.Size = new System.Drawing.Size(86, 15);
             this.L_NewBody.TabIndex = 5;
             this.L_NewBody.Text = "Message Body:";
             // 
@@ -75,6 +78,16 @@ namespace QueueViewer.Forms
             this.TB_Value.Json = null;
             this.TB_Value.Location = new System.Drawing.Point(15, 43);
             this.TB_Value.Name = "TB_Value";
+            syntaxSettings1.Comment = "";
+            syntaxSettings1.CommentColor = System.Drawing.Color.Green;
+            syntaxSettings1.EnableComments = true;
+            syntaxSettings1.EnableIntegers = true;
+            syntaxSettings1.EnableStrings = true;
+            syntaxSettings1.IntegerColor = System.Drawing.Color.Red;
+            syntaxSettings1.KeywordColor = System.Drawing.Color.Empty;
+            syntaxSettings1.StringColor = System.Drawing.Color.Gray;
+            syntaxSettings1.SymbolColor = System.Drawing.Color.Empty;
+            this.TB_Value.Settings = syntaxSettings1;
             this.TB_Value.ShowSelectionMargin = true;
             this.TB_Value.Size = new System.Drawing.Size(738, 296);
             this.TB_Value.TabIndex = 6;
