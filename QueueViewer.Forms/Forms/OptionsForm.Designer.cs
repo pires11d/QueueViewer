@@ -74,7 +74,7 @@
             // BTN_OK
             // 
             this.BTN_OK.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTN_OK.Location = new System.Drawing.Point(80, 166);
+            this.BTN_OK.Location = new System.Drawing.Point(75, 167);
             this.BTN_OK.Name = "BTN_OK";
             this.BTN_OK.Size = new System.Drawing.Size(106, 28);
             this.BTN_OK.TabIndex = 3;

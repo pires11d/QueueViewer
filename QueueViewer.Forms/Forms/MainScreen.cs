@@ -13,6 +13,7 @@ using System.Media;
 using System.Messaging;
 using System.Threading;
 using System.Windows.Forms;
+using Jarbas = System.Messaging.Message;
 
 namespace QueueViewer.Forms
 {
@@ -22,6 +23,7 @@ namespace QueueViewer.Forms
         public bool Refreshing { get; set; }
         public int MaxMessages { get; set; }
         public int CurrentPage { get; set; }
+        public Dictionary<Jarbas, string> Bodies { get; set; } = new Dictionary<Jarbas, string>();
         public TreeNode CurrentNode { get; set; }
         public TreeNode HoveredNode { get; set; }
         public ListViewColumnSorter ColumnSorter { get; set; }
@@ -33,6 +35,7 @@ namespace QueueViewer.Forms
         public bool EnableSounds { get; set; }
         private string _appDataFolder { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.Combine(Application.CompanyName, Application.ProductName));
         private string _configPath { get; set; }
+        public string Filter { get; set; }
 
         public MainScreen()
         {
@@ -41,9 +44,9 @@ namespace QueueViewer.Forms
             Config = new Config();
             Service = new QueueService();
 
+            LoadConfig();
             LoadTreeView();
             LoadListView();
-            LoadConfig();
 
             ActiveControl = CB_Refresh;
             HideStandardMenuItems();
@@ -59,6 +62,9 @@ namespace QueueViewer.Forms
         public void ChangeColor()
         {
             ChangeColor(this, Theme);
+            ChangeMenuColor(MS_Header, Theme);
+            ChangeMenuColor(CMS_Messages, Theme);
+            ChangeMenuColor(CMS_Queues, Theme);
             TB_MessageBody.Initialize(Theme);
             TB_MessageExtension.Initialize(Theme);
         }
@@ -84,6 +90,77 @@ namespace QueueViewer.Forms
             if (control is ListView)
             {
                 ChangeListViewColor((ListView)control);
+            }
+        }
+
+        private void ChangeMenuColor(object obj, ThemesEnum theme)
+        {
+            Color bc, fc;
+            if (obj == null)
+                return;
+
+            if (obj is MenuStrip)
+            {
+                var menu = (MenuStrip)obj;
+
+                bc = menu.BackColor;
+                fc = menu.ForeColor;
+                UpdateColors(theme, ref bc, ref fc);
+                menu.BackColor = bc;
+                menu.ForeColor = fc;
+
+                foreach (var c in menu.Items)
+                    ChangeMenuColor(c, theme);
+            }
+            else if (obj is ContextMenuStrip)
+            {
+                var contextMenu = (ContextMenuStrip)obj;
+
+                bc = contextMenu.BackColor;
+                fc = contextMenu.ForeColor;
+                UpdateColors(theme, ref bc, ref fc);
+                contextMenu.BackColor = bc;
+                contextMenu.ForeColor = fc;
+
+                foreach (var c in contextMenu.Items)
+                    ChangeMenuColor(c, theme);
+            }
+            else if (obj is ToolStripMenuItem)
+            {
+                var menuItem = (ToolStripMenuItem)obj;
+
+                bc = menuItem.BackColor;
+                fc = menuItem.ForeColor;
+                UpdateColors(theme, ref bc, ref fc);
+                menuItem.BackColor = bc;
+                menuItem.ForeColor = fc;
+
+                foreach (var c in menuItem.DropDownItems)
+                    ChangeMenuColor(c, theme);
+            }
+            else if (obj is ToolStripDropDownItem)
+            {
+                var dropDownItem = (ToolStripDropDownItem)obj;
+
+                bc = dropDownItem.BackColor;
+                fc = dropDownItem.ForeColor;
+                UpdateColors(theme, ref bc, ref fc);
+                dropDownItem.BackColor = bc;
+                dropDownItem.ForeColor = fc;
+
+                foreach (var c in dropDownItem.DropDownItems)
+                    ChangeMenuColor(c, theme);
+            }
+            else if (obj is ToolStripSeparator)
+            {
+
+                var separator = (ToolStripSeparator)obj;
+
+                bc = separator.BackColor;
+                fc = separator.ForeColor;
+                UpdateColors(theme, ref bc, ref fc);
+                separator.BackColor = bc;
+                separator.ForeColor = fc;
             }
         }
 
@@ -120,6 +197,11 @@ namespace QueueViewer.Forms
             }
         }
 
+        public void ResetTreeViewColor()
+        {
+            ResetNodesColor(TV_Queues.Nodes);
+        }
+
         private void ChangeListViewColor(ListView lv)
         {
             SetListViewColors();
@@ -128,7 +210,7 @@ namespace QueueViewer.Forms
 
         public void ChangeLanguage()
         {
-            ChangeLanguage(this, Config.Language);
+            Culture.ChangeLanguage(this, Config.Language);
             ChangeMenuLanguage(MS_Header, Config.Language);
             ChangeMenuLanguage(CMS_Messages, Config.Language);
             ChangeMenuLanguage(CMS_Queues, Config.Language);
@@ -203,25 +285,6 @@ namespace QueueViewer.Forms
             }
         }
 
-        public void ChangeLanguage(Control control, string languageName)
-        {
-            if (!Culture.Languages.Contains(languageName))
-                return;
-
-            if (control == null)
-                return;
-
-            if (Culture.Words[languageName].TryGetValue(control.Name, out string result))
-            {
-                control.Text = result;
-            }
-
-            foreach (Control c in control.Controls)
-            {
-                ChangeLanguage(c, languageName);
-            }
-        }
-
         public void LoadConfig()
         {
             Config = (Config)FileExtension.LoadXML(_configPath, Config);
@@ -232,8 +295,14 @@ namespace QueueViewer.Forms
             EnableSounds = bool.TryParse(Config.Sounds, out bool enableSoundsBool) ? enableSoundsBool : true;
 
             SetTheme(Config.Theme);
+            SetLanguage(Config.Language);
             ChangeColor();
             ChangeLanguage();
+        }
+
+        public void SetLanguage(string language)
+        {
+            Config.Language = language ?? "en-US";
         }
 
         public void SetTheme(string theme)
@@ -328,7 +397,7 @@ namespace QueueViewer.Forms
                         }
                     }
                     ScreenTimer.Stop();
-                    ResetNodesBackColor(NodesToUpdate.Keys.ToList());
+                    ResetNodesColor(NodesToUpdate.Keys.ToList());
                 }).Start();
             }
         }
@@ -535,12 +604,30 @@ namespace QueueViewer.Forms
             }
         }
 
+        public void UpdateMessages()
+        {
+            ShowMessages(Service.CurrentQueue);
+        }
+
         public void ShowMessages(MessageQueue selectedQueue, int operation = 0)
         {
+            BTN_ClearFilter.Visible = !string.IsNullOrEmpty(Filter);
             LV_Messages.Items.Clear();
             try
             {
                 var allMessages = selectedQueue?.GetAllMessages()?.ToList();
+                if (allMessages is null)
+                    return;
+
+                Bodies = new Dictionary<Jarbas, string>();
+                allMessages.ForEach(x => Bodies.Add(x, Service.GetMessageBody(x)));
+
+                if (!string.IsNullOrEmpty(Filter))
+                {
+                    Bodies = Bodies.Where(x => !string.IsNullOrEmpty(x.Value) && x.Value.Contains(Filter)).ToDictionary(x => x.Key, x => x.Value);
+                    allMessages = Bodies.Keys.ToList();
+                }
+
                 if (allMessages != null)
                 {
                     var messages = allMessages.OrderByDescending(x => x.SentTime).ToList();
@@ -560,7 +647,7 @@ namespace QueueViewer.Forms
                     foreach (var message in messages)
                     {
                         var size = Service.GetMessageSize(message);
-                        var body = Service.GetMessageBody(message);
+                        var body = Bodies[message];
 
                         var values = new string[]
                         {
@@ -576,13 +663,13 @@ namespace QueueViewer.Forms
                     }
                     LV_Messages.Sort();
 
-                    BTN_Next.Enabled = allMessages.Count > Service.CurrentMessages;
-                    BTN_Prev.Enabled = CurrentPage > 0;
+                    BTN_Next.Visible = allMessages.Count > Service.CurrentMessages;
+                    BTN_Prev.Visible = CurrentPage > 0;
                 }
                 else
                 {
-                    BTN_Next.Enabled = false;
-                    BTN_Prev.Enabled = false;
+                    BTN_Next.Visible = false;
+                    BTN_Prev.Visible = false;
                 }
             }
             catch (Exception)
@@ -911,16 +998,15 @@ namespace QueueViewer.Forms
             {
                 if (HoveredNode != null && TV_Queues.SelectedNode != HoveredNode)
                 {
-                    HoveredNode.BackColor = Colors.GetBackColor(Theme);
-                    HoveredNode.ForeColor = Colors.GetBackColor(Theme);
+                    ResetNodeColor(HoveredNode);
                 }
 
                 TV_Queues.SelectedNode.Expand();
                 if (TV_Queues.SelectedNode.ImageIndex == 0)
                 {
                     HoveredNode = TV_Queues.SelectedNode;
-                    TV_Queues.SelectedNode.BackColor = SystemColors.ActiveCaption;
-                    TV_Queues.SelectedNode.ForeColor = Color.Black;
+                    TV_Queues.SelectedNode.BackColor = Colors.GetHighlightColor(Theme);
+                    TV_Queues.SelectedNode.ForeColor = Colors.GetForeColor(Theme);
                 }
             }
 
@@ -929,29 +1015,35 @@ namespace QueueViewer.Forms
 
         private void TV_Queues_DragLeave(object sender, EventArgs e)
         {
-            ResetNodesBackColor(TV_Queues.Nodes);
+            ResetNodesColor(TV_Queues.Nodes);
         }
 
-        private void ResetNodesBackColor(TreeNodeCollection nodes)
+        private void ResetNodesColor(TreeNodeCollection nodes)
         {
             if (nodes?.Count > 0)
             {
                 foreach (TreeNode node in nodes)
                 {
-                    node.BackColor = Colors.GetBackColor(Theme);
+                    node.BackColor = Colors.GetDefaultColor(Theme);
                     node.ForeColor = Colors.GetForeColor(Theme);
-                    ResetNodesBackColor(node.Nodes);
+                    ResetNodesColor(node.Nodes);
                 }
             }
         }
 
-        private void ResetNodesBackColor(List<TreeNode> nodes)
+        private void ResetNodesColor(List<TreeNode> nodes)
         {
             foreach (var node in nodes)
             {
-                node.BackColor = Colors.GetBackColor(Theme);
+                node.BackColor = Colors.GetDefaultColor(Theme);
                 node.ForeColor = Colors.GetForeColor(Theme);
             }
+        }
+
+        private void ResetNodeColor(TreeNode node)
+        {
+            HoveredNode.BackColor = Colors.GetDefaultColor(Theme);
+            HoveredNode.ForeColor = Colors.GetForeColor(Theme);
         }
 
         private void BTN_RefreshMessages_Click(object sender, EventArgs e)
@@ -1024,6 +1116,7 @@ namespace QueueViewer.Forms
                 }
                 else if (e.Control && e.KeyCode == Keys.F)
                 {
+                    BTN_Filter_Click(sender, e);
                 }
             }
         }
@@ -1051,6 +1144,7 @@ namespace QueueViewer.Forms
                         InsertMessageIntoQueue(targetQueue, msg);
                         Service.RemoveMessage(CurrentNode.Name, msgId);
                         draggedItem.Remove();
+                        ResetNodeColor(targetNode);
                     }
 
                     ShowMessages(Service.CurrentQueue);
@@ -1123,6 +1217,18 @@ namespace QueueViewer.Forms
             int yOffset = (e.State == DrawItemState.Selected) ? -2 : 1;
             paddedBounds.Offset(1, yOffset);
             TextRenderer.DrawText(e.Graphics, page.Text, Font, paddedBounds, foreColor);
+        }
+
+        private void BTN_Filter_Click(object sender, EventArgs e)
+        {
+            var form = new FilterForm(this);
+            form.Show();
+        }
+
+        private void BTN_ClearFilter_Click(object sender, EventArgs e)
+        {
+            Filter = "";
+            UpdateMessages();
         }
 
         #endregion CONTROLS

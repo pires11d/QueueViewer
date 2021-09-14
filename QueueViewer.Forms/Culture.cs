@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace QueueViewer.Forms
 {
@@ -30,9 +32,11 @@ namespace QueueViewer.Forms
             {"L_NewBody","Corpo da mensagem:" },
             {"T_Body","Corpinho" },
             {"T_Extension","Extensão" },
+            {"FilterForm","Filtro de Mensagens" },
+            {"L_Field","Filtrar corpo:" },
             {"TSMI_Insert","Inserir Mensagem" },
             {"TSMI_Create","Criar Fila" },
-            {"TSMI_Delete","Deletar Fila" },
+            {"TSMI_Delete","Desmanchar Fila" },
             {"TSMI_Purge","Limpar Fila" },
             {"TSMI_Reprocess","Reprocessar" },
             {"TSMI_Expand","Expandir" },
@@ -50,7 +54,7 @@ namespace QueueViewer.Forms
             {"columnHeader2"," Tamanho  " },
             {"columnHeader3"," Data de criação  " },
             {"columnHeader4"," Fila de origem  " },
-            {"columnHeader5"," Conteúdo do corpinho  " },
+            {"columnHeader5"," Conteúdo do corpo  " },
         };
 
         /// <summary>
@@ -73,6 +77,8 @@ namespace QueueViewer.Forms
             {"L_NewBody","Message body:" },
             {"T_Body","Body" },
             {"T_Extension","Extension" },
+            {"FilterForm","Message Filter" },
+            {"L_Field","Filter body:" },
             {"TSMI_Insert","Insert New Message" },
             {"TSMI_Create","Create Queue" },
             {"TSMI_Delete","Delete Queue" },
@@ -105,5 +111,23 @@ namespace QueueViewer.Forms
             {"en-US", WordsEN },
         };
 
+        public static void ChangeLanguage(Control control, string languageName)
+        {
+            if (!Culture.Languages.Contains(languageName))
+                return;
+
+            if (control == null)
+                return;
+
+            if (Culture.Words[languageName].TryGetValue(control.Name, out string result))
+            {
+                control.Text = result;
+            }
+
+            foreach (Control c in control.Controls)
+            {
+                ChangeLanguage(c, languageName);
+            }
+        }
     }
 }

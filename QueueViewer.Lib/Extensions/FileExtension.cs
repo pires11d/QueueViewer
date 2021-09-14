@@ -30,8 +30,9 @@ namespace QueueViewer.Lib.Extensions
         {
             try
             {
-                if (!File.Exists(path))
-                    return obj;
+                var folder = Path.GetDirectoryName(path);
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
 
                 XmlSerializer xmlSerializer = new XmlSerializer(obj.GetType());
                 using (Stream reader = new FileStream(path, FileMode.Open))

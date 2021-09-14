@@ -70,6 +70,12 @@
     <Compile Include="Entities\SoundsEnum.cs" />
     <Compile Include="Entities\ThemesEnum.cs" />
     <Compile Include="Extensions\FormExtensions.cs" />
+    <Compile Include="Forms\FilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterForm.Designer.cs">
+      <DependentUpon>FilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewMessageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Custom\XmlRichTextBox.resx" />
+    <EmbeddedResource Include="Forms\FilterForm.resx">
+      <DependentUpon>FilterForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewMessageForm.resx">
       <DependentUpon>NewMessageForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,6 +152,8 @@
     <None Include="Resources\aiai.wav" />
     <Content Include="config.xml" />
     <None Include="Resources\en-US.png" />
+    <None Include="Resources\filter.png" />
+    <None Include="Resources\clear.png" />
     <Content Include="Resources\folder.ico" />
     <None Include="Resources\mail.ico" />
     <None Include="Resources\folderX.ico" />

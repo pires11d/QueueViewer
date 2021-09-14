@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            Custom.SyntaxSettings syntaxSettings5 = new Custom.SyntaxSettings();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
-            Custom.SyntaxSettings syntaxSettings1 = new Custom.SyntaxSettings();
             this.CMS_Queues = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TSMI_Expand = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Collapse = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +49,9 @@
             this.P_BotttomRight = new System.Windows.Forms.Panel();
             this.TC_Message = new System.Windows.Forms.TabControl();
             this.T_Body = new System.Windows.Forms.TabPage();
+            this.TB_MessageBody = new Custom.SyntaxRichTextBox();
             this.T_Extension = new System.Windows.Forms.TabPage();
+            this.TB_MessageExtension = new Custom.XmlRichTextBox();
             this.P_TopRight = new System.Windows.Forms.Panel();
             this.P_CenterTopRight = new System.Windows.Forms.Panel();
             this.LV_Messages = new System.Windows.Forms.ListView();
@@ -63,6 +65,8 @@
             this.BTN_Prev = new System.Windows.Forms.Button();
             this.BTN_Next = new System.Windows.Forms.Button();
             this.P_TopTopRight = new System.Windows.Forms.Panel();
+            this.BTN_ClearFilter = new System.Windows.Forms.Button();
+            this.BTN_Filter = new System.Windows.Forms.Button();
             this.LB_MaxMessages = new System.Windows.Forms.Label();
             this.CBB_MaxMessages = new System.Windows.Forms.ComboBox();
             this.BTN_RefreshMessages = new System.Windows.Forms.Button();
@@ -81,10 +85,7 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.TB_MessageBody = new Custom.SyntaxRichTextBox();
-            this.TB_MessageExtension = new Custom.XmlRichTextBox();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
             this.P_Right.SuspendLayout();
@@ -288,6 +289,33 @@
             this.T_Body.TabIndex = 0;
             this.T_Body.Text = "Body";
             // 
+            // TB_MessageBody
+            // 
+            this.TB_MessageBody.AcceptsTab = true;
+            this.TB_MessageBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TB_MessageBody.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TB_MessageBody.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_MessageBody.Json = null;
+            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageBody.Name = "TB_MessageBody";
+            this.TB_MessageBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            syntaxSettings5.Comment = "";
+            syntaxSettings5.CommentColor = System.Drawing.Color.Green;
+            syntaxSettings5.EnableComments = true;
+            syntaxSettings5.EnableIntegers = true;
+            syntaxSettings5.EnableStrings = true;
+            syntaxSettings5.IntegerColor = System.Drawing.Color.Red;
+            syntaxSettings5.KeywordColor = System.Drawing.Color.Empty;
+            syntaxSettings5.StringColor = System.Drawing.Color.Gray;
+            syntaxSettings5.SymbolColor = System.Drawing.Color.Empty;
+            this.TB_MessageBody.Settings = syntaxSettings5;
+            this.TB_MessageBody.ShowSelectionMargin = true;
+            this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
+            this.TB_MessageBody.TabIndex = 1;
+            this.TB_MessageBody.Text = "";
+            // 
             // T_Extension
             // 
             this.T_Extension.BackColor = System.Drawing.Color.Transparent;
@@ -298,6 +326,23 @@
             this.T_Extension.Size = new System.Drawing.Size(634, 192);
             this.T_Extension.TabIndex = 1;
             this.T_Extension.Text = "Extension";
+            // 
+            // TB_MessageExtension
+            // 
+            this.TB_MessageExtension.AcceptsTab = true;
+            this.TB_MessageExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TB_MessageExtension.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TB_MessageExtension.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageExtension.Name = "TB_MessageExtension";
+            this.TB_MessageExtension.ShowSelectionMargin = true;
+            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
+            this.TB_MessageExtension.TabIndex = 0;
+            this.TB_MessageExtension.Text = "";
+            this.TB_MessageExtension.Theme = QueueViewer.Forms.Entities.ThemesEnum.Light;
+            this.TB_MessageExtension.Xml = "";
             // 
             // P_TopRight
             // 
@@ -415,6 +460,8 @@
             // P_TopTopRight
             // 
             this.P_TopTopRight.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.P_TopTopRight.Controls.Add(this.BTN_ClearFilter);
+            this.P_TopTopRight.Controls.Add(this.BTN_Filter);
             this.P_TopTopRight.Controls.Add(this.LB_MaxMessages);
             this.P_TopTopRight.Controls.Add(this.CBB_MaxMessages);
             this.P_TopTopRight.Controls.Add(this.BTN_RefreshMessages);
@@ -423,6 +470,38 @@
             this.P_TopTopRight.Name = "P_TopTopRight";
             this.P_TopTopRight.Size = new System.Drawing.Size(642, 27);
             this.P_TopTopRight.TabIndex = 1;
+            // 
+            // BTN_ClearFilter
+            // 
+            this.BTN_ClearFilter.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.BTN_ClearFilter.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.clear;
+            this.BTN_ClearFilter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BTN_ClearFilter.FlatAppearance.BorderSize = 0;
+            this.BTN_ClearFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BTN_ClearFilter.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTN_ClearFilter.ForeColor = System.Drawing.Color.Green;
+            this.BTN_ClearFilter.Location = new System.Drawing.Point(54, 1);
+            this.BTN_ClearFilter.Name = "BTN_ClearFilter";
+            this.BTN_ClearFilter.Size = new System.Drawing.Size(24, 24);
+            this.BTN_ClearFilter.TabIndex = 7;
+            this.BTN_ClearFilter.UseVisualStyleBackColor = false;
+            this.BTN_ClearFilter.Click += new System.EventHandler(this.BTN_ClearFilter_Click);
+            // 
+            // BTN_Filter
+            // 
+            this.BTN_Filter.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.BTN_Filter.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.filter;
+            this.BTN_Filter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BTN_Filter.FlatAppearance.BorderSize = 0;
+            this.BTN_Filter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BTN_Filter.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTN_Filter.ForeColor = System.Drawing.Color.Transparent;
+            this.BTN_Filter.Location = new System.Drawing.Point(28, 1);
+            this.BTN_Filter.Name = "BTN_Filter";
+            this.BTN_Filter.Size = new System.Drawing.Size(24, 24);
+            this.BTN_Filter.TabIndex = 6;
+            this.BTN_Filter.UseVisualStyleBackColor = false;
+            this.BTN_Filter.Click += new System.EventHandler(this.BTN_Filter_Click);
             // 
             // LB_MaxMessages
             // 
@@ -452,15 +531,16 @@
             // 
             // BTN_RefreshMessages
             // 
-            this.BTN_RefreshMessages.BackColor = System.Drawing.SystemColors.Control;
-            this.BTN_RefreshMessages.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.refresh1;
+            this.BTN_RefreshMessages.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.BTN_RefreshMessages.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.refresh;
             this.BTN_RefreshMessages.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BTN_RefreshMessages.FlatAppearance.BorderSize = 0;
             this.BTN_RefreshMessages.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BTN_RefreshMessages.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTN_RefreshMessages.ForeColor = System.Drawing.Color.Green;
-            this.BTN_RefreshMessages.Location = new System.Drawing.Point(3, 0);
+            this.BTN_RefreshMessages.ForeColor = System.Drawing.Color.Transparent;
+            this.BTN_RefreshMessages.Location = new System.Drawing.Point(3, 1);
             this.BTN_RefreshMessages.Name = "BTN_RefreshMessages";
-            this.BTN_RefreshMessages.Size = new System.Drawing.Size(27, 27);
+            this.BTN_RefreshMessages.Size = new System.Drawing.Size(24, 24);
             this.BTN_RefreshMessages.TabIndex = 2;
             this.BTN_RefreshMessages.UseVisualStyleBackColor = false;
             this.BTN_RefreshMessages.Click += new System.EventHandler(this.BTN_RefreshMessages_Click);
@@ -513,15 +593,16 @@
             // BTN_RefreshQueues
             // 
             this.BTN_RefreshQueues.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BTN_RefreshQueues.BackColor = System.Drawing.SystemColors.Control;
-            this.BTN_RefreshQueues.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.refresh1;
+            this.BTN_RefreshQueues.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.BTN_RefreshQueues.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.refresh;
             this.BTN_RefreshQueues.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BTN_RefreshQueues.FlatAppearance.BorderSize = 0;
             this.BTN_RefreshQueues.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BTN_RefreshQueues.Font = new System.Drawing.Font("Calibri", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTN_RefreshQueues.ForeColor = System.Drawing.Color.Green;
-            this.BTN_RefreshQueues.Location = new System.Drawing.Point(0, 0);
+            this.BTN_RefreshQueues.ForeColor = System.Drawing.Color.Transparent;
+            this.BTN_RefreshQueues.Location = new System.Drawing.Point(0, 1);
             this.BTN_RefreshQueues.Name = "BTN_RefreshQueues";
-            this.BTN_RefreshQueues.Size = new System.Drawing.Size(27, 27);
+            this.BTN_RefreshQueues.Size = new System.Drawing.Size(24, 24);
             this.BTN_RefreshQueues.TabIndex = 5;
             this.BTN_RefreshQueues.UseVisualStyleBackColor = false;
             this.BTN_RefreshQueues.Click += new System.EventHandler(this.BTN_RefreshQueues_Click);
@@ -574,7 +655,6 @@
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.optionsToolStripMenuItem,
-            this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -611,54 +691,12 @@
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
-            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // TB_MessageBody
-            // 
-            this.TB_MessageBody.AcceptsTab = true;
-            this.TB_MessageBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB_MessageBody.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_MessageBody.Json = null;
-            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
-            this.TB_MessageBody.Name = "TB_MessageBody";
-            syntaxSettings1.Comment = "";
-            syntaxSettings1.CommentColor = System.Drawing.Color.Green;
-            syntaxSettings1.EnableComments = true;
-            syntaxSettings1.EnableIntegers = true;
-            syntaxSettings1.EnableStrings = true;
-            syntaxSettings1.IntegerColor = System.Drawing.Color.Red;
-            syntaxSettings1.KeywordColor = System.Drawing.Color.Empty;
-            syntaxSettings1.StringColor = System.Drawing.Color.Gray;
-            syntaxSettings1.SymbolColor = System.Drawing.Color.Empty;
-            this.TB_MessageBody.Settings = syntaxSettings1;
-            this.TB_MessageBody.ShowSelectionMargin = true;
-            this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
-            this.TB_MessageBody.TabIndex = 1;
-            this.TB_MessageBody.Text = "";
-            // 
-            // TB_MessageExtension
-            // 
-            this.TB_MessageExtension.AcceptsTab = true;
-            this.TB_MessageExtension.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB_MessageExtension.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
-            this.TB_MessageExtension.Name = "TB_MessageExtension";
-            this.TB_MessageExtension.ShowSelectionMargin = true;
-            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
-            this.TB_MessageExtension.TabIndex = 0;
-            this.TB_MessageExtension.Text = "";
-            this.TB_MessageExtension.Theme = QueueViewer.Forms.Entities.ThemesEnum.Light;
-            this.TB_MessageExtension.Xml = "";
             // 
             // MainScreen
             // 
@@ -756,8 +794,9 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.Button BTN_Filter;
+        private System.Windows.Forms.Button BTN_ClearFilter;
     }
 }
 

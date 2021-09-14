@@ -20,7 +20,7 @@ namespace QueueViewer.Forms
                 case ThemesEnum.Light:
                     return Color.White;
                 case ThemesEnum.Dark:
-                    return Color.Black;
+                    return DarkestGray;
                 default:
                     return Color.White;
             }

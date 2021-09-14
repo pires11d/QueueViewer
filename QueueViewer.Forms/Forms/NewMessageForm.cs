@@ -14,7 +14,7 @@ namespace QueueViewer.Forms
             InitializeComponent();
 
             _main = main;
-            _main.ChangeLanguage(this, _main.Config.Language);
+            Culture.ChangeLanguage(this, _main.Config.Language);
             _main.ChangeColor(this, _main.Theme);
             TB_Value.Initialize(_main.Theme);
             BTN_Send.Text = BTN_Send.Text.Replace("@", queue.QueueName);

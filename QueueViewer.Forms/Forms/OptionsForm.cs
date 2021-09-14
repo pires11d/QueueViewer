@@ -33,7 +33,7 @@ namespace QueueViewer.Forms
 
         private void ChangeLanguage()
         {
-            _main.ChangeLanguage(this, _currentLanguage);
+            Culture.ChangeLanguage(this, _currentLanguage);
             LoadThemes();
             SelectTheme();
         }
@@ -106,6 +106,7 @@ namespace QueueViewer.Forms
                 _main.ChangeLanguage();
                 _main.SetTheme(_currentTheme);
                 _main.ChangeColor();
+                _main.ResetTreeViewColor();
                 _main.EnableSounds = CB_Sounds.Checked;
             }
             catch (Exception ex)

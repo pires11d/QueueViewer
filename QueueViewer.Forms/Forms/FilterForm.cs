@@ -1,31 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace QueueViewer.Forms
 {
-    public partial class NewQueueForm : Form
+    public partial class FilterForm : Form
     {
-        private MainScreen _main { get; set; }
+        MainScreen _main { get; set; }
 
-        public NewQueueForm(MainScreen main)
+        public FilterForm(MainScreen main)
         {
             InitializeComponent();
+
+            AcceptButton = BTN_FilterOK;
             _main = main;
             Culture.ChangeLanguage(this, _main.Config.Language);
             _main.ChangeColor(this, _main.Theme);
-            AcceptButton = BTN_Create;
+            TB_Field.Text = main.Filter;
         }
 
         private void BTN_OK_Click(object sender, EventArgs e)
         {
             try
             {
-                var queueFullName = _main.CreateNewQueue(TB_Value.Text);
-                _main.CurrentNode.Nodes.Add(queueFullName, TB_Value.Text);
+                _main.Filter = TB_Field.Text;
+                _main.UpdateMessages();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                
             }
             finally
             {
