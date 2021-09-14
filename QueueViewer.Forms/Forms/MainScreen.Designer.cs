@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Custom.SyntaxSettings syntaxSettings1 = new Custom.SyntaxSettings();
+            Custom.SyntaxSettings syntaxSettings3 = new Custom.SyntaxSettings();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
             this.CMS_Queues = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TSMI_Expand = new System.Windows.Forms.ToolStripMenuItem();
@@ -301,16 +301,16 @@
             this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
             this.TB_MessageBody.Name = "TB_MessageBody";
             this.TB_MessageBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            syntaxSettings1.Comment = "";
-            syntaxSettings1.CommentColor = System.Drawing.Color.Green;
-            syntaxSettings1.EnableComments = true;
-            syntaxSettings1.EnableIntegers = true;
-            syntaxSettings1.EnableStrings = true;
-            syntaxSettings1.IntegerColor = System.Drawing.Color.Red;
-            syntaxSettings1.KeywordColor = System.Drawing.Color.Empty;
-            syntaxSettings1.StringColor = System.Drawing.Color.Gray;
-            syntaxSettings1.SymbolColor = System.Drawing.Color.Empty;
-            this.TB_MessageBody.Settings = syntaxSettings1;
+            syntaxSettings3.Comment = "";
+            syntaxSettings3.CommentColor = System.Drawing.Color.Green;
+            syntaxSettings3.EnableComments = true;
+            syntaxSettings3.EnableIntegers = true;
+            syntaxSettings3.EnableStrings = true;
+            syntaxSettings3.IntegerColor = System.Drawing.Color.Red;
+            syntaxSettings3.KeywordColor = System.Drawing.Color.Empty;
+            syntaxSettings3.StringColor = System.Drawing.Color.Gray;
+            syntaxSettings3.SymbolColor = System.Drawing.Color.Empty;
+            this.TB_MessageBody.Settings = syntaxSettings3;
             this.TB_MessageBody.ShowSelectionMargin = true;
             this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
             this.TB_MessageBody.TabIndex = 1;
@@ -483,9 +483,9 @@
             this.BTN_ClearFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BTN_ClearFilter.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_ClearFilter.ForeColor = System.Drawing.Color.Green;
-            this.BTN_ClearFilter.Location = new System.Drawing.Point(54, 1);
+            this.BTN_ClearFilter.Location = new System.Drawing.Point(52, 2);
             this.BTN_ClearFilter.Name = "BTN_ClearFilter";
-            this.BTN_ClearFilter.Size = new System.Drawing.Size(24, 24);
+            this.BTN_ClearFilter.Size = new System.Drawing.Size(22, 22);
             this.BTN_ClearFilter.TabIndex = 7;
             this.BTN_ClearFilter.UseVisualStyleBackColor = false;
             this.BTN_ClearFilter.Click += new System.EventHandler(this.BTN_ClearFilter_Click);
@@ -499,9 +499,9 @@
             this.BTN_Filter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BTN_Filter.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_Filter.ForeColor = System.Drawing.Color.Transparent;
-            this.BTN_Filter.Location = new System.Drawing.Point(28, 1);
+            this.BTN_Filter.Location = new System.Drawing.Point(28, 3);
             this.BTN_Filter.Name = "BTN_Filter";
-            this.BTN_Filter.Size = new System.Drawing.Size(24, 24);
+            this.BTN_Filter.Size = new System.Drawing.Size(22, 22);
             this.BTN_Filter.TabIndex = 6;
             this.BTN_Filter.UseVisualStyleBackColor = false;
             this.BTN_Filter.Click += new System.EventHandler(this.BTN_Filter_Click);

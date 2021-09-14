@@ -752,7 +752,7 @@ namespace QueueViewer.Forms
 
         private void TSMI_Delete_Click(object sender, EventArgs e)
         {
-            var result = YesNoDialog("delete this queue");
+            var result = YesNoDialog();
             if (!result)
                 return;
 
@@ -767,10 +767,13 @@ namespace QueueViewer.Forms
             }
         }
 
-        private bool YesNoDialog(string action)
+        private bool YesNoDialog()
         {
-            string message = $"Are you sure you want to {action}?";
-            string caption = "Confirmation Dialog";
+            var question = Culture.Words[Config.Language]["Question"];
+            var action = Culture.Words[Config.Language]["ActionDelete"];
+            var message = question + action;
+
+            string caption = Culture.Words[Config.Language]["ConfirmationDialog"];
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             DialogResult result;
 

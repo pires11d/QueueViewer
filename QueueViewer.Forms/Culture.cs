@@ -17,6 +17,9 @@ namespace QueueViewer.Forms
         /// </summary>
         public static Dictionary<string, string> WordsPT = new Dictionary<string, string>()
         {
+            {"ConfirmationDialog","Confirmação" },
+            {"Question","Você tem certeza que deseja " },
+            {"ActionDelete","deletar esta fila?" },
             {"All","Tudo" },
             {"Light","Claro" },
             {"Dark","Escuro" },
@@ -36,8 +39,8 @@ namespace QueueViewer.Forms
             {"L_Field","Filtrar corpo:" },
             {"TSMI_Insert","Inserir Mensagem" },
             {"TSMI_Create","Criar Fila" },
-            {"TSMI_Delete","Desmanchar Fila" },
-            {"TSMI_Purge","Limpar Fila" },
+            {"TSMI_Delete","Deletar Fila" },
+            {"TSMI_Purge","Desmanchar Fila" },
             {"TSMI_Reprocess","Reprocessar" },
             {"TSMI_Expand","Expandir" },
             {"TSMI_Collapse","Encolher" },
@@ -62,6 +65,9 @@ namespace QueueViewer.Forms
         /// </summary>
         public static Dictionary<string, string> WordsEN = new Dictionary<string, string>()
         {
+            {"ConfirmationDialog","Confirmation" },
+            {"Question","Are you sure you want to " },
+            {"ActionDelete","delete this queue?" },
             {"All","All" },
             {"Light","Light" },
             {"Dark","Dark" },
