@@ -12,7 +12,7 @@ namespace QueueViewer.Lib.Services
         public List<MessageQueue> PrivateQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> PublicQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> SystemQueues { get; set; } = new List<MessageQueue>();
-        public int CurrentMessages { get; set; }
+        public long CurrentMessages { get; set; }
         public MessageQueue CurrentQueue { get; set; }
         public string MachineId { get; set; }
 
@@ -238,7 +238,10 @@ namespace QueueViewer.Lib.Services
         public void RemoveMessage(string queueName, string msgId)
         {
             var originQueue = GetQueueByName(queueName);
-            originQueue.ReceiveById(msgId);
+            if (originQueue != null)
+            {
+                originQueue.ReceiveById(msgId);
+            }
         }
 
         public void PurgeQueue()
@@ -249,7 +252,7 @@ namespace QueueViewer.Lib.Services
             }
         }
 
-        public void Reprocess(string content, string queueName)
+        public void Reprocess(string queueName, string content)
         {
             if (string.IsNullOrEmpty(queueName))
                 return;

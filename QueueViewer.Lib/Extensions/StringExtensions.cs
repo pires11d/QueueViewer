@@ -62,7 +62,7 @@ namespace System
                 return char.ToUpper(str[0]).ToString() + str.Substring(1);
         }
 
-        public static string UpdateCount(this string str, int count = 0)
+        public static string UpdateCount(this string str, long count = 0)
         {
             var text = str.Split('(').FirstOrDefault();
             return text += $"({count})";

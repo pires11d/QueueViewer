@@ -28,7 +28,7 @@ namespace QueueViewer.Forms
         public TreeNode HoveredNode { get; set; }
         public ListViewColumnSorter ColumnSorter { get; set; }
         public QueueService Service { get; set; }
-        public Dictionary<TreeNode, int> NodesToUpdate { get; set; }
+        public Dictionary<TreeNode, long> NodesToUpdate { get; set; }
         public Stopwatch ScreenTimer { get; private set; }
         public Config Config { get; set; }
         public ThemesEnum Theme { get; set; }
@@ -44,9 +44,9 @@ namespace QueueViewer.Forms
             Config = new Config();
             Service = new QueueService();
 
-            LoadConfig();
             LoadTreeView();
             LoadListView();
+            LoadConfig();
 
             ActiveControl = CB_Refresh;
             HideStandardMenuItems();
@@ -329,7 +329,7 @@ namespace QueueViewer.Forms
         public void RefreshScreen(TreeNode rootNode)
         {
             var treeNodes = rootNode.Nodes;
-            NodesToUpdate = new Dictionary<TreeNode, int>();
+            NodesToUpdate = new Dictionary<TreeNode, long>();
 
             foreach (var q in Service.PrivateQueues)
             {
@@ -378,8 +378,8 @@ namespace QueueViewer.Forms
                 foreach (var n in NodesToUpdate)
                 {
                     var node = n.Key;
-                    int newCount = n.Value;
-                    int oldCount = (int)node.Tag;
+                    var newCount = n.Value;
+                    var oldCount = (long)node.Tag;
                     node.Text = node.Text.UpdateCount(newCount);
                     node.Tag = newCount;
                     SetNodeColor(node, oldCount, newCount);
@@ -400,14 +400,16 @@ namespace QueueViewer.Forms
                     ResetNodesColor(NodesToUpdate.Keys.ToList());
                 }).Start();
             }
+
+            L_LastUpdate.Text = DateTime.Now.ToString("HH:mm:ss yyyy-MM-dd");
         }
 
-        private void UpdateParentNode(TreeNode parentNode, int oldCount = 0, int newCount = 0)
+        private void UpdateParentNode(TreeNode parentNode, long oldCount = 0, long newCount = 0)
         {
             if (parentNode != null && !IsRootNode(parentNode))
             {
-                int parentOldCount = (int)parentNode.Tag;
-                int parentNewCount = parentOldCount + newCount - oldCount;
+                var parentOldCount = (long)parentNode.Tag;
+                var parentNewCount = parentOldCount + newCount - oldCount;
                 UpdateNode(parentNode, parentOldCount, parentNewCount);
                 UpdateParentNode(parentNode.Parent, parentOldCount, parentNewCount);
             }
@@ -471,12 +473,30 @@ namespace QueueViewer.Forms
                 node.Expand();
             }
 
-            var privateNode = rootNode.Nodes.Find(nameof(Constants.Private), false).FirstOrDefault();
-            LoadNode(privateNode, Service.PrivateQueues);
-            var publicNode = rootNode.Nodes.Find(nameof(Constants.Public), false).FirstOrDefault();
-            LoadNode(publicNode, Service.PublicQueues);
-            var systemNode = rootNode.Nodes.Find(nameof(Constants.System), false).FirstOrDefault();
-            LoadSystemNode(systemNode, Service.SystemQueues);
+            try
+            {
+                var privateNode = rootNode.Nodes.Find(nameof(Constants.Private), false).FirstOrDefault();
+                LoadNode(privateNode, Service.PrivateQueues);
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                var publicNode = rootNode.Nodes.Find(nameof(Constants.Public), false).FirstOrDefault();
+                LoadNode(publicNode, Service.PublicQueues);
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                var systemNode = rootNode.Nodes.Find(nameof(Constants.System), false).FirstOrDefault();
+                LoadSystemNode(systemNode, Service.SystemQueues);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private void LoadSystemNode(TreeNode parentNode, List<MessageQueue> systemQueues)
@@ -485,19 +505,19 @@ namespace QueueViewer.Forms
             {
                 var queueName = systemQueue.FormatName;
                 var queueLabel = queueName.ToSystemQueueLabel(Service.MachineId);
-                var messageCount = systemQueue.GetAllMessages()?.Count() ?? 0;
+                var messageCount = systemQueue.Count();
                 AddSystemNode(parentNode, queueName, queueLabel, messageCount, 0);
             }
         }
 
-        private TreeNode AddSystemNode(TreeNode parentNode, string queueName, string queueLabel, int n = 0, int imageIndex = 0)
+        private TreeNode AddSystemNode(TreeNode parentNode, string queueName, string queueLabel, long n = 0, int imageIndex = 0)
         {
             var node = parentNode.Nodes.Add(queueName, queueLabel + $" ({n})", imageIndex, imageIndex);
             node.Tag = n;
             return node;
         }
 
-        private void LoadNode(TreeNode parentNode, List<MessageQueue> queues, int depth = 0)
+        private void LoadNode(TreeNode parentNode, List<MessageQueue> queues, long depth = 0)
         {
             if (!queues.Any()) return;
 
@@ -505,12 +525,12 @@ namespace QueueViewer.Forms
 
             foreach (var queueGroup in groupedQueues)
             {
-                var lastNodeItems = queueGroup.Where(x => x.QueueName.Count(y => y == '.') == depth);
+                var lastNodeItems = queueGroup.Where(x => x.QueueName.LongCount(y => y == '.') == depth);
 
-                int messageCount = 0;
+                long messageCount = 0;
                 try
                 {
-                    messageCount = queueGroup.Select(x => x.GetAllMessages()?.Count() ?? 0).Sum();
+                    messageCount = queueGroup.Select(x => x.Count()).Sum();
                 }
                 catch (Exception)
                 {
@@ -524,7 +544,7 @@ namespace QueueViewer.Forms
 
                 if (lastNodeItems.Any() && newItems.Any())
                 {
-                    messageCount = lastNodeItems.Sum(x => x.GetAllMessages()?.Count() ?? 0);
+                    messageCount = lastNodeItems.Sum(x => x.Count());
                     AddNode(newParent, queueGroup.Key, messageCount, 0);
                 }
 
@@ -532,7 +552,7 @@ namespace QueueViewer.Forms
             }
         }
 
-        private TreeNode AddNode(TreeNode parentNode, string name, int n = 0, int imageIndex = 0)
+        private TreeNode AddNode(TreeNode parentNode, string name, long n = 0, int imageIndex = 0)
         {
             string lastName = parentNode.Name.Split('.').LastOrDefault();
             bool folder = imageIndex == 0 && lastName == name;
@@ -548,17 +568,17 @@ namespace QueueViewer.Forms
             if (node != null)
             {
                 var queue = Service.GetQueueByName(node.Name);
-                int oldCount = node.Tag != null ? (int)node.Tag : 0;
-                int newCount = queue.GetAllMessages()?.Count() ?? 0;
+                var oldCount = node.Tag != null ? (long)node.Tag : 0;
+                var newCount = queue.Count();
                 UpdateNode(node, oldCount, newCount);
                 UpdateParentNode(node.Parent, oldCount, newCount);
             }
         }
 
-        private void UpdateNode(TreeNode node, int oldCount, int newCount)
+        private void UpdateNode(TreeNode node, long oldCount, long newCount)
         {
             if (NodesToUpdate == null)
-                NodesToUpdate = new Dictionary<TreeNode, int>();
+                NodesToUpdate = new Dictionary<TreeNode, long>();
 
             if (newCount != oldCount)
             {
@@ -566,21 +586,22 @@ namespace QueueViewer.Forms
             }
         }
 
-        private void SetNodeColor(TreeNode node, int oldCount, int newCount)
+        private void SetNodeColor(TreeNode node, long oldCount, long newCount)
         {
             if (newCount > oldCount)
             {
-                ChangeColor(node, Color.LightGreen);
+                node.BackColor = Colors.GetIncreaseCountColor(Theme);
+                node.ForeColor = Colors.GetForeColor(Theme);
             }
             else if (newCount < oldCount)
             {
-                ChangeColor(node, Color.Salmon);
+                node.BackColor = Colors.GetDecreaseCountColor(Theme);
+                node.ForeColor = Colors.GetForeColor(Theme);
             }
         }
 
         private void ChangeColor(TreeNode node, Color color)
         {
-            node.BackColor = color;
         }
 
         #endregion LOAD
@@ -615,10 +636,13 @@ namespace QueueViewer.Forms
             LV_Messages.Items.Clear();
             try
             {
-                var allMessages = selectedQueue?.GetAllMessages()?.ToList();
+                if (MaxMessages == 0)
+                    CurrentPage = 0;
+
+                long totalMessageCount = selectedQueue.Count();
+                var allMessages = selectedQueue.GetMessages(CurrentPage * MaxMessages, MaxMessages);
                 if (allMessages is null)
                     return;
-
                 Bodies = new Dictionary<Jarbas, string>();
                 allMessages.ForEach(x => Bodies.Add(x, Service.GetMessageBody(x)));
 
@@ -632,17 +656,12 @@ namespace QueueViewer.Forms
                 {
                     var messages = allMessages.OrderByDescending(x => x.SentTime).ToList();
 
-                    if (MaxMessages > 0)
-                        messages = messages.Skip(CurrentPage * MaxMessages).Take(MaxMessages).ToList();
-                    else
-                        CurrentPage = 0;
-
                     if (operation > 0)
-                        Service.CurrentMessages += messages.Count;
+                        Service.CurrentMessages += messages.LongCount();
                     else if (operation < 0)
-                        Service.CurrentMessages -= messages.Count;
+                        Service.CurrentMessages -= messages.LongCount();
                     else
-                        Service.CurrentMessages = messages.Count;
+                        Service.CurrentMessages = messages.LongCount();
 
                     foreach (var message in messages)
                     {
@@ -663,7 +682,7 @@ namespace QueueViewer.Forms
                     }
                     LV_Messages.Sort();
 
-                    BTN_Next.Visible = allMessages.Count > Service.CurrentMessages;
+                    BTN_Next.Visible = totalMessageCount > Service.CurrentMessages;
                     BTN_Prev.Visible = CurrentPage > 0;
                 }
                 else
@@ -801,7 +820,6 @@ namespace QueueViewer.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
             }
         }
 
@@ -951,10 +969,12 @@ namespace QueueViewer.Forms
                     var items = LV_Messages.SelectedItems.Cast<ListViewItem>().ToList();
                     foreach (ListViewItem item in items)
                     {
+                        var id = item.SubItems[1].Text;
                         var content = item.SubItems[5].Text;
                         var queueName = item.SubItems[4].Text;
 
-                        Service.Reprocess(content, queueName);
+                        Service.Reprocess(queueName, content);
+                        Service.RemoveMessage(queueName, id);
                     }
                     ShowMessages(Service.CurrentQueue);
                 }

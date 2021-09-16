@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\FileExtension.cs" />
+    <Compile Include="Extensions\MessageQueueExtensions.cs" />
     <Compile Include="Extensions\SizeExtension.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

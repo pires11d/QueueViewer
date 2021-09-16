@@ -129,5 +129,31 @@ namespace QueueViewer.Forms
                     return SystemColors.ActiveCaption;
             }
         }
+
+        public static Color GetIncreaseCountColor(ThemesEnum theme)
+        {
+            switch (theme)
+            {
+                case ThemesEnum.Light:
+                    return Color.LightGreen;
+                case ThemesEnum.Dark:
+                    return Color.DarkBlue;
+                default:
+                    return Color.LightGreen;
+            }
+        }
+
+        public static Color GetDecreaseCountColor(ThemesEnum theme)
+        {
+            switch (theme)
+            {
+                case ThemesEnum.Light:
+                    return Color.Salmon;
+                case ThemesEnum.Dark:
+                    return Color.DarkRed;
+                default:
+                    return Color.Salmon;
+            }
+        }
     }
 }

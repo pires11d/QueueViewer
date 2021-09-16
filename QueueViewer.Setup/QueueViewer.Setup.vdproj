@@ -76,13 +76,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
+        "OwnerKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
+        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -196,7 +196,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=0.0.3.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=0.0.5.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3ABC214536FB530C55CAB2F51A402104"
@@ -361,21 +361,21 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:QueueViewer"
-        "ProductCode" = "8:{421F47DF-0174-4346-ABBB-7D92DA591574}"
-        "PackageCode" = "8:{71B86174-B46C-4D70-BE5E-5BF8D7691F16}"
+        "ProductCode" = "8:{5FEC53AB-7925-42AF-944A-3EA8DD799638}"
+        "PackageCode" = "8:{604DEFFD-EFA3-4BD1-AC1D-C7D7ED8440AD}"
         "UpgradeCode" = "8:{BFCC3D6D-F003-4D03-9B13-9BD1931C5E46}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.0.3"
+        "ProductVersion" = "8:0.0.6"
         "Manufacturer" = "8:Jarbas"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:QueueViewerSetup"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Jarbas"
+        "ARPCONTACT" = "8:Lucas Joshua Pires"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Message Queue management tool"
         "ARPURLINFOABOUT" = "8:https://github.com/pires11d"

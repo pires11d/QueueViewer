@@ -58,6 +58,7 @@ namespace QueueViewer.Forms
             {"columnHeader3"," Data de criação  " },
             {"columnHeader4"," Fila de origem  " },
             {"columnHeader5"," Conteúdo do corpo  " },
+            {"L_Updated","Atualizado em:" },
         };
 
         /// <summary>
@@ -106,6 +107,7 @@ namespace QueueViewer.Forms
             {"columnHeader3"," Creation Time  " },
             {"columnHeader4"," Response Queue  " },
             {"columnHeader5"," Body Content  " },
+            {"L_Updated","Last update:" },
         };
 
         /// <summary>
