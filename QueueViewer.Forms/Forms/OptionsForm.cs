@@ -11,6 +11,7 @@ namespace QueueViewer.Forms
         private string _currentLanguage { get; set; }
         private string _currentTheme { get; set; }
         private string _enableSounds { get; set; }
+        private string _enableOutgoing { get; set; }
 
         public OptionsForm(MainScreen main, Config config)
         {
@@ -19,6 +20,7 @@ namespace QueueViewer.Forms
             _currentLanguage = config.Language;
             _currentTheme = config.Theme;
             _enableSounds = config.Sounds;
+            _enableOutgoing = config.Outgoing;
 
             ChangeLanguage();
             LoadControls();
@@ -43,6 +45,7 @@ namespace QueueViewer.Forms
             SelectLanguage();
             SelectTheme();
             SelectSounds();
+            SelectOutgoing();
         }
 
         private void LoadThemes()
@@ -77,6 +80,11 @@ namespace QueueViewer.Forms
             CB_Sounds.Checked = bool.TryParse(_enableSounds, out bool result) ? result : true;
         }
 
+        private void SelectOutgoing()
+        {
+            CB_Outgoing.Checked = bool.TryParse(_enableOutgoing, out bool result) ? result : true;
+        }
+
         private void RB_EN_CheckedChanged(object sender, System.EventArgs e)
         {
             if (RB_EN.Checked)
@@ -102,12 +110,20 @@ namespace QueueViewer.Forms
                 _main.Config.Language = _currentLanguage;
                 _main.Config.Theme = _currentTheme;
                 _main.Config.Sounds = _enableSounds;
+                _main.Config.Outgoing = _enableOutgoing;
 
+                if (_main.EnableOutgoing != CB_Outgoing.Checked)
+                {
+                    _main.EnableOutgoing = CB_Outgoing.Checked;
+                    _main.Service.LoadQueues(_main.EnableOutgoing);
+                    _main.LoadNodes();
+                }
+
+                _main.EnableSounds = CB_Sounds.Checked;
                 _main.ChangeLanguage();
                 _main.SetTheme(_currentTheme);
                 _main.ChangeColor();
                 _main.ResetTreeViewColor();
-                _main.EnableSounds = CB_Sounds.Checked;
             }
             catch (Exception ex)
             {
@@ -128,6 +144,11 @@ namespace QueueViewer.Forms
         {
             _currentTheme = CBB_Themes.SelectedIndex.ToString();
             ChangeColor();
+        }
+
+        private void CB_Outgoing_CheckedChanged(object sender, EventArgs e)
+        {
+            _enableOutgoing = CB_Outgoing.Checked.ToString();
         }
     }
 }

@@ -8,6 +8,8 @@ namespace QueueViewer.Forms
 {
     public class Config
     {
+        public string MachineName { get; set; }
+        public string Outgoing { get; set; }
         public string AutoRefresh { get; set; }
         public string Sounds { get; set; }
         public string RefreshTime { get; set; }

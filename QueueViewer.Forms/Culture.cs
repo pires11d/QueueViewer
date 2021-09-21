@@ -17,22 +17,30 @@ namespace QueueViewer.Forms
         /// </summary>
         public static Dictionary<string, string> WordsPT = new Dictionary<string, string>()
         {
+            {"Outgoing","Filas de saída" },
+            {"Private","Filas privativas" },
+            {"Public","Filas públicas" },
+            {"System","Filas do sistema" },
             {"ConfirmationDialog","Confirmação" },
             {"Question","Você tem certeza que deseja " },
             {"ActionDelete","deletar esta fila?" },
             {"All","Tudo" },
             {"Light","Claro" },
             {"Dark","Escuro" },
+
             {"OptionsForm","Opções" },
             {"L_Language","Idioma:" },
             {"L_Theme","Tema:" },
             {"L_Sounds","Habilitar Sons:" },
+            {"L_Outgoing","Habilitar filas de saída:" },
+
             {"NewQueueForm","Nova Fila" },
             {"BTN_Create","Criar Fila" },
             {"NewMessageForm","Nova Mensagem" },
             {"BTN_Send","Enviar para @" },
             {"BTN_Prettify","Formatar" },
             {"L_NewBody","Corpo da mensagem:" },
+
             {"T_Body","Corpinho" },
             {"T_Extension","Extensão" },
             {"FilterForm","Filtro de Mensagens" },
@@ -66,22 +74,30 @@ namespace QueueViewer.Forms
         /// </summary>
         public static Dictionary<string, string> WordsEN = new Dictionary<string, string>()
         {
+            {"Outgoing","Outgoing Queues" },
+            {"Private","Private Queues" },
+            {"Public","Public Queues" },
+            {"System","System Queues" },
             {"ConfirmationDialog","Confirmation" },
             {"Question","Are you sure you want to " },
             {"ActionDelete","delete this queue?" },
             {"All","All" },
             {"Light","Light" },
             {"Dark","Dark" },
+
             {"OptionsForm","Options" },
             {"L_Language","Language:" },
             {"L_Theme","Color Theme:" },
             {"L_Sounds","Enable Sounds:" },
+            {"L_Outgoing","Enable Outgoing queues:" },
+
             {"NewQueueForm","New Queue" },
             {"BTN_Create","Create Queue" },
             {"NewMessageForm","New Message" },
             {"BTN_Send","Send to @" },
             {"BTN_Prettify","Beautify" },
             {"L_NewBody","Message body:" },
+
             {"T_Body","Body" },
             {"T_Extension","Extension" },
             {"FilterForm","Message Filter" },

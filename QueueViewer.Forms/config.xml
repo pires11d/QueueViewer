@@ -1,4 +1,6 @@
 <Config>
+  <MachineName>localhost</MachineName>
+  <Outgoing>False</Outgoing>
 	<AutoRefresh>True</AutoRefresh>
 	<Sounds>True</Sounds>
 	<RefreshTime>1</RefreshTime>

@@ -21,7 +21,8 @@ namespace QueueViewer.Forms
             try
             {
                 var queueFullName = _main.CreateNewQueue(TB_Value.Text);
-                _main.CurrentNode.Nodes.Add(queueFullName, TB_Value.Text);
+                var newNode = _main.AddNodeByFullName(_main.CurrentNode,queueFullName);
+                _main.ExpandUntilNode(newNode);
             }
             catch (Exception ex)
             {

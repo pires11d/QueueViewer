@@ -154,6 +154,7 @@
     <None Include="Resources\en-US.png" />
     <None Include="Resources\filter.png" />
     <None Include="Resources\clear.png" />
+    <None Include="Resources\computer.ico" />
     <Content Include="Resources\folder.ico" />
     <None Include="Resources\mail.ico" />
     <None Include="Resources\folderX.ico" />

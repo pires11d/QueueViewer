@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Messaging;
 
 namespace QueueViewer.Lib.Services
 {
     public class QueueService
     {
+        public List<MessageQueue> OutgoingQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> PrivateQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> PublicQueues { get; set; } = new List<MessageQueue>();
         public List<MessageQueue> SystemQueues { get; set; } = new List<MessageQueue>();
@@ -16,11 +18,15 @@ namespace QueueViewer.Lib.Services
         public MessageQueue CurrentQueue { get; set; }
         public string MachineId { get; set; }
 
-        public QueueService(string machineId = null)
+        public QueueService(string machineId, bool outgoing = false)
         {
-            MachineId = machineId ?? Environment.MachineName;
+            if (string.IsNullOrEmpty(machineId))
+                MachineId = Environment.MachineName;
 
-            LoadQueues();
+            if (machineId.ToLower() == "localhost")
+                MachineId = Environment.MachineName;
+
+            LoadQueues(outgoing);
         }
 
         public string GetMessageBody(Message message)
@@ -37,15 +43,42 @@ namespace QueueViewer.Lib.Services
             return result;
         }
 
-        public void LoadQueues()
+        public void LoadQueues(bool outgoingQueues = true, bool privateQueues = true, bool publicQueues = true, bool systemQueues = true)
         {
-            LoadPrivateQueues();
-            LoadPublicQueues();
-            LoadSystemQueues();
+            LoadOutgoingQueues(outgoingQueues);
+            LoadPrivateQueues(privateQueues);
+            LoadPublicQueues(publicQueues);
+            LoadSystemQueues(systemQueues);
         }
 
-        private void LoadPrivateQueues()
+        public void LoadOutgoingQueues(bool isEnabled = true)
         {
+            if (!isEnabled) return;
+
+            try
+            {
+                OutgoingQueues = new List<MessageQueue>();
+                SelectQuery query = new SelectQuery("Select * From Win32_PerfRawData_MSMQ_MSMQQueue");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+                foreach (var obj in searcher.Get())
+                {
+                    var name = obj.Properties["Name"]?.Value?.ToString();
+                    if (name != null && !name.StartsWith($"{MachineId.ToLower()}") && !name.StartsWith("Computer"))
+                    {
+                        var queue = new MessageQueue(name.ToFormatName());
+                        OutgoingQueues.Add(queue);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public void LoadPrivateQueues(bool isEnabled = true)
+        {
+            if (!isEnabled) return;
+
             try
             {
                 var machine = MachineId == Environment.MachineName ? "." : MachineId;
@@ -56,8 +89,10 @@ namespace QueueViewer.Lib.Services
             }
         }
 
-        private void LoadPublicQueues()
+        public void LoadPublicQueues(bool isEnabled = true)
         {
+            if (!isEnabled) return;
+
             try
             {
                 PublicQueues = MessageQueue.GetPublicQueues().OrderBy(x => x.QueueName).ToList();
@@ -67,8 +102,10 @@ namespace QueueViewer.Lib.Services
             }
         }
 
-        private void LoadSystemQueues()
+        public void LoadSystemQueues(bool isEnabled = true)
         {
+            if (!isEnabled) return;
+
             try
             {
                 string prefix = $"FormatName:DIRECT=OS:{MachineId}";
@@ -126,6 +163,9 @@ namespace QueueViewer.Lib.Services
 
             if (string.IsNullOrEmpty(lastPart))
                 return false;
+
+            if (queueName.ToLower().StartsWith("direct=os"))
+                return true;
 
             switch (lastPart)
             {

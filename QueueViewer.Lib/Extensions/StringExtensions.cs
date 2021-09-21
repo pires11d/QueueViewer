@@ -8,6 +8,11 @@ namespace System
 {
     public static class StringExtensions
     {
+        public static string ToFormatName(this string str)
+        {
+            return $"FormatName:DIRECT=OS:{str}";
+        }
+
         public static string ToSystemQueueLabel(this string str, string machineId)
         {
             str = str.Replace($"DIRECT=OS:{machineId}", "");
@@ -25,9 +30,10 @@ namespace System
             str = str.Capitalize();
             str = str.Replace("$", "");
             str = str.Replace(@"\", ".");
-            str = removeRoot ? str.Replace(nameof(Constants.Private), "") : str;
-            str = removeRoot ? str.Replace(nameof(Constants.Public), "") : str;
-            str = removeRoot ? str.Replace(nameof(Constants.System), "") : str;
+            str = removeRoot ? str.Replace(Constants.Outgoing, "") : str;
+            str = removeRoot ? str.Replace(Constants.Private, "") : str;
+            str = removeRoot ? str.Replace(Constants.Public, "") : str;
+            str = removeRoot ? str.Replace(Constants.System, "") : str;
             str = str.StartsWith(".") ? str.Remove(0, 1) : str;
             return str;
         }

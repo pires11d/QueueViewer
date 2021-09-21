@@ -36,6 +36,8 @@
             this.CBB_Themes = new System.Windows.Forms.ComboBox();
             this.L_Sounds = new System.Windows.Forms.Label();
             this.CB_Sounds = new System.Windows.Forms.CheckBox();
+            this.CB_Outgoing = new System.Windows.Forms.CheckBox();
+            this.L_Outgoing = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // L_Language
@@ -51,7 +53,7 @@
             // 
             this.RB_EN.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.en_US;
             this.RB_EN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.RB_EN.Location = new System.Drawing.Point(152, 15);
+            this.RB_EN.Location = new System.Drawing.Point(201, 12);
             this.RB_EN.Name = "RB_EN";
             this.RB_EN.Size = new System.Drawing.Size(80, 27);
             this.RB_EN.TabIndex = 1;
@@ -63,7 +65,7 @@
             // 
             this.RB_PT.BackgroundImage = global::QueueViewer.Forms.Properties.Resources.pt_BR;
             this.RB_PT.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.RB_PT.Location = new System.Drawing.Point(152, 48);
+            this.RB_PT.Location = new System.Drawing.Point(201, 45);
             this.RB_PT.Name = "RB_PT";
             this.RB_PT.Size = new System.Drawing.Size(80, 28);
             this.RB_PT.TabIndex = 2;
@@ -74,7 +76,7 @@
             // BTN_OK
             // 
             this.BTN_OK.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTN_OK.Location = new System.Drawing.Point(87, 208);
+            this.BTN_OK.Location = new System.Drawing.Point(87, 262);
             this.BTN_OK.Name = "BTN_OK";
             this.BTN_OK.Size = new System.Drawing.Size(124, 38);
             this.BTN_OK.TabIndex = 3;
@@ -112,18 +114,39 @@
             // CB_Sounds
             // 
             this.CB_Sounds.AutoSize = true;
-            this.CB_Sounds.Location = new System.Drawing.Point(152, 152);
+            this.CB_Sounds.Location = new System.Drawing.Point(240, 152);
             this.CB_Sounds.Name = "CB_Sounds";
             this.CB_Sounds.Size = new System.Drawing.Size(15, 14);
             this.CB_Sounds.TabIndex = 7;
             this.CB_Sounds.UseVisualStyleBackColor = true;
             this.CB_Sounds.CheckedChanged += new System.EventHandler(this.CB_Sounds_CheckedChanged);
             // 
+            // CB_Outgoing
+            // 
+            this.CB_Outgoing.AutoSize = true;
+            this.CB_Outgoing.Location = new System.Drawing.Point(240, 196);
+            this.CB_Outgoing.Name = "CB_Outgoing";
+            this.CB_Outgoing.Size = new System.Drawing.Size(15, 14);
+            this.CB_Outgoing.TabIndex = 9;
+            this.CB_Outgoing.UseVisualStyleBackColor = true;
+            this.CB_Outgoing.CheckedChanged += new System.EventHandler(this.CB_Outgoing_CheckedChanged);
+            // 
+            // L_Outgoing
+            // 
+            this.L_Outgoing.AutoSize = true;
+            this.L_Outgoing.Location = new System.Drawing.Point(28, 196);
+            this.L_Outgoing.Name = "L_Outgoing";
+            this.L_Outgoing.Size = new System.Drawing.Size(140, 15);
+            this.L_Outgoing.TabIndex = 8;
+            this.L_Outgoing.Text = "Enable Outgoing queues:";
+            // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 267);
+            this.ClientSize = new System.Drawing.Size(294, 312);
+            this.Controls.Add(this.CB_Outgoing);
+            this.Controls.Add(this.L_Outgoing);
             this.Controls.Add(this.CB_Sounds);
             this.Controls.Add(this.L_Sounds);
             this.Controls.Add(this.CBB_Themes);
@@ -154,5 +177,7 @@
         private System.Windows.Forms.ComboBox CBB_Themes;
         private System.Windows.Forms.Label L_Sounds;
         private System.Windows.Forms.CheckBox CB_Sounds;
+        private System.Windows.Forms.CheckBox CB_Outgoing;
+        private System.Windows.Forms.Label L_Outgoing;
     }
 }

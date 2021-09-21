@@ -444,9 +444,9 @@
             this.BTN_ClearFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BTN_ClearFilter.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_ClearFilter.ForeColor = System.Drawing.Color.Green;
-            this.BTN_ClearFilter.Location = new System.Drawing.Point(52, 2);
+            this.BTN_ClearFilter.Location = new System.Drawing.Point(52, 4);
             this.BTN_ClearFilter.Name = "BTN_ClearFilter";
-            this.BTN_ClearFilter.Size = new System.Drawing.Size(22, 22);
+            this.BTN_ClearFilter.Size = new System.Drawing.Size(20, 20);
             this.BTN_ClearFilter.TabIndex = 7;
             this.BTN_ClearFilter.UseVisualStyleBackColor = false;
             this.BTN_ClearFilter.Click += new System.EventHandler(this.BTN_ClearFilter_Click);
@@ -460,9 +460,9 @@
             this.BTN_Filter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BTN_Filter.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_Filter.ForeColor = System.Drawing.Color.Transparent;
-            this.BTN_Filter.Location = new System.Drawing.Point(28, 3);
+            this.BTN_Filter.Location = new System.Drawing.Point(28, 4);
             this.BTN_Filter.Name = "BTN_Filter";
-            this.BTN_Filter.Size = new System.Drawing.Size(22, 22);
+            this.BTN_Filter.Size = new System.Drawing.Size(20, 20);
             this.BTN_Filter.TabIndex = 6;
             this.BTN_Filter.UseVisualStyleBackColor = false;
             this.BTN_Filter.Click += new System.EventHandler(this.BTN_Filter_Click);
@@ -502,9 +502,9 @@
             this.BTN_RefreshMessages.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BTN_RefreshMessages.Font = new System.Drawing.Font("Stencil", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_RefreshMessages.ForeColor = System.Drawing.Color.Transparent;
-            this.BTN_RefreshMessages.Location = new System.Drawing.Point(3, 1);
+            this.BTN_RefreshMessages.Location = new System.Drawing.Point(4, 3);
             this.BTN_RefreshMessages.Name = "BTN_RefreshMessages";
-            this.BTN_RefreshMessages.Size = new System.Drawing.Size(24, 24);
+            this.BTN_RefreshMessages.Size = new System.Drawing.Size(20, 20);
             this.BTN_RefreshMessages.TabIndex = 2;
             this.BTN_RefreshMessages.UseVisualStyleBackColor = false;
             this.BTN_RefreshMessages.Click += new System.EventHandler(this.BTN_RefreshMessages_Click);
@@ -539,6 +539,7 @@
             this.TV_Queues.ShowNodeToolTips = true;
             this.TV_Queues.Size = new System.Drawing.Size(364, 539);
             this.TV_Queues.TabIndex = 0;
+            this.TV_Queues.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TV_Queues_AfterSelect);
             this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
             this.TV_Queues.DragDrop += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragDrop);
             this.TV_Queues.DragEnter += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragEnter);
@@ -565,9 +566,9 @@
             this.BTN_RefreshQueues.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BTN_RefreshQueues.Font = new System.Drawing.Font("Calibri", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTN_RefreshQueues.ForeColor = System.Drawing.Color.Transparent;
-            this.BTN_RefreshQueues.Location = new System.Drawing.Point(0, 1);
+            this.BTN_RefreshQueues.Location = new System.Drawing.Point(3, 3);
             this.BTN_RefreshQueues.Name = "BTN_RefreshQueues";
-            this.BTN_RefreshQueues.Size = new System.Drawing.Size(24, 24);
+            this.BTN_RefreshQueues.Size = new System.Drawing.Size(20, 20);
             this.BTN_RefreshQueues.TabIndex = 5;
             this.BTN_RefreshQueues.UseVisualStyleBackColor = false;
             this.BTN_RefreshQueues.Click += new System.EventHandler(this.BTN_RefreshQueues_Click);
@@ -746,7 +747,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "QueueViewer";
+            this.Text = "QueueViewer {0}.{1}.{2}";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainScreen_FormClosing);
             this.CMS_Queues.ResumeLayout(false);

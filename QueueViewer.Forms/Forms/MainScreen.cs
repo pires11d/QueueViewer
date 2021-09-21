@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Messaging;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Jarbas = System.Messaging.Message;
@@ -33,6 +34,7 @@ namespace QueueViewer.Forms
         public Config Config { get; set; }
         public ThemesEnum Theme { get; set; }
         public bool EnableSounds { get; set; }
+        public bool EnableOutgoing { get; set; }
         private string _appDataFolder { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.Combine(Application.CompanyName, Application.ProductName));
         private string _configPath { get; set; }
         public string Filter { get; set; }
@@ -40,16 +42,28 @@ namespace QueueViewer.Forms
         public MainScreen()
         {
             InitializeComponent();
-            _configPath = Path.Combine(_appDataFolder, "config.xml");
-            Config = new Config();
-            Service = new QueueService();
 
+            LoadConfig();
+
+            Service = new QueueService("", EnableOutgoing);
+
+            LoadVersion();
             LoadTreeView();
             LoadListView();
-            LoadConfig();
+
+            SetTheme(Config.Theme);
+            SetLanguage(Config.Language);
+            ChangeColor();
+            ChangeLanguage();
 
             ActiveControl = CB_Refresh;
             HideStandardMenuItems();
+        }
+
+        private void LoadVersion()
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            Text = string.Format(Text, version.Major, version.Minor, version.Build);
         }
 
         private void HideStandardMenuItems()
@@ -211,6 +225,8 @@ namespace QueueViewer.Forms
         public void ChangeLanguage()
         {
             Culture.ChangeLanguage(this, Config.Language);
+
+            ChangeQueuesLanguage(TV_Queues);
             ChangeMenuLanguage(MS_Header, Config.Language);
             ChangeMenuLanguage(CMS_Messages, Config.Language);
             ChangeMenuLanguage(CMS_Queues, Config.Language);
@@ -218,6 +234,17 @@ namespace QueueViewer.Forms
 
             var items = new string[] { "50", "100", "200", "500", Culture.Words[Config.Language][Constants.All] };
             UpdateComboBox(CBB_MaxMessages, items, Config.MaxMessages);
+        }
+
+        private void ChangeQueuesLanguage(TreeView treeview)
+        {
+            foreach (TreeNode node in treeview.Nodes[0]?.Nodes)
+            {
+                if (Constants.QueueTypes.Contains(node.Name))
+                {
+                    node.Text = Culture.Words[Config.Language][node.Name];
+                }
+            }
         }
 
         private void UpdateComboBox(ComboBox cbb, string[] items, object value)
@@ -287,17 +314,15 @@ namespace QueueViewer.Forms
 
         public void LoadConfig()
         {
+            _configPath = Path.Combine(_appDataFolder, "config.xml");
+            Config = new Config();
             Config = (Config)FileExtension.LoadXML(_configPath, Config);
 
             CBB_Refresh.SelectedIndex = int.TryParse(Config.RefreshTime, out int refreshTimeInt) ? refreshTimeInt : 0;
             CBB_MaxMessages.SelectedIndex = int.TryParse(Config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
             CB_Refresh.Checked = bool.TryParse(Config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
             EnableSounds = bool.TryParse(Config.Sounds, out bool enableSoundsBool) ? enableSoundsBool : true;
-
-            SetTheme(Config.Theme);
-            SetLanguage(Config.Language);
-            ChangeColor();
-            ChangeLanguage();
+            EnableOutgoing = bool.TryParse(Config.Outgoing, out bool enableOutgoing) ? enableOutgoing : true;
         }
 
         public void SetLanguage(string language)
@@ -313,10 +338,12 @@ namespace QueueViewer.Forms
         private void SaveConfig()
         {
             Config.Theme = Convert.ToString((int)Theme);
-            Config.Sounds = EnableSounds.ToString();
+            Config.MachineName = Service.MachineId == Environment.MachineName ? "localhost" : Service.MachineId;
+            Config.Outgoing = EnableOutgoing.ToString();
             Config.AutoRefresh = CB_Refresh.Checked.ToString();
             Config.RefreshTime = CBB_Refresh.SelectedIndex.ToString();
             Config.MaxMessages = CBB_MaxMessages.SelectedIndex.ToString();
+            Config.Sounds = EnableSounds.ToString();
 
             FileExtension.SaveXML(Config, _configPath);
         }
@@ -330,6 +357,18 @@ namespace QueueViewer.Forms
         {
             var treeNodes = rootNode.Nodes;
             NodesToUpdate = new Dictionary<TreeNode, long>();
+
+            foreach (var q in Service.OutgoingQueues)
+            {
+                try
+                {
+                    var node = treeNodes.Find(q.FormatName, true).FirstOrDefault();
+                    UpdateNode(node);
+                }
+                catch (Exception)
+                {
+                }
+            }
 
             foreach (var q in Service.PrivateQueues)
             {
@@ -380,6 +419,7 @@ namespace QueueViewer.Forms
                     var node = n.Key;
                     var newCount = n.Value;
                     var oldCount = (long)node.Tag;
+                    newCount = newCount > 0 ? newCount : 0;
                     node.Text = node.Text.UpdateCount(newCount);
                     node.Tag = newCount;
                     SetNodeColor(node, oldCount, newCount);
@@ -410,6 +450,7 @@ namespace QueueViewer.Forms
             {
                 var parentOldCount = (long)parentNode.Tag;
                 var parentNewCount = parentOldCount + newCount - oldCount;
+                parentNewCount = parentNewCount > 0 ? parentNewCount : 0;
                 UpdateNode(parentNode, parentOldCount, parentNewCount);
                 UpdateParentNode(parentNode.Parent, parentOldCount, parentNewCount);
             }
@@ -417,8 +458,10 @@ namespace QueueViewer.Forms
 
         private bool IsRootNode(TreeNode node)
         {
-            switch (node.Text)
+            switch (node.Name)
             {
+                case Constants.Outgoing:
+                    return true;
                 case Constants.Private:
                     return true;
                 case Constants.Public:
@@ -451,21 +494,19 @@ namespace QueueViewer.Forms
             TV_Queues.ImageList.Images.Add(Properties.Resources.mail.ToBitmap());
             TV_Queues.ImageList.Images.Add(Properties.Resources.folder.ToBitmap());
             TV_Queues.ImageList.Images.Add(Properties.Resources.folderX.ToBitmap());
-
-            LV_Messages.LargeImageList = new ImageList();
-            LV_Messages.LargeImageList.ImageSize = new Size(16, 16);
-            LV_Messages.LargeImageList.Images.Add(Properties.Resources.mail.ToBitmap());
+            TV_Queues.ImageList.Images.Add(Properties.Resources.computer.ToBitmap());
         }
 
-        private void LoadNodes()
+        public void LoadNodes()
         {
             TV_Queues.Nodes.Clear();
 
             var machine = Service.MachineId == Environment.MachineName ? "localhost" : Service.MachineId;
-            TreeNode rootNode = TV_Queues.Nodes.Add(machine, machine, 1, 1);
-            rootNode.Nodes.Add(nameof(Constants.Private), Constants.Private, 1, 1);
-            rootNode.Nodes.Add(nameof(Constants.Public), Constants.Public, 1, 1);
-            rootNode.Nodes.Add(nameof(Constants.System), Constants.System, 2, 2);
+            TreeNode rootNode = TV_Queues.Nodes.Add(machine, machine, 3, 3);
+            rootNode.Nodes.Add(Constants.Outgoing, Constants.Outgoing, 1, 1);
+            rootNode.Nodes.Add(Constants.Private, Constants.Private, 1, 1);
+            rootNode.Nodes.Add(Constants.Public, Constants.Public, 1, 1);
+            rootNode.Nodes.Add(Constants.System, Constants.System, 2, 2);
 
             rootNode.Expand();
             foreach (TreeNode node in rootNode.Nodes)
@@ -475,7 +516,18 @@ namespace QueueViewer.Forms
 
             try
             {
-                var privateNode = rootNode.Nodes.Find(nameof(Constants.Private), false).FirstOrDefault();
+                var outgoingNode = GetNodeByName(TV_Queues, Constants.Outgoing);
+                if (EnableOutgoing)
+                    LoadOutgoingNode(outgoingNode, Service.OutgoingQueues);
+                else
+                    outgoingNode.Remove();
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                var privateNode = GetNodeByName(TV_Queues, Constants.Private);
                 LoadNode(privateNode, Service.PrivateQueues);
             }
             catch (Exception)
@@ -483,7 +535,7 @@ namespace QueueViewer.Forms
             }
             try
             {
-                var publicNode = rootNode.Nodes.Find(nameof(Constants.Public), false).FirstOrDefault();
+                var publicNode = GetNodeByName(TV_Queues, Constants.Public);
                 LoadNode(publicNode, Service.PublicQueues);
             }
             catch (Exception)
@@ -491,22 +543,50 @@ namespace QueueViewer.Forms
             }
             try
             {
-                var systemNode = rootNode.Nodes.Find(nameof(Constants.System), false).FirstOrDefault();
+                var systemNode = GetNodeByName(TV_Queues, Constants.System);
                 LoadSystemNode(systemNode, Service.SystemQueues);
             }
             catch (Exception)
             {
             }
+
+            ChangeQueuesLanguage(TV_Queues);
+        }
+
+        public void ExpandUntilNode(TreeNode newNode)
+        {
+            if (newNode == null) return;
+
+            newNode.EnsureVisible();
+        }
+
+        public TreeNode GetNodeByName(TreeView treeView, string name, bool searchAll = false)
+        {
+            var rootNode = treeView.Nodes[0];
+            if (rootNode == null || rootNode.Nodes == null)
+                return null;
+
+            return rootNode.Nodes.Find(name, searchAll).FirstOrDefault();
         }
 
         private void LoadSystemNode(TreeNode parentNode, List<MessageQueue> systemQueues)
         {
-            foreach (var systemQueue in systemQueues)
+            foreach (var queue in systemQueues)
             {
-                var queueName = systemQueue.FormatName;
+                var queueName = queue.FormatName;
                 var queueLabel = queueName.ToSystemQueueLabel(Service.MachineId);
-                var messageCount = systemQueue.Count();
+                var messageCount = queue.Count();
                 AddSystemNode(parentNode, queueName, queueLabel, messageCount, 0);
+            }
+        }
+
+        private void LoadOutgoingNode(TreeNode parentNode, List<MessageQueue> outgoingQueues)
+        {
+            foreach (var queue in outgoingQueues)
+            {
+                var queueName = queue.FormatName;
+                var messageCount = queue.Count();
+                AddSystemNode(parentNode, queueName, queueName, messageCount, 0);
             }
         }
 
@@ -563,6 +643,14 @@ namespace QueueViewer.Forms
             return node;
         }
 
+        public TreeNode AddNodeByFullName(TreeNode parentNode, string fullName, long n = 0, int imageIndex = 0)
+        {
+            string name = fullName.Replace($"{parentNode.Name}.", "");
+            var node = parentNode.Nodes.Add(fullName, name + $" ({n})", imageIndex, imageIndex);
+            node.Tag = n;
+            return node;
+        }
+
         private void UpdateNode(TreeNode node)
         {
             if (node != null)
@@ -598,10 +686,6 @@ namespace QueueViewer.Forms
                 node.BackColor = Colors.GetDecreaseCountColor(Theme);
                 node.ForeColor = Colors.GetForeColor(Theme);
             }
-        }
-
-        private void ChangeColor(TreeNode node, Color color)
-        {
         }
 
         #endregion LOAD
@@ -823,7 +907,7 @@ namespace QueueViewer.Forms
             }
         }
 
-        private void TV_Queues_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TV_Queues_AfterSelect(object sender, TreeViewEventArgs e)
         {
             CurrentNode = e.Node;
             try
@@ -858,6 +942,11 @@ namespace QueueViewer.Forms
             }
         }
 
+        private void TV_Queues_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+
+        }
+
         private void SetListViewColor(Color color)
         {
             LV_Messages.BackColor = color;
@@ -867,7 +956,7 @@ namespace QueueViewer.Forms
         {
             var backColor = Colors.GetDefaultColor(Theme);
             var foreColor = Colors.GetForeColor(Theme);
-            
+
             LV_Messages.BackColor = backColor;
             LV_Messages.ForeColor = foreColor;
         }
@@ -940,7 +1029,7 @@ namespace QueueViewer.Forms
                 return;
             }
             TV_Queues.SelectedNode = selectedNode;
-            TV_Queues_NodeMouseClick(sender, new TreeNodeMouseClickEventArgs(selectedNode, MouseButtons.Left, 1, targetPoint.X, targetPoint.Y));
+            TV_Queues_AfterSelect(sender, new TreeViewEventArgs(selectedNode));
 
             bool showExtra = selectedNode.ImageIndex == 0;
             bool isSystem = Service.IsSystemQueue(selectedNode.Name);
@@ -1097,6 +1186,8 @@ namespace QueueViewer.Forms
 
         private void BTN_RefreshQueues_Click(object sender, EventArgs e)
         {
+            Service.LoadQueues(EnableOutgoing);
+            LoadNodes();
             RefreshScreen(TV_Queues.Nodes[0]);
         }
 
@@ -1107,7 +1198,8 @@ namespace QueueViewer.Forms
             else
                 MaxMessages = 0;
 
-            ShowMessages(Service.CurrentQueue);
+            if (Service != null)
+                ShowMessages(Service.CurrentQueue);
         }
 
         private void TSMI_Expand_Click(object sender, EventArgs e)
@@ -1200,7 +1292,7 @@ namespace QueueViewer.Forms
             var foreColorBrush = new SolidBrush(Colors.GetForeColor(Theme));
 
             e.Graphics.FillRectangle(backColorBrush, e.Bounds);
-            e.Graphics.DrawString(e.Header.Text, new Font(e.Font,FontStyle.Bold), foreColorBrush, e.Bounds);
+            e.Graphics.DrawString(e.Header.Text, new Font(e.Font, FontStyle.Bold), foreColorBrush, e.Bounds);
             Rectangle rect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width, e.Bounds.Height);
             e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Gray)), rect);
         }
