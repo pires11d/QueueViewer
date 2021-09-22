@@ -281,10 +281,16 @@ namespace QueueViewer.Lib.Services
 
         public void RemoveMessage(string queueName, string msgId)
         {
-            var originQueue = GetQueueByName(queueName);
-            if (originQueue != null)
+            try
             {
-                originQueue.ReceiveById(msgId);
+                var originQueue = GetQueueByName(queueName);
+                if (originQueue != null)
+                {
+                    originQueue.ReceiveById(msgId);
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -301,7 +307,8 @@ namespace QueueViewer.Lib.Services
             if (string.IsNullOrEmpty(queueName))
                 return;
 
-            var queue = GetQueueByName(queueName);
+            var queueLabel = queueName.ToQueueLabel();
+            var queue = GetQueueByName(queueLabel);
             if (queue != null)
             {
                 MessageService.SendMessage(queue, content);

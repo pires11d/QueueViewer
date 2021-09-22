@@ -21,7 +21,7 @@ namespace System.Messaging
             return count;
         }
 
-        public static List<Message> GetMessages(this MessageQueue queue, int skip = 0, int take = 0)
+        public static List<Message> GetMessages(this MessageQueue queue, int skip = 0, int take = 0, int max = 10000)
         {
             if (queue is null) return null;
 
@@ -30,7 +30,7 @@ namespace System.Messaging
             try
             {
                 var enumerator = queue.GetMessageEnumerator2();
-                while (enumerator.MoveNext())
+                while (enumerator.MoveNext() && count < max)
                 {
                     if (take == 0 && skip == 0)
                     {

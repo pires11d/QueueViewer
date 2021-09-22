@@ -717,24 +717,36 @@ namespace QueueViewer.Forms
 
         public void ShowMessages(MessageQueue selectedQueue, int operation = 0)
         {
+            if (selectedQueue is null) return;
             BTN_ClearFilter.Visible = !string.IsNullOrEmpty(Filter);
             LV_Messages.Items.Clear();
+            List<Jarbas> allMessages = null;
             try
             {
                 if (MaxMessages == 0)
+                {
                     CurrentPage = 0;
+                    allMessages = selectedQueue.GetAllMessages()?.ToList();
+                }
+                else
+                {
+                    allMessages = selectedQueue.GetMessages(CurrentPage * MaxMessages, MaxMessages);
+                }
+
+                if (allMessages is null) return;
 
                 long totalMessageCount = selectedQueue.Count();
-                var allMessages = selectedQueue.GetMessages(CurrentPage * MaxMessages, MaxMessages);
-                if (allMessages is null)
-                    return;
                 Bodies = new Dictionary<Jarbas, string>();
-                allMessages.ForEach(x => Bodies.Add(x, Service.GetMessageBody(x)));
 
                 if (!string.IsNullOrEmpty(Filter))
                 {
+                    allMessages.ForEach(x => Bodies.Add(x, Service.GetMessageBody(x)));
                     Bodies = Bodies.Where(x => !string.IsNullOrEmpty(x.Value) && x.Value.Contains(Filter)).ToDictionary(x => x.Key, x => x.Value);
                     allMessages = Bodies.Keys.ToList();
+                }
+                else
+                {
+                    allMessages.ForEach(x => Bodies.Add(x, Service.GetMessageBody(x).Truncate(100)));
                 }
 
                 if (allMessages != null)
@@ -748,10 +760,11 @@ namespace QueueViewer.Forms
                     else
                         Service.CurrentMessages = messages.LongCount();
 
+                    var items = new List<ListViewItem>();
                     foreach (var message in messages)
                     {
-                        var size = Service.GetMessageSize(message);
-                        var body = Bodies[message];
+                        var size = Service.CurrentMessages < 1000 ? Service.GetMessageSize(message) : "";
+                        var body = Bodies[message].Truncate(100);
 
                         var values = new string[]
                         {
@@ -759,13 +772,14 @@ namespace QueueViewer.Forms
                             message.Id,
                             size,
                             message.SentTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
-                            message.ResponseQueue?.QueueName.ToQueueLabel() ?? "",
+                            message.ResponseQueue?.QueueName ?? "",
                             body
                         };
-                        var item = new ListViewItem(values);
-                        LV_Messages.Items.Add(item);
+                        items.Add(new ListViewItem(values));
                     }
-                    LV_Messages.Sort();
+
+                    LV_Messages.Items.AddRange(items.ToArray());
+                    //LV_Messages.Sort();
 
                     BTN_Next.Visible = totalMessageCount > Service.CurrentMessages;
                     BTN_Prev.Visible = CurrentPage > 0;
@@ -927,7 +941,7 @@ namespace QueueViewer.Forms
         {
             //if (e.Action == TreeViewAction.ByKeyboard) 
             //{
-                //TV_Queues_NodeMouseClick(sender, new TreeNodeMouseClickEventArgs(e.Node, MouseButtons.Left, 1, targetPoint.X, targetPoint.Y));
+            //TV_Queues_NodeMouseClick(sender, new TreeNodeMouseClickEventArgs(e.Node, MouseButtons.Left, 1, targetPoint.X, targetPoint.Y));
             //}
         }
 
@@ -1077,8 +1091,12 @@ namespace QueueViewer.Forms
                     foreach (ListViewItem item in items)
                     {
                         var id = item.SubItems[1].Text;
-                        var content = item.SubItems[5].Text;
                         var queueName = item.SubItems[4].Text;
+                        if (string.IsNullOrEmpty(queueName))
+                            return;
+
+                        var msg = Service.CurrentQueue.ReceiveById(id);
+                        var content = Service.GetMessageBody(msg);
 
                         Service.Reprocess(queueName, content);
                         Service.RemoveMessage(queueName, id);
@@ -1272,9 +1290,10 @@ namespace QueueViewer.Forms
                 {
                     foreach (ListViewItem draggedItem in draggedItems)
                     {
-                        var msg = draggedItem.SubItems[5].Text;
                         var msgId = draggedItem.SubItems[1].Text;
-                        InsertMessageIntoQueue(targetQueue, msg);
+                        var msg = Service.CurrentQueue.ReceiveById(msgId);
+                        var body = Service.GetMessageBody(msg);
+                        InsertMessageIntoQueue(targetQueue, body);
                         Service.RemoveMessage(CurrentNode.Name, msgId);
                         draggedItem.Remove();
                         ResetNodeColor(targetNode);
