@@ -29,6 +29,7 @@ namespace QueueViewer.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewQueueForm));
             this.TB_Value = new System.Windows.Forms.TextBox();
             this.BTN_Create = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -61,6 +62,7 @@ namespace QueueViewer.Forms
             this.Controls.Add(this.BTN_Create);
             this.Controls.Add(this.TB_Value);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "NewQueueForm";

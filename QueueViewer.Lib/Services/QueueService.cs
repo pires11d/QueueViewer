@@ -185,11 +185,13 @@ namespace QueueViewer.Lib.Services
             var prefix = name.Split('.').FirstOrDefault();
             switch (prefix)
             {
-                case nameof(Constants.Private):
+                case Constants.Outgoing:
+                    return OutgoingQueues;
+                case Constants.Private:
                     return PrivateQueues;
-                case nameof(Constants.Public):
+                case Constants.Public:
                     return PublicQueues;
-                case nameof(Constants.System):
+                case Constants.System:
                     return SystemQueues;
                 default:
                     break;
@@ -205,11 +207,13 @@ namespace QueueViewer.Lib.Services
                 prefix = prefix.Capitalize();
             switch (prefix)
             {
-                case nameof(Constants.Private):
+                case Constants.Outgoing:
+                    return OutgoingQueues;
+                case Constants.Private:
                     return PrivateQueues;
-                case nameof(Constants.Public):
+                case Constants.Public:
                     return PublicQueues;
-                case nameof(Constants.System):
+                case Constants.System:
                     return SystemQueues;
                 default:
                     break;

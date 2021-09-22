@@ -30,6 +30,7 @@ namespace QueueViewer.Forms
         private void InitializeComponent()
         {
             Custom.SyntaxSettings syntaxSettings1 = new Custom.SyntaxSettings();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewMessageForm));
             this.BTN_Send = new System.Windows.Forms.Button();
             this.BTN_Prettify = new System.Windows.Forms.Button();
             this.L_NewBody = new System.Windows.Forms.Label();
@@ -104,6 +105,7 @@ namespace QueueViewer.Forms
             this.Controls.Add(this.BTN_Prettify);
             this.Controls.Add(this.BTN_Send);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NewMessageForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

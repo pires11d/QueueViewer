@@ -10,6 +10,7 @@ namespace QueueViewer.Lib.Services
     {
         public static void SendMessage(MessageQueue queue, string message)
         {
+            message = message.RemoveSpaces();
             var formatter = new JsonMessageFormatter();
             queue.Formatter = formatter;
 

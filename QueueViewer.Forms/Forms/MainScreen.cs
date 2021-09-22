@@ -81,6 +81,7 @@ namespace QueueViewer.Forms
             ChangeMenuColor(CMS_Queues, Theme);
             TB_MessageBody.Initialize(Theme);
             TB_MessageExtension.Initialize(Theme);
+            ShowMessageInfo();
         }
 
         public void ChangeColor(Control control, ThemesEnum theme)
@@ -322,7 +323,7 @@ namespace QueueViewer.Forms
             CBB_MaxMessages.SelectedIndex = int.TryParse(Config.MaxMessages, out int maxMessagesInt) ? maxMessagesInt : 0;
             CB_Refresh.Checked = bool.TryParse(Config.AutoRefresh, out bool autoRefreshBool) ? autoRefreshBool : true;
             EnableSounds = bool.TryParse(Config.Sounds, out bool enableSoundsBool) ? enableSoundsBool : true;
-            EnableOutgoing = bool.TryParse(Config.Outgoing, out bool enableOutgoing) ? enableOutgoing : true;
+            EnableOutgoing = bool.TryParse(Config.Outgoing, out bool enableOutgoing) ? enableOutgoing : false;
         }
 
         public void SetLanguage(string language)
@@ -836,6 +837,21 @@ namespace QueueViewer.Forms
                     TB_MessageExtension.Xml = extension;
                 }
             }
+            else
+            {
+                TB_MessageBody.Text = "";
+                TB_MessageExtension.Text = "";
+            }
+
+            ResetScrolls();
+        }
+
+        private void ResetScrolls()
+        {
+            TB_MessageBody.SelectionStart = 1;
+            TB_MessageBody.ScrollToCaret();
+            TB_MessageExtension.SelectionStart = 1;
+            TB_MessageExtension.ScrollToCaret();
         }
 
         #endregion ACTIONS
@@ -909,6 +925,14 @@ namespace QueueViewer.Forms
 
         private void TV_Queues_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            //if (e.Action == TreeViewAction.ByKeyboard) 
+            //{
+                //TV_Queues_NodeMouseClick(sender, new TreeNodeMouseClickEventArgs(e.Node, MouseButtons.Left, 1, targetPoint.X, targetPoint.Y));
+            //}
+        }
+
+        private void TV_Queues_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
             CurrentNode = e.Node;
             try
             {
@@ -938,13 +962,7 @@ namespace QueueViewer.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
             }
-        }
-
-        private void TV_Queues_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-
         }
 
         private void SetListViewColor(Color color)

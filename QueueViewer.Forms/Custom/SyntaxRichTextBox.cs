@@ -104,7 +104,7 @@ namespace Custom
 			int nPosition = SelectionStart;
 			SelectionStart = _nLineStart;
 			SelectionLength = _nLineLength;
-			SelectionColor = Colors.GetForeColor(Theme);
+			SelectionColor = Colors.GetRed(Theme);
 
 			// Process the keywords
 			ProcessRegex(_strKeywords, Settings.KeywordColor);
@@ -122,7 +122,7 @@ namespace Custom
 
 			SelectionStart = nPosition;
 			SelectionLength = 0;
-			SelectionColor = Colors.GetForeColor(Theme);
+			SelectionColor = Colors.GetRed(Theme);
 
 			_nCurSelection = nPosition;
 		}
@@ -165,7 +165,10 @@ namespace Custom
 		public void ProcessAllLines()
 		{
 			if (Text != null && Text.Length > 1000)
+			{
+				ForeColor = Colors.GetRed(Theme);
 				return;
+			}
 
 			_bPaint = false;
 

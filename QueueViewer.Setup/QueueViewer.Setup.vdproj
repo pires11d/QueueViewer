@@ -76,13 +76,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
+        "OwnerKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3ABC214536FB530C55CAB2F51A402104"
+        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -196,7 +196,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=0.0.6.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3ABC214536FB530C55CAB2F51A402104"
@@ -361,15 +361,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:QueueViewer"
-        "ProductCode" = "8:{EB2AC5EC-2BAE-46ED-8816-AA2DAE306B03}"
-        "PackageCode" = "8:{E1188973-CF6E-410D-8F12-A401F00C0EEA}"
+        "ProductCode" = "8:{C5077C5D-2F98-41CB-8932-92299D3E6EB1}"
+        "PackageCode" = "8:{C53702DB-9C33-4F29-B199-F091ECD85302}"
         "UpgradeCode" = "8:{BFCC3D6D-F003-4D03-9B13-9BD1931C5E46}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.0.7"
+        "ProductVersion" = "8:0.0.8"
         "Manufacturer" = "8:Jarbas"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -939,7 +939,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2D6A641C667F49E1B3C261CF5EF128AF"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\QueueViewer.Lib\\obj\\Release\\QueueViewer.Lib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"

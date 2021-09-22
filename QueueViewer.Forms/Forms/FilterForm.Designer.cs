@@ -29,6 +29,7 @@ namespace QueueViewer.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FilterForm));
             this.TB_Field = new System.Windows.Forms.TextBox();
             this.L_Field = new System.Windows.Forms.Label();
             this.BTN_FilterOK = new System.Windows.Forms.Button();
@@ -74,6 +75,7 @@ namespace QueueViewer.Forms
             this.Controls.Add(this.L_Field);
             this.Controls.Add(this.TB_Field);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FilterForm";

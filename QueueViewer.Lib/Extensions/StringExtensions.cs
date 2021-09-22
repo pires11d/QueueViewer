@@ -3,6 +3,7 @@ using QueueViewer.Lib.Entities;
 using QueueViewer.Lib.Extensions;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace System
 {
@@ -68,31 +69,98 @@ namespace System
                 return char.ToUpper(str[0]).ToString() + str.Substring(1);
         }
 
+        public static string RemoveSpaces(this string str)
+        {
+            return str.Replace("\t", "").Replace("\n", "").Replace("\r", "");
+        }
+
         public static string UpdateCount(this string str, long count = 0)
         {
             var text = str.Split('(').FirstOrDefault();
             return text += $"({count})";
         }
 
-        public static string Prettify(this string json)
+        public static string Prettify(this string str)
         {
+            if (string.IsNullOrEmpty(str))
+                return "";
+
+            var result = str;
+
+            // JSON
             try
             {
-                if (string.IsNullOrEmpty(json))
-                    return "";
-                using (var stringReader = new StringReader(json))
-                using (var stringWriter = new StringWriter())
+                result = PrettifyJSON(result);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            // XML
+            try
+            {
+                result = PrettifyXML(result);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result.Length < 2147483647 ? result : result.RemoveSpaces();
+        }
+
+        private static string PrettifyJSON(this string str)
+        {
+            var result = str;
+
+            using (var stringReader = new StringReader(result))
+            using (var stringWriter = new StringWriter())
+            {
+                var jsonReader = new JsonTextReader(stringReader);
+                var jsonWriter = new JsonTextWriter(stringWriter) { Formatting = Formatting.Indented };
+                jsonWriter.WriteToken(jsonReader);
+                result = stringWriter.ToString();
+            }
+
+            return result;
+        }
+
+        public static string PrettifyXML(this string str)
+        {
+            var result = str;
+
+            var pieces = result.Split(new[] { "\"<" }, StringSplitOptions.None);
+            if (pieces.Count() > 1)
+            {
+                int start = 0;
+                foreach (var piece in pieces)
                 {
-                    var jsonReader = new JsonTextReader(stringReader);
-                    var jsonWriter = new JsonTextWriter(stringWriter) { Formatting = Formatting.Indented };
-                    jsonWriter.WriteToken(jsonReader);
-                    return stringWriter.ToString();
+                    if (start == 0)
+                    {
+                        start += piece.Length;
+                        continue;
+                    }
+
+                    var rest = str.Substring(start + 1);
+                    //var rest = piece;
+                    var end = rest.IndexOf(">\"");
+                    if (start > 0 && end > 0)
+                    {
+                        var xml = str.Substring(start + 1, end + 1);
+                        try
+                        {
+                            XDocument doc = XDocument.Parse(xml.RemoveSpaces());
+                            var newXml = Environment.NewLine + doc.ToString() + Environment.NewLine;
+                            result = str.Replace(xml, newXml);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        start += piece.Length + 2;
+                    }
                 }
             }
-            catch (Exception)
-            {
-                return "";
-            }
+
+            return result;
         }
 
         public static string ToSize(this string bytes)

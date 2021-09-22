@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsForm));
             this.L_Language = new System.Windows.Forms.Label();
             this.RB_EN = new System.Windows.Forms.RadioButton();
             this.RB_PT = new System.Windows.Forms.RadioButton();
@@ -156,6 +157,7 @@
             this.Controls.Add(this.RB_EN);
             this.Controls.Add(this.L_Language);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "OptionsForm";
