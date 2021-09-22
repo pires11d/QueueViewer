@@ -63,7 +63,7 @@ namespace QueueViewer.Lib.Services
                 foreach (var obj in searcher.Get())
                 {
                     var name = obj.Properties["Name"]?.Value?.ToString();
-                    if (name != null && !name.StartsWith($"{MachineId.ToLower()}") && !name.StartsWith("Computer"))
+                    if (name != null && !name.StartsWith($"{MachineId.ToLower()}"))
                     {
                         var queue = new MessageQueue(name.ToFormatName());
                         OutgoingQueues.Add(queue);

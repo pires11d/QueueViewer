@@ -77,7 +77,7 @@
             // BTN_OK
             // 
             this.BTN_OK.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTN_OK.Location = new System.Drawing.Point(87, 262);
+            this.BTN_OK.Location = new System.Drawing.Point(87, 226);
             this.BTN_OK.Name = "BTN_OK";
             this.BTN_OK.Size = new System.Drawing.Size(124, 38);
             this.BTN_OK.TabIndex = 3;
@@ -125,27 +125,29 @@
             // CB_Outgoing
             // 
             this.CB_Outgoing.AutoSize = true;
-            this.CB_Outgoing.Location = new System.Drawing.Point(240, 196);
+            this.CB_Outgoing.Location = new System.Drawing.Point(240, 188);
             this.CB_Outgoing.Name = "CB_Outgoing";
             this.CB_Outgoing.Size = new System.Drawing.Size(15, 14);
             this.CB_Outgoing.TabIndex = 9;
             this.CB_Outgoing.UseVisualStyleBackColor = true;
+            this.CB_Outgoing.Visible = false;
             this.CB_Outgoing.CheckedChanged += new System.EventHandler(this.CB_Outgoing_CheckedChanged);
             // 
             // L_Outgoing
             // 
             this.L_Outgoing.AutoSize = true;
-            this.L_Outgoing.Location = new System.Drawing.Point(28, 196);
+            this.L_Outgoing.Location = new System.Drawing.Point(28, 188);
             this.L_Outgoing.Name = "L_Outgoing";
             this.L_Outgoing.Size = new System.Drawing.Size(140, 15);
             this.L_Outgoing.TabIndex = 8;
             this.L_Outgoing.Text = "Enable Outgoing queues:";
+            this.L_Outgoing.Visible = false;
             // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 312);
+            this.ClientSize = new System.Drawing.Size(294, 289);
             this.Controls.Add(this.CB_Outgoing);
             this.Controls.Add(this.L_Outgoing);
             this.Controls.Add(this.CB_Sounds);
@@ -157,11 +159,11 @@
             this.Controls.Add(this.RB_EN);
             this.Controls.Add(this.L_Language);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "OptionsForm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Options";
             this.ResumeLayout(false);
