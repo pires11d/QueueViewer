@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config>
+  <MachineName>localhost</MachineName>
+  <Outgoing>False</Outgoing>
+  <AutoRefresh>False</AutoRefresh>
+  <Sounds>True</Sounds>
+  <RefreshTime>1</RefreshTime>
+  <MaxMessages>1</MaxMessages>
+  <Language>pt-BR</Language>
+  <Theme>0</Theme>
+</Config>
