@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_091DD622866A4D15A8D59D9EEEEB7485"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_181E18135B7441349AC5D9C8F6A0D210"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -198,6 +204,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_091DD622866A4D15A8D59D9EEEEB7485"
+            {
+            "SourcePath" = "8:..\\QueueViewer.Forms\\Resources\\config.xml"
+            "TargetName" = "8:config.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_181E18135B7441349AC5D9C8F6A0D210"
             {
             "SourcePath" = "8:..\\QueueViewer.Forms\\Resources\\config.xml"
@@ -222,7 +248,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_5D108D7E451E3744CD6EF9EEA8427D02"
@@ -420,15 +446,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:QueueViewer"
-        "ProductCode" = "8:{AE16E00A-669E-44AE-8E8C-F54E8750866B}"
-        "PackageCode" = "8:{00F3C138-3682-4099-9622-3EDA7F1172AD}"
+        "ProductCode" = "8:{E1A82850-2D74-4BDA-8401-42EF7F2F8A17}"
+        "PackageCode" = "8:{C2D0F388-3ED4-41EA-8FAA-8ABC1AF19BF1}"
         "UpgradeCode" = "8:{BFCC3D6D-F003-4D03-9B13-9BD1931C5E46}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:Jarbas"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

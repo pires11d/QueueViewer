@@ -36,6 +36,7 @@ namespace QueueViewer.Forms
         public bool EnableSounds { get; set; }
         public bool EnableOutgoing { get; set; }
         private string _appDataFolder { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.Combine(Application.CompanyName, Application.ProductName));
+        private string _defaultConfigPath { get; set; } = Path.Combine(Application.StartupPath, "config.xml");
         private string _configPath { get; set; }
         public string Filter { get; set; }
 
@@ -316,6 +317,9 @@ namespace QueueViewer.Forms
         public void LoadConfig()
         {
             _configPath = Path.Combine(_appDataFolder, "config.xml");
+            if (!File.Exists(_configPath))
+                _configPath = _defaultConfigPath;
+
             Config = new Config();
             Config = (Config)FileExtension.LoadXML(_configPath, Config);
 
@@ -1222,9 +1226,11 @@ namespace QueueViewer.Forms
 
         private void BTN_RefreshQueues_Click(object sender, EventArgs e)
         {
+            T_Refresh.Stop();
             Service.LoadQueues(EnableOutgoing);
             LoadNodes();
             RefreshScreen(TV_Queues.Nodes[0]);
+            StartOrStop();
         }
 
         private void CBB_MaxMessages_SelectedIndexChanged(object sender, EventArgs e)

@@ -150,7 +150,9 @@
     <None Include="Resources\qq.ico" />
     <None Include="Resources\swoosh.wav" />
     <None Include="Resources\aiai.wav" />
-    <Content Include="Resources\config.xml" />
+    <Content Include="Resources\config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\en-US.png" />
     <None Include="Resources\filter.png" />
     <None Include="Resources\clear.png" />
