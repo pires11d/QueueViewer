@@ -1001,7 +1001,11 @@ namespace QueueViewer.Forms
         {
             try
             {
-                ShowMessageInfo();
+                var senderListView = (ListView)sender;
+                if (senderListView?.SelectedItems?.Count == 1)
+                {
+                    ShowMessageInfo();
+                }
             }
             catch (Exception)
             {
@@ -1260,6 +1264,27 @@ namespace QueueViewer.Forms
                 TV_Queues.CollapseAll();
         }
 
+        private void TSMI_Remove_Click(object sender, EventArgs e)
+        {
+            if (LV_Messages.SelectedItems?.Count > 0)
+            {
+                try
+                {
+                    var items = LV_Messages.SelectedItems.Cast<ListViewItem>().ToList();
+                    foreach (ListViewItem item in items)
+                    {
+                        var id = item.SubItems[1].Text;
+                        var msg = Service.CurrentQueue.ReceiveById(id);
+                    }
+                    ShowMessages(Service.CurrentQueue);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
         private void LV_Messages_KeyDown(object sender, KeyEventArgs e)
         {
             if (ActiveControl is ListView)
@@ -1274,6 +1299,10 @@ namespace QueueViewer.Forms
                 else if (e.Control && e.KeyCode == Keys.F)
                 {
                     BTN_Filter_Click(sender, e);
+                }
+                else if (e.KeyCode == Keys.Delete)
+                {
+                    TSMI_Remove_Click(sender, e);
                 }
             }
         }

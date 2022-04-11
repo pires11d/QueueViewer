@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
             Custom.SyntaxSettings syntaxSettings1 = new Custom.SyntaxSettings();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
             this.CMS_Queues = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TSMI_Expand = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Collapse = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +49,9 @@
             this.P_BotttomRight = new System.Windows.Forms.Panel();
             this.TC_Message = new System.Windows.Forms.TabControl();
             this.T_Body = new System.Windows.Forms.TabPage();
+            this.TB_MessageBody = new Custom.SyntaxRichTextBox();
             this.T_Extension = new System.Windows.Forms.TabPage();
+            this.TB_MessageExtension = new Custom.XmlRichTextBox();
             this.P_TopRight = new System.Windows.Forms.Panel();
             this.P_CenterTopRight = new System.Windows.Forms.Panel();
             this.LV_Messages = new System.Windows.Forms.ListView();
@@ -79,6 +81,7 @@
             this.T_Refresh = new System.Windows.Forms.Timer(this.components);
             this.CMS_Messages = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TSMI_Reprocess = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Remove = new System.Windows.Forms.ToolStripMenuItem();
             this.MS_Header = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,8 +89,6 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.TB_MessageBody = new Custom.SyntaxRichTextBox();
-            this.TB_MessageExtension = new Custom.XmlRichTextBox();
             this.CMS_Queues.SuspendLayout();
             this.P_Top.SuspendLayout();
             this.P_Right.SuspendLayout();
@@ -294,6 +295,33 @@
             this.T_Body.TabIndex = 0;
             this.T_Body.Text = "Body";
             // 
+            // TB_MessageBody
+            // 
+            this.TB_MessageBody.AcceptsTab = true;
+            this.TB_MessageBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TB_MessageBody.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TB_MessageBody.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_MessageBody.Json = null;
+            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageBody.Name = "TB_MessageBody";
+            this.TB_MessageBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            syntaxSettings1.Comment = "";
+            syntaxSettings1.CommentColor = System.Drawing.Color.Green;
+            syntaxSettings1.EnableComments = true;
+            syntaxSettings1.EnableIntegers = true;
+            syntaxSettings1.EnableStrings = true;
+            syntaxSettings1.IntegerColor = System.Drawing.Color.Red;
+            syntaxSettings1.KeywordColor = System.Drawing.Color.Empty;
+            syntaxSettings1.StringColor = System.Drawing.Color.Gray;
+            syntaxSettings1.SymbolColor = System.Drawing.Color.Empty;
+            this.TB_MessageBody.Settings = syntaxSettings1;
+            this.TB_MessageBody.ShowSelectionMargin = true;
+            this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
+            this.TB_MessageBody.TabIndex = 1;
+            this.TB_MessageBody.Text = "";
+            // 
             // T_Extension
             // 
             this.T_Extension.BackColor = System.Drawing.Color.Transparent;
@@ -304,6 +332,23 @@
             this.T_Extension.Size = new System.Drawing.Size(634, 192);
             this.T_Extension.TabIndex = 1;
             this.T_Extension.Text = "Extension";
+            // 
+            // TB_MessageExtension
+            // 
+            this.TB_MessageExtension.AcceptsTab = true;
+            this.TB_MessageExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TB_MessageExtension.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TB_MessageExtension.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
+            this.TB_MessageExtension.Name = "TB_MessageExtension";
+            this.TB_MessageExtension.ShowSelectionMargin = true;
+            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
+            this.TB_MessageExtension.TabIndex = 0;
+            this.TB_MessageExtension.Text = "";
+            this.TB_MessageExtension.Theme = QueueViewer.Forms.Entities.ThemesEnum.Light;
+            this.TB_MessageExtension.Xml = "";
             // 
             // P_TopRight
             // 
@@ -367,7 +412,7 @@
             // colSize
             // 
             this.colSize.Text = "Size";
-            this.colSize.Width = 76;
+            this.colSize.Width = 80;
             // 
             // colTime
             // 
@@ -615,9 +660,10 @@
             // CMS_Messages
             // 
             this.CMS_Messages.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TSMI_Reprocess});
+            this.TSMI_Reprocess,
+            this.TSMI_Remove});
             this.CMS_Messages.Name = "CMS_Messages";
-            this.CMS_Messages.Size = new System.Drawing.Size(169, 26);
+            this.CMS_Messages.Size = new System.Drawing.Size(169, 48);
             this.CMS_Messages.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Messages_Opening);
             // 
             // TSMI_Reprocess
@@ -627,6 +673,14 @@
             this.TSMI_Reprocess.Size = new System.Drawing.Size(168, 22);
             this.TSMI_Reprocess.Text = "Reprocess";
             this.TSMI_Reprocess.Click += new System.EventHandler(this.TSMI_Reprocess_Click);
+            // 
+            // TSMI_Remove
+            // 
+            this.TSMI_Remove.Name = "TSMI_Remove";
+            this.TSMI_Remove.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.TSMI_Remove.Size = new System.Drawing.Size(168, 22);
+            this.TSMI_Remove.Text = "Remove";
+            this.TSMI_Remove.Click += new System.EventHandler(this.TSMI_Remove_Click);
             // 
             // MS_Header
             // 
@@ -687,50 +741,6 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // TB_MessageBody
-            // 
-            this.TB_MessageBody.AcceptsTab = true;
-            this.TB_MessageBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TB_MessageBody.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TB_MessageBody.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_MessageBody.Json = null;
-            this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
-            this.TB_MessageBody.Name = "TB_MessageBody";
-            this.TB_MessageBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            syntaxSettings1.Comment = "";
-            syntaxSettings1.CommentColor = System.Drawing.Color.Green;
-            syntaxSettings1.EnableComments = true;
-            syntaxSettings1.EnableIntegers = true;
-            syntaxSettings1.EnableStrings = true;
-            syntaxSettings1.IntegerColor = System.Drawing.Color.Red;
-            syntaxSettings1.KeywordColor = System.Drawing.Color.Empty;
-            syntaxSettings1.StringColor = System.Drawing.Color.Gray;
-            syntaxSettings1.SymbolColor = System.Drawing.Color.Empty;
-            this.TB_MessageBody.Settings = syntaxSettings1;
-            this.TB_MessageBody.ShowSelectionMargin = true;
-            this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
-            this.TB_MessageBody.TabIndex = 1;
-            this.TB_MessageBody.Text = "";
-            // 
-            // TB_MessageExtension
-            // 
-            this.TB_MessageExtension.AcceptsTab = true;
-            this.TB_MessageExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TB_MessageExtension.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TB_MessageExtension.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_MessageExtension.Location = new System.Drawing.Point(3, 3);
-            this.TB_MessageExtension.Name = "TB_MessageExtension";
-            this.TB_MessageExtension.ShowSelectionMargin = true;
-            this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
-            this.TB_MessageExtension.TabIndex = 0;
-            this.TB_MessageExtension.Text = "";
-            this.TB_MessageExtension.Theme = QueueViewer.Forms.Entities.ThemesEnum.Light;
-            this.TB_MessageExtension.Xml = "";
             // 
             // MainScreen
             // 
@@ -833,6 +843,7 @@
         private System.Windows.Forms.Button BTN_ClearFilter;
         private System.Windows.Forms.Label L_LastUpdate;
         private System.Windows.Forms.Label L_Updated;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_Remove;
     }
 }
 

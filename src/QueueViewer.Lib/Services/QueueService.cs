@@ -112,6 +112,7 @@ namespace QueueViewer.Lib.Services
                 var dead0 = new MessageQueue(prefix + @"\system$;JOURNAL");
                 var dead1 = new MessageQueue(prefix + @"\system$;DEADLETTER");
                 var dead2 = new MessageQueue(prefix + @"\system$;DEADXACT");
+                //var queue = new MessageQueue($"FormatName:DIRECT=OS:{Environment.MachineName}\\private$\\nddigital.audit");
 
                 SetFilter(dead0);
                 SetFilter(dead1);

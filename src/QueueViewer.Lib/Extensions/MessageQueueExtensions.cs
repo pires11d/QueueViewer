@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using MSMQ;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace System.Messaging
 {
@@ -13,7 +15,19 @@ namespace System.Messaging
             {
                 var enumerator = queue.GetMessageEnumerator2();
                 while (enumerator.MoveNext())
+                {
                     count++;
+                    if (count > 9999) break;
+                }
+
+                if (count > 9999)
+                {
+                    var formatName = queue.FormatName;
+                    var msmqManagement = new MSMQManagement();
+                    msmqManagement.Init(queue.MachineName, null, formatName);
+                    count = msmqManagement.MessageCount;
+                    Marshal.ReleaseComObject(msmqManagement);
+                }
             }
             catch (Exception)
             {
