@@ -1025,6 +1025,7 @@ namespace QueueViewer.Forms
 
         private void StartOrStop()
         {
+            BTN_RefreshQueues.Visible = !Refreshing;
             if (Refreshing)
             {
                 T_Refresh.Start();
