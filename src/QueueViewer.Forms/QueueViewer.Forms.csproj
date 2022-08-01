@@ -34,7 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\qq.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -145,9 +146,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\q.ico" />
+    <Content Include="Resources\qq.ico" />
+    <Content Include="Resources\qqq.ico" />
     <None Include="Resources\pt-BR.png" />
     <None Include="Resources\refresh.png" />
-    <None Include="Resources\qq.ico" />
     <None Include="Resources\swoosh.wav" />
     <None Include="Resources\aiai.wav" />
     <Content Include="Resources\config.xml">

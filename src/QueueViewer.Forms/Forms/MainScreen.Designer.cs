@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Custom.SyntaxSettings syntaxSettings1 = new Custom.SyntaxSettings();
+            Custom.SyntaxSettings syntaxSettings2 = new Custom.SyntaxSettings();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
             this.CMS_Queues = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TSMI_Expand = new System.Windows.Forms.ToolStripMenuItem();
@@ -187,6 +187,7 @@
             this.CB_Refresh.Name = "CB_Refresh";
             this.CB_Refresh.Size = new System.Drawing.Size(96, 19);
             this.CB_Refresh.TabIndex = 2;
+            this.CB_Refresh.TabStop = false;
             this.CB_Refresh.Text = "Refresh Every";
             this.CB_Refresh.UseVisualStyleBackColor = true;
             this.CB_Refresh.CheckedChanged += new System.EventHandler(this.CB_Refresh_CheckedChanged);
@@ -205,6 +206,7 @@
             this.CBB_Refresh.Name = "CBB_Refresh";
             this.CBB_Refresh.Size = new System.Drawing.Size(43, 23);
             this.CBB_Refresh.TabIndex = 3;
+            this.CBB_Refresh.TabStop = false;
             this.CBB_Refresh.SelectedIndexChanged += new System.EventHandler(this.CBB_Refresh_SelectedIndexChanged);
             // 
             // L_Unit
@@ -282,6 +284,7 @@
             this.TC_Message.Size = new System.Drawing.Size(642, 230);
             this.TC_Message.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.TC_Message.TabIndex = 1;
+            this.TC_Message.TabStop = false;
             this.TC_Message.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TC_Message_DrawItem);
             // 
             // T_Body
@@ -307,19 +310,20 @@
             this.TB_MessageBody.Location = new System.Drawing.Point(3, 3);
             this.TB_MessageBody.Name = "TB_MessageBody";
             this.TB_MessageBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            syntaxSettings1.Comment = "";
-            syntaxSettings1.CommentColor = System.Drawing.Color.Green;
-            syntaxSettings1.EnableComments = true;
-            syntaxSettings1.EnableIntegers = true;
-            syntaxSettings1.EnableStrings = true;
-            syntaxSettings1.IntegerColor = System.Drawing.Color.Red;
-            syntaxSettings1.KeywordColor = System.Drawing.Color.Empty;
-            syntaxSettings1.StringColor = System.Drawing.Color.Gray;
-            syntaxSettings1.SymbolColor = System.Drawing.Color.Empty;
-            this.TB_MessageBody.Settings = syntaxSettings1;
+            syntaxSettings2.Comment = "";
+            syntaxSettings2.CommentColor = System.Drawing.Color.Green;
+            syntaxSettings2.EnableComments = true;
+            syntaxSettings2.EnableIntegers = true;
+            syntaxSettings2.EnableStrings = true;
+            syntaxSettings2.IntegerColor = System.Drawing.Color.Red;
+            syntaxSettings2.KeywordColor = System.Drawing.Color.Empty;
+            syntaxSettings2.StringColor = System.Drawing.Color.Gray;
+            syntaxSettings2.SymbolColor = System.Drawing.Color.Empty;
+            this.TB_MessageBody.Settings = syntaxSettings2;
             this.TB_MessageBody.ShowSelectionMargin = true;
             this.TB_MessageBody.Size = new System.Drawing.Size(628, 186);
             this.TB_MessageBody.TabIndex = 1;
+            this.TB_MessageBody.TabStop = false;
             this.TB_MessageBody.Text = "";
             // 
             // T_Extension
@@ -346,6 +350,7 @@
             this.TB_MessageExtension.ShowSelectionMargin = true;
             this.TB_MessageExtension.Size = new System.Drawing.Size(628, 186);
             this.TB_MessageExtension.TabIndex = 0;
+            this.TB_MessageExtension.TabStop = false;
             this.TB_MessageExtension.Text = "";
             this.TB_MessageExtension.Theme = QueueViewer.Forms.Entities.ThemesEnum.Light;
             this.TB_MessageExtension.Xml = "";
@@ -389,7 +394,7 @@
             this.LV_Messages.Name = "LV_Messages";
             this.LV_Messages.OwnerDraw = true;
             this.LV_Messages.Size = new System.Drawing.Size(642, 282);
-            this.LV_Messages.TabIndex = 0;
+            this.LV_Messages.TabIndex = 2;
             this.LV_Messages.UseCompatibleStateImageBehavior = false;
             this.LV_Messages.View = System.Windows.Forms.View.Details;
             this.LV_Messages.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LV_Messages_ColumnClick);
@@ -448,6 +453,7 @@
             this.BTN_Prev.Name = "BTN_Prev";
             this.BTN_Prev.Size = new System.Drawing.Size(52, 26);
             this.BTN_Prev.TabIndex = 1;
+            this.BTN_Prev.TabStop = false;
             this.BTN_Prev.Text = "<<";
             this.BTN_Prev.UseVisualStyleBackColor = true;
             this.BTN_Prev.Visible = false;
@@ -461,6 +467,7 @@
             this.BTN_Next.Name = "BTN_Next";
             this.BTN_Next.Size = new System.Drawing.Size(52, 26);
             this.BTN_Next.TabIndex = 0;
+            this.BTN_Next.TabStop = false;
             this.BTN_Next.Text = ">>";
             this.BTN_Next.UseVisualStyleBackColor = true;
             this.BTN_Next.Visible = false;
@@ -493,6 +500,7 @@
             this.BTN_ClearFilter.Name = "BTN_ClearFilter";
             this.BTN_ClearFilter.Size = new System.Drawing.Size(20, 20);
             this.BTN_ClearFilter.TabIndex = 7;
+            this.BTN_ClearFilter.TabStop = false;
             this.BTN_ClearFilter.UseVisualStyleBackColor = false;
             this.BTN_ClearFilter.Click += new System.EventHandler(this.BTN_ClearFilter_Click);
             // 
@@ -509,6 +517,7 @@
             this.BTN_Filter.Name = "BTN_Filter";
             this.BTN_Filter.Size = new System.Drawing.Size(20, 20);
             this.BTN_Filter.TabIndex = 6;
+            this.BTN_Filter.TabStop = false;
             this.BTN_Filter.UseVisualStyleBackColor = false;
             this.BTN_Filter.Click += new System.EventHandler(this.BTN_Filter_Click);
             // 
@@ -536,6 +545,7 @@
             this.CBB_MaxMessages.Name = "CBB_MaxMessages";
             this.CBB_MaxMessages.Size = new System.Drawing.Size(58, 21);
             this.CBB_MaxMessages.TabIndex = 4;
+            this.CBB_MaxMessages.TabStop = false;
             this.CBB_MaxMessages.SelectedIndexChanged += new System.EventHandler(this.CBB_MaxMessages_SelectedIndexChanged);
             // 
             // BTN_RefreshMessages
@@ -551,6 +561,7 @@
             this.BTN_RefreshMessages.Name = "BTN_RefreshMessages";
             this.BTN_RefreshMessages.Size = new System.Drawing.Size(20, 20);
             this.BTN_RefreshMessages.TabIndex = 2;
+            this.BTN_RefreshMessages.TabStop = false;
             this.BTN_RefreshMessages.UseVisualStyleBackColor = false;
             this.BTN_RefreshMessages.Click += new System.EventHandler(this.BTN_RefreshMessages_Click);
             // 
@@ -583,7 +594,7 @@
             this.TV_Queues.Name = "TV_Queues";
             this.TV_Queues.ShowNodeToolTips = true;
             this.TV_Queues.Size = new System.Drawing.Size(364, 539);
-            this.TV_Queues.TabIndex = 0;
+            this.TV_Queues.TabIndex = 1;
             this.TV_Queues.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TV_Queues_AfterSelect);
             this.TV_Queues.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TV_Queues_NodeMouseClick);
             this.TV_Queues.DragDrop += new System.Windows.Forms.DragEventHandler(this.TV_Queues_DragDrop);
@@ -615,6 +626,7 @@
             this.BTN_RefreshQueues.Name = "BTN_RefreshQueues";
             this.BTN_RefreshQueues.Size = new System.Drawing.Size(20, 20);
             this.BTN_RefreshQueues.TabIndex = 5;
+            this.BTN_RefreshQueues.TabStop = false;
             this.BTN_RefreshQueues.UseVisualStyleBackColor = false;
             this.BTN_RefreshQueues.Click += new System.EventHandler(this.BTN_RefreshQueues_Click);
             // 

@@ -28,6 +28,7 @@ namespace QueueViewer.Forms
         public TreeNode CurrentNode { get; set; }
         public TreeNode HoveredNode { get; set; }
         public ListViewColumnSorter ColumnSorter { get; set; }
+        public ListView.SelectedListViewItemCollection SelectedMessages { get; set; }
         public QueueService Service { get; set; }
         public Dictionary<TreeNode, long> NodesToUpdate { get; set; }
         public Stopwatch ScreenTimer { get; private set; }
@@ -436,7 +437,7 @@ namespace QueueViewer.Forms
                     ScreenTimer.Start();
                     while (true)
                     {
-                        if (ScreenTimer.ElapsedMilliseconds > 1500)
+                        if (ScreenTimer.ElapsedMilliseconds > 1000)
                         {
                             break;
                         }
@@ -721,9 +722,12 @@ namespace QueueViewer.Forms
 
         public void ShowMessages(MessageQueue selectedQueue, int operation = 0)
         {
-            if (selectedQueue is null) return;
             BTN_ClearFilter.Visible = !string.IsNullOrEmpty(Filter);
             LV_Messages.Items.Clear();
+
+            if (selectedQueue is null) return;
+            if (CurrentNode.Nodes?.Count > 0) return;
+
             List<Jarbas> allMessages = null;
             try
             {
@@ -848,6 +852,10 @@ namespace QueueViewer.Forms
                 var id = item.SubItems[1].Text;
                 if (!string.IsNullOrEmpty(id))
                 {
+                    if (Service.CurrentQueue == null)
+                    {
+                        Service.CurrentQueue = Service.GetQueueByName(CurrentNode.Name);
+                    }
                     var message = Service.CurrentQueue.PeekById(id);
                     var body = Service.GetMessageBody(message);
                     var extension = Service.GetMessageExtension(message);
@@ -936,22 +944,29 @@ namespace QueueViewer.Forms
                 Service.PurgeQueue();
                 UpdateNode(CurrentNode);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
 
         private void TV_Queues_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            //if (e.Action == TreeViewAction.ByKeyboard) 
-            //{
-            //TV_Queues_NodeMouseClick(sender, new TreeNodeMouseClickEventArgs(e.Node, MouseButtons.Left, 1, targetPoint.X, targetPoint.Y));
-            //}
+            if (SelectedMessages?.Count > 0) return;
+            CurrentNode = e.Node;
+            if (e.Action == TreeViewAction.ByKeyboard)
+            {
+                SelectQueue();
+            }
         }
 
         private void TV_Queues_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             CurrentNode = e.Node;
+            SelectQueue();
+        }
+
+        private void SelectQueue()
+        {
             try
             {
                 if (CurrentNode.Parent == null)
@@ -978,7 +993,7 @@ namespace QueueViewer.Forms
 
                 ResizeListViewColumns(LV_Messages);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -1136,8 +1151,8 @@ namespace QueueViewer.Forms
 
         private void LV_Messages_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            var selectedItems = LV_Messages.SelectedItems;
-            DoDragDrop(selectedItems, DragDropEffects.Move);
+            SelectedMessages = LV_Messages.SelectedItems;
+            DoDragDrop(SelectedMessages, DragDropEffects.Move);
         }
 
         private void TV_Queues_DragEnter(object sender, DragEventArgs e)
@@ -1332,15 +1347,17 @@ namespace QueueViewer.Forms
                         InsertMessageIntoQueue(targetQueue, body);
                         Service.RemoveMessage(CurrentNode.Name, msgId);
                         draggedItem.Remove();
-                        ResetNodeColor(targetNode);
                     }
-
-                    ShowMessages(Service.CurrentQueue);
                 }
                 catch (Exception)
                 {
                 }
+
+                ResetNodeColor(targetNode);
+                ShowMessages(Service.CurrentQueue);
             }
+
+            SelectedMessages.Clear();
         }
 
         private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)

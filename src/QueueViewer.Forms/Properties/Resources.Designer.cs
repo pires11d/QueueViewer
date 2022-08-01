@@ -152,9 +152,9 @@ namespace QueueViewer.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon qq {
+        internal static System.Drawing.Icon q {
             get {
-                object obj = ResourceManager.GetObject("qq", resourceCulture);
+                object obj = ResourceManager.GetObject("q", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

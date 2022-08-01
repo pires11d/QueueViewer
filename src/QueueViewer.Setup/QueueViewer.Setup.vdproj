@@ -33,12 +33,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5D108D7E451E3744CD6EF9EEA8427D02"
-        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_603832464193D501327D53607690F472"
         "OwnerKey" = "8:_2D6A641C667F49E1B3C261CF5EF128AF"
         "MsmSig" = "8:_UNDEFINED"
@@ -57,7 +51,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C5D4391A3778427A83ABA4C931BE00E1"
+        "MsmKey" = "8:_82440ADA586546C5A856EBC1C6681F8A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -70,12 +64,18 @@
         "Entry"
         {
         "MsmKey" = "8:_C9470B24E568BAF13B34CF539996C555"
-        "OwnerKey" = "8:_5D108D7E451E3744CD6EF9EEA8427D02"
+        "OwnerKey" = "8:_D6B2443532E36940108E9F11AF04ACBA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_C9470B24E568BAF13B34CF539996C555"
+        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D6B2443532E36940108E9F11AF04ACBA"
         "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -88,13 +88,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
+        "OwnerKey" = "8:_D6B2443532E36940108E9F11AF04ACBA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5D108D7E451E3744CD6EF9EEA8427D02"
+        "OwnerKey" = "8:_81388104227D43DDBD23D5564A08DE71"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -244,37 +244,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5D108D7E451E3744CD6EF9EEA8427D02"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_5D108D7E451E3744CD6EF9EEA8427D02"
-                    {
-                    "Name" = "8:QueueViewer.Lib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:QueueViewer.Lib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_603832464193D501327D53607690F472"
             {
             "AssemblyRegister" = "3:1"
@@ -306,17 +275,17 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C5D4391A3778427A83ABA4C931BE00E1"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_82440ADA586546C5A856EBC1C6681F8A"
             {
-            "SourcePath" = "8:..\\QueueViewer.Forms\\Resources\\qq.ico"
-            "TargetName" = "8:qq.ico"
+            "SourcePath" = "8:..\\QueueViewer.Forms\\Resources\\q.ico"
+            "TargetName" = "8:q.ico"
             "Tag" = "8:"
             "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:TRUE"
+            "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
@@ -340,6 +309,37 @@
                     }
                 }
             "SourcePath" = "8:Newtonsoft.Json.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D6B2443532E36940108E9F11AF04ACBA"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QueueViewer.Lib, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D6B2443532E36940108E9F11AF04ACBA"
+                    {
+                    "Name" = "8:QueueViewer.Lib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:QueueViewer.Lib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_93B554099DAA4F8C8D8864E091051A47"
@@ -446,15 +446,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:QueueViewer"
-        "ProductCode" = "8:{6F59855F-3607-4067-9F10-C1E1D163D1B3}"
-        "PackageCode" = "8:{0F6C4FC4-6E24-4845-9112-0FEDFC38924E}"
+        "ProductCode" = "8:{D0FB5F49-4F2B-41CE-BFA0-04A3AB3AF255}"
+        "PackageCode" = "8:{D1FDC745-FE96-4404-9B8A-0B691F8528B8}"
         "UpgradeCode" = "8:{BFCC3D6D-F003-4D03-9B13-9BD1931C5E46}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.3"
+        "ProductVersion" = "8:1.0.4"
         "Manufacturer" = "8:Jarbas"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -464,7 +464,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Message Queue management tool"
         "ARPURLINFOABOUT" = "8:https://github.com/pires11d"
-        "ARPPRODUCTICON" = "8:_C5D4391A3778427A83ABA4C931BE00E1"
+        "ARPPRODUCTICON" = "8:_82440ADA586546C5A856EBC1C6681F8A"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -578,7 +578,7 @@
             "Target" = "8:_81388104227D43DDBD23D5564A08DE71"
             "Folder" = "8:_258E4363FD5E4C0BBC8A1DA41C83D467"
             "WorkingFolder" = "8:_93B554099DAA4F8C8D8864E091051A47"
-            "Icon" = "8:_C5D4391A3778427A83ABA4C931BE00E1"
+            "Icon" = "8:_82440ADA586546C5A856EBC1C6681F8A"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_DD6AEAF6E4E04A2581A1FB6268D71F03"
@@ -592,7 +592,7 @@
             "Target" = "8:_81388104227D43DDBD23D5564A08DE71"
             "Folder" = "8:_D137517BFC1940DDBB4A2D2A4E5E62DB"
             "WorkingFolder" = "8:_93B554099DAA4F8C8D8864E091051A47"
-            "Icon" = "8:_C5D4391A3778427A83ABA4C931BE00E1"
+            "Icon" = "8:_82440ADA586546C5A856EBC1C6681F8A"
             "Feature" = "8:"
             }
         }

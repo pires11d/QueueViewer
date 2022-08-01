@@ -98,7 +98,7 @@ namespace System
             {
                 result = PrettifyJSON(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -107,7 +107,7 @@ namespace System
             {
                 result = PrettifyXML(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
