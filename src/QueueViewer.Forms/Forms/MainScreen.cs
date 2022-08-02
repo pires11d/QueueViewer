@@ -555,8 +555,6 @@ namespace QueueViewer.Forms
             catch (Exception)
             {
             }
-
-            ChangeQueuesLanguage(TV_Queues);
         }
 
         public void ExpandUntilNode(TreeNode newNode)
